@@ -5,7 +5,7 @@ const channel = communityChannels.wins;
 
 const winsChannelConfig: CommunityChannelScreenConfig = {
   channelId: "wins",
-  threadName: "# wins",
+  threadName: "Wins",
   avatarLabel: "WN",
   hero: {
     icon: <channel.icon className="h-4 w-4" />,

@@ -1,30 +1,36 @@
 "use client";
 
+import { useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { useMobileNavigation } from "@/domains/partnerships/mobile/application/navigation-store";
 import { cn } from "@/domains/shared/utils/cn";
-
-const pinMessage = {
-  title: "Pinned Message",
-  body: "**THIS IS THE CHANNEL TO INTRODUCE YOURSELF**",
-};
-
-const feed = [
-  {
-    id: "msg-1",
-    author: "WolfyBands",
-    badges: "✝ 🦄 🏆 ⚡",
-    timestamp: "Today at 6:20 AM",
-    title: "WELCOME TO HUSTLERS CAMPUS",
-    body: `Whether you're flipping products or running neighborhood services, this is where cash flow begins.\n\nHere, you're not just learning... *you're executing.*\n\nEvery lesson is verified, every strategy works if you work.\n\n• You're starting in the trenches.\n• You're heading to the penthouse.\n(You'll understand once you start showing up to live calls.)\n\n**Your Mission Today:**\n1️⃣ Complete the #✅ | daily-checklist\n2️⃣ TAKE ACTION\n\n💬 Pick your path:\nNeighborhood Hustles? Jump into #🏠 | service-biz-chat\nFlipping? Head to #🎯 | flipping-chat`,
-  },
-];
+import { Button } from "@/components/ui/button";
+import { HighlightCard } from "@/components/ui/card-5-static";
+import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
+import {
+  heroCopy,
+  hubAnnouncements,
+  hubMetrics,
+  hubNavCards,
+  onboardingSteps,
+  supportLinks,
+} from "./partnershipHubData";
 
 export function CampusHubScreen() {
   const { openDrawer, isDrawerOpen } = useMobileNavigation();
+  const router = useRouter();
+
+  const completedSteps = useMemo(() => onboardingSteps.slice(0, 2).map((step) => step.id), []);
+  const heroMetricValue = `${completedSteps.length}/${onboardingSteps.length}`;
+  const HeroIcon = heroCopy.icon;
+
+  const handleNavigate = (href: string) => {
+    router.push(href);
+  };
 
   return (
-    <section className="flex min-h-screen flex-col bg-siso-bg-primary">
-      <header className="sticky top-0 z-20 border-b border-siso-border/70 bg-siso-bg-tertiary/85 px-4 py-3 backdrop-blur rounded-b-2xl">
+    <section className="flex min-h-screen flex-col bg-siso-bg-primary text-siso-text-primary">
+      <header className="sticky top-0 z-20 rounded-b-2xl border-b border-siso-border/70 bg-siso-bg-tertiary/85 px-4 py-3 backdrop-blur">
         <div className="flex items-center justify-between">
           <button
             type="button"
@@ -38,46 +44,213 @@ export function CampusHubScreen() {
             <span className="text-xs font-medium uppercase tracking-wide text-siso-text-muted">Menu</span>
           </button>
 
-          <div className="flex flex-col items-center">
-            <span className="text-[11px] uppercase tracking-widest text-siso-text-muted">Now Viewing</span>
-            <span className="text-lg font-semibold text-siso-text-primary">Hustlers Campus</span>
+          <div className="flex flex-col items-center text-center">
+            <span className="text-[11px] uppercase tracking-[0.4em] text-siso-text-muted">Now Viewing</span>
+            <span className="text-lg font-semibold text-white">Partnership Hub</span>
           </div>
 
-          <span className="text-xs font-semibold uppercase tracking-[0.3em] text-siso-text-muted">SISO-R</span>
+          <span className="text-xs font-semibold uppercase tracking-[0.3em] text-siso-text-muted">SISO</span>
         </div>
       </header>
 
-      <div className="mx-4 mb-3 rounded-3xl border border-siso-border bg-siso-bg-secondary p-3 text-sm text-siso-text-secondary">
-        <div className="mb-1 flex items-center justify-between">
-          <span className="font-medium text-siso-text-primary">{pinMessage.title}</span>
-          <button className="text-xs text-siso-text-muted" type="button" aria-label="Dismiss pinned message">
-            ✕
-          </button>
-        </div>
-        <p>{pinMessage.body}</p>
-      </div>
+      <div className="flex-1 overflow-y-auto px-4 py-6">
+        <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
+          <div>
+            <HighlightCard
+              color="orange"
+              title={heroCopy.title}
+              description={heroCopy.description}
+              metricValue={heroMetricValue}
+              metricLabel={heroCopy.metricLabel}
+              buttonText={heroCopy.primaryCta.label}
+              onButtonClick={() => handleNavigate(heroCopy.primaryCta.href)}
+              icon={null}
+              titleClassName="uppercase tracking-[0.35em] text-white"
+              descriptionClassName="text-sm"
+              hideDivider
+              showCornerIcon={false}
+            />
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="border border-white/30 bg-white/10 text-white hover:bg-white/20"
+                onClick={() => handleNavigate(heroCopy.secondaryCta.href)}
+              >
+                {heroCopy.secondaryCta.label}
+              </Button>
+            </div>
+          </div>
 
-      <div className="flex-1 overflow-y-auto px-4">
-        {feed.map((message) => (
-          <article key={message.id} className="mb-6 rounded-3xl border border-siso-border bg-siso-bg-secondary p-4">
-            <header className="mb-3 flex items-center gap-3">
-              <div className="h-10 w-10 flex-shrink-0 rounded-full bg-siso-bg-tertiary" />
+          <SettingsGroupCallout
+            icon={<HeroIcon className="h-4 w-4 text-siso-orange" />}
+            title="Launch checklist"
+            subtitle="Complete these five steps to unlock all partner programs."
+            showChevron={false}
+          >
+            <div className="space-y-3">
+              {onboardingSteps.map((step) => {
+                const completed = completedSteps.includes(step.id);
+                return (
+                  <div
+                    key={step.id}
+                    className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+                  >
+                    <div>
+                      <p className="text-sm font-semibold text-white">
+                        {completed ? "✓ " : null}
+                        {step.title}
+                      </p>
+                      <p className="text-xs text-siso-text-muted">{step.description}</p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        className="border border-white/10 text-white"
+                        onClick={() => handleNavigate(step.href)}
+                      >
+                        {step.actionLabel}
+                      </Button>
+                      <span
+                        className={cn(
+                          "text-[11px] uppercase tracking-[0.35em]",
+                          completed ? "text-siso-orange" : "text-siso-text-muted",
+                        )}
+                      >
+                        {completed ? "Completed" : "Queued"}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </SettingsGroupCallout>
+
+          <section className="space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
-                <div className="flex items-center gap-2 text-sm text-siso-text-primary">
-                  <span className="font-semibold">{message.author}</span>
-                  <span className="text-xs text-siso-text-muted">{message.badges}</span>
-                </div>
-                <p className="text-xs text-siso-text-muted">{message.timestamp}</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-siso-text-muted">Explore pages</p>
+                <p className="text-sm text-siso-text-muted">Every partner surface explained in one place.</p>
               </div>
-            </header>
-            <h2 className="mb-3 text-lg font-semibold text-siso-text-primary">{message.title}</h2>
-            <div className="space-y-3 whitespace-pre-line text-sm text-siso-text-secondary">
-              {message.body.split("\n\n").map((paragraph, idx) => (
-                <p key={idx}>{paragraph}</p>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="border border-white/10 text-white hover:border-white/30"
+                onClick={() => handleNavigate("/partners/academy/getting-started")}
+              >
+                View roadmap
+              </Button>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {hubNavCards.map((card) => {
+                const Icon = card.icon;
+                return (
+                  <button
+                    key={card.id}
+                    type="button"
+                    onClick={() => handleNavigate(card.href)}
+                    className="group flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-left transition hover:border-siso-orange hover:bg-white/[0.05]"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-siso-orange">
+                        <Icon className="h-4 w-4" />
+                      </span>
+                      <div>
+                        <p className="text-sm font-semibold text-white">{card.title}</p>
+                        <p className="text-xs text-siso-text-muted">{card.description}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.35em]">
+                      <span className="text-siso-text-muted">{card.badge}</span>
+                      <span className="text-siso-orange">Open</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+
+          <section className="space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-siso-text-muted">Account health</p>
+              <span className="text-[11px] text-siso-text-muted">Updated 2 hours ago</span>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {hubMetrics.map((metric) => (
+                <div
+                  key={metric.id}
+                  className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 shadow-[0_12px_30px_rgba(0,0,0,0.35)]"
+                >
+                  <p className="text-[11px] uppercase tracking-[0.35em] text-siso-text-muted">{metric.label}</p>
+                  <p className="mt-2 text-2xl font-semibold text-white">{metric.value}</p>
+                  <p className="text-xs text-siso-text-muted">{metric.helper}</p>
+                </div>
               ))}
             </div>
-          </article>
-        ))}
+          </section>
+
+          <SettingsGroupCallout
+            icon={<HeroIcon className="h-4 w-4 text-siso-orange" />}
+            title="Announcements"
+            subtitle="Stay ahead on releases, playbooks, and live broadcasts."
+            showChevron={false}
+          >
+            <div className="space-y-3">
+              {hubAnnouncements.map((item) => (
+                <article key={item.id} className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="text-sm font-semibold text-white">{item.title}</p>
+                    <span className="text-[11px] uppercase tracking-[0.35em] text-siso-text-muted">{item.timestamp}</span>
+                  </div>
+                  <p className="mt-2 text-sm text-siso-text-muted">{item.body}</p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="mt-3 border border-white/10 text-white hover:border-white/30"
+                    onClick={() => handleNavigate(item.href)}
+                  >
+                    {item.ctaLabel}
+                  </Button>
+                </article>
+              ))}
+            </div>
+          </SettingsGroupCallout>
+
+          <SettingsGroupCallout
+            icon={<HeroIcon className="h-4 w-4 text-siso-orange" />}
+            title="Need help?"
+            subtitle="Book a session, open docs, or ping Partner Success."
+            showChevron={false}
+          >
+            <div className="grid gap-3 sm:grid-cols-2">
+              {supportLinks.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <div key={link.id} className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+                    <div className="flex items-center gap-3">
+                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-siso-orange">
+                        <Icon className="h-4 w-4" />
+                      </span>
+                      <div>
+                        <p className="text-sm font-semibold text-white">{link.title}</p>
+                        <p className="text-xs text-siso-text-muted">{link.description}</p>
+                      </div>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="mt-3 border border-white/10 text-white hover:border-white/30"
+                      onClick={() => handleNavigate(link.href)}
+                    >
+                      {link.actionLabel}
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          </SettingsGroupCallout>
+        </div>
       </div>
 
       {isDrawerOpen && (

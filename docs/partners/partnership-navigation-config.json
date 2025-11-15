@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "lastUpdated": "2025-11-10",
+  "lastUpdated": "2025-11-15",
   "description": "SISO Partnership Portal Navigation Configuration - Ready for Implementation",
   "icons": [
     {
@@ -159,7 +159,7 @@
               {
                 "id": "office-hours-shortcut",
                 "label": "Office Hours",
-                "path": "/partners/workspace/calendar/office-hours",
+                "path": "/partners/workspace/calendar#office-hours",
                 "description": "Book time with the SISO team"
               },
               {
@@ -197,15 +197,6 @@
       "icon": "GraduationCap",
       "order": 2,
       "subsections": [
-        {
-          "id": "training-hub",
-          "label": "Training Hub",
-          "path": "/partners/academy",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Academy dashboard with quick shortcuts",
-          "group": "Learning Flow"
-        },
         {
           "id": "getting-started",
           "label": "Getting Started",
@@ -249,47 +240,7 @@
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Templates, brand assets, sales decks",
-          "dropdown": {
-            "id": "sales-assets",
-            "label": "Sales Assets",
-            "items": [
-              {
-                "id": "brand-kit",
-                "label": "Brand Kit",
-                "description": "Logos, colors, fonts, usage guidelines"
-              },
-              {
-                "id": "presentation-templates",
-                "label": "Presentation Templates",
-                "description": "PowerPoint/Google Slides decks"
-              },
-              {
-                "id": "demo-videos",
-                "label": "Demo Videos",
-                "description": "Process explainers and project walkthroughs"
-              },
-              {
-                "id": "case-studies",
-                "label": "Case Studies",
-                "description": "Full project deep-dives with results"
-              },
-              {
-                "id": "objection-handling",
-                "label": "Objection Handling Guide",
-                "description": "Common pushbacks with responses"
-              }
-            ]
-          },
           "group": "Proof & Assets"
-        },
-        {
-          "id": "saved-docs",
-          "label": "Saved Docs",
-          "path": "/partners/academy/saved",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Bookmarked resources and favorites",
-          "group": "My Library"
         }
       ],
       "globalDropdown": {
@@ -340,6 +291,7 @@
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Pipeline Ops dashboard with quick insights",
+          "hidden": true,
           "group": "Manage Pipeline"
         },
         {
@@ -406,40 +358,58 @@
           "group": "Manage Pipeline"
         },
         {
-          "id": "recruitment",
-          "label": "Recruitment",
-          "path": "/partners/pipeline-ops/recruitment",
-          "tierRequired": "active",
-          "hasHashtag": false,
-          "description": "Invite and track sales members you recruit",
-          "group": "Grow Team",
-          "dropdown": {
-            "id": "recruitment-tools",
-            "label": "Recruitment Tools",
-            "items": [
-              {
-                "id": "invite",
-                "label": "Invite Partners",
-                "description": "Send referral links and track invites",
-                "path": "/partners/pipeline-ops/recruitment"
-              },
-              {
-                "id": "team-building",
-                "label": "Team Building",
-                "description": "Manage your sales team and overrides",
-                "path": "/partners/team-building"
-              }
-            ]
-          }
-        },
-        {
-          "id": "client-notes",
-          "label": "Client Notes",
-          "path": "/partners/pipeline-ops/client-notes",
+          "id": "app-plan-generator",
+          "label": "App Plan Generator",
+          "path": "/partners/tools/app-plan-generator",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Notes attached to prospects in Pipeline",
-          "group": "Deal Notes"
+          "description": "Generate custom app plans to pitch to prospects",
+          "group": "Tools"
+        }
+      ]
+    },
+    {
+      "id": "recruitment",
+      "label": "Recruitment",
+      "icon": "UserPlus",
+      "order": 4,
+      "subsections": [
+        {
+          "id": "dashboard",
+          "label": "Dashboard",
+          "path": "/partners/recruitment/dashboard",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Invite and track sales members you recruit",
+          "group": "Dashboard",
+          "hidden": true
+        },
+        {
+          "id": "prospects",
+          "label": "Prospects",
+          "path": "/partners/recruitment/prospects",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Airtable-style view of recruitment prospects",
+          "group": "Manage Pipeline"
+        },
+        {
+          "id": "team",
+          "label": "Active sales team",
+          "path": "/partners/recruitment/team",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Who’s currently selling and their status",
+          "group": "Grow Team"
+        },
+        {
+          "id": "performance",
+          "label": "Referral performance",
+          "path": "/partners/recruitment/performance",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Referral volume, conversion, and payouts",
+          "group": "Grow Team"
         }
       ]
     },
@@ -447,7 +417,7 @@
       "id": "growth",
       "label": "Earnings",
       "icon": "DollarSign",
-      "order": 4,
+      "order": 5,
       "subsections": [
         {
           "id": "dashboard",
@@ -456,6 +426,7 @@
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Earnings dashboard and metrics",
+          "hidden": true,
           "group": "Money In"
         },
         {
@@ -518,7 +489,7 @@
       "id": "community",
       "label": "Community",
       "icon": "Users",
-      "order": 5,
+      "order": 6,
       "subsections": [
         {
           "id": "dashboard",
@@ -526,7 +497,8 @@
           "path": "/partners/community",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Community dashboard with highlights"
+          "description": "Community dashboard with highlights",
+          "hidden": true
         },
         {
           "id": "messages",
@@ -538,27 +510,27 @@
         },
         {
           "id": "general-chat",
-          "label": "# general-chat",
+          "label": "General Chat",
           "path": "/partners/community/channels/general-chat",
           "tierRequired": "starter",
-          "hasHashtag": true,
+          "hasHashtag": false,
           "description": "Open discussion room for all partners"
         },
         {
           "id": "wins",
-          "label": "# wins",
+          "label": "Wins",
           "path": "/partners/community/channels/wins",
           "tierRequired": "starter",
-          "hasHashtag": true,
+          "hasHashtag": false,
           "description": "Celebrate closed deals",
           "note": "Read-only for Starter, post at Active+"
         },
         {
           "id": "announcements",
-          "label": "# announcements",
+          "label": "Announcements",
           "path": "/partners/community/announcements",
           "tierRequired": "starter",
-          "hasHashtag": true,
+          "hasHashtag": false,
           "description": "Read-only product and program updates"
         },
         {
@@ -591,42 +563,15 @@
       "id": "workspace",
       "label": "Workspace",
       "icon": "Briefcase",
-      "order": 6,
+      "order": 7,
       "subsections": [
         {
-          "id": "dashboard",
-          "label": "Dashboard",
-          "path": "/partners/workspace",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Workspace dashboard for calendar, tasks, and notes",
-          "group": "Overview"
-        },
-        {
           "id": "calendar",
-          "label": "Calendar",
+          "label": "Calendar & Sessions",
           "path": "/partners/workspace/calendar",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Complete calendar view with all scheduled events",
-          "group": "Schedule"
-        },
-        {
-          "id": "office-hours",
-          "label": "Office Hours",
-          "path": "/partners/workspace/calendar/office-hours",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Book time with SISO team",
-          "group": "Schedule"
-        },
-        {
-          "id": "webinars",
-          "label": "Webinars",
-          "path": "/partners/workspace/calendar/webinars",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Training sessions and recordings",
+          "description": "Unified calendar with office hours, webinars, and deal reminders",
           "group": "Schedule"
         },
         {
@@ -639,56 +584,22 @@
           "group": "Productivity"
         },
         {
+          "id": "files",
+          "label": "Files",
+          "path": "/partners/workspace/files",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "My, client, and shared documents in one view",
+          "group": "Storage"
+        },
+        {
           "id": "my-notes",
           "label": "My Notes",
           "path": "/partners/workspace/notes/my-notes",
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Private personal notes",
-          "group": "Productivity"
-        },
-        {
-          "id": "my-files",
-          "label": "My Files",
-          "path": "/partners/workspace/files/my-files",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Private personal documents",
           "group": "Storage"
-        },
-        {
-          "id": "client-files",
-          "label": "Client Files",
-          "path": "/partners/workspace/files/clients",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Deal-specific materials",
-          "group": "Storage"
-        },
-        {
-          "id": "shared-files",
-          "label": "Shared Files",
-          "path": "/partners/workspace/files/shared",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Team-accessible files",
-          "group": "Storage"
-        }
-      ]
-    },
-    {
-      "id": "tools",
-      "label": "Tools",
-      "icon": "Wrench",
-      "order": 7,
-      "subsections": [
-        {
-          "id": "app-plan-generator",
-          "label": "App Plan Generator",
-          "path": "/partners/tools/app-plan-generator",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Generate custom app plans to pitch to prospects"
         }
       ]
     },

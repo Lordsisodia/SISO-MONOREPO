@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export default function PartnerRecruitmentPage() {
+export default function PartnersRecruitmentIndexPage() {
   redirect("/partners/recruitment/dashboard");
 }

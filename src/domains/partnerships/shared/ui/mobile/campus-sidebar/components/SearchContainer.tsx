@@ -8,6 +8,11 @@ interface SearchContainerProps {
 }
 
 export function SearchContainer({ activeSection }: SearchContainerProps) {
+  const mutedSections = new Set(["pipeline", "growth", "community", "workspace", "recruitment"]);
+  if (mutedSections.has(activeSection)) {
+    return null;
+  }
+
   const copy = sidebarCallouts[activeSection];
 
   if (!copy) return null;

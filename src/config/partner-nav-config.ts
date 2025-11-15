@@ -25,6 +25,7 @@ export interface NavSubsection {
   note?: string;
   dropdown?: NavDropdown;
   group?: string;
+  hidden?: boolean;
 }
 
 export interface TopLevelIconSpec {

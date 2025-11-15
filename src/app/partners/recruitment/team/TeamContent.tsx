@@ -1,0 +1,156 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
+import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
+import { HighlightCard } from "@/components/ui/card-5-static";
+import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+
+const teamHighlights = [
+  {
+    title: "Active sales team",
+    description: "Reps cleared to sell and paid overrides.",
+    metricValue: "18",
+    metricLabel: "live partners",
+    buttonText: "Invite partner",
+    href: "/partners/recruitment/prospects",
+    icon: "🤝",
+  },
+  {
+    title: "Ramp & compliance",
+    description: "Track training, wallet setup, and access.",
+    metricValue: "6",
+    metricLabel: "in onboarding",
+    buttonText: "View checklist",
+    href: "/partners/academy/getting-started",
+    icon: "📋",
+  },
+];
+
+const roster = [
+  {
+    name: "Avery Diaz",
+    role: "Partner Lead",
+    tier: "Performer",
+    activity: "Closed 2 referrals this month",
+    status: "Green",
+  },
+  {
+    name: "Jordan Kim",
+    role: "Inbound Recruiter",
+    tier: "Active",
+    activity: "4 invites pending compliance",
+    status: "Action needed",
+  },
+  {
+    name: "Marin Patel",
+    role: "Strategic Sales",
+    tier: "Elite",
+    activity: "Mentoring 3 new reps",
+    status: "Green",
+  },
+  {
+    name: "Nova Chen",
+    role: "Community Advocate",
+    tier: "Starter",
+    activity: "Needs onboarding course",
+    status: "Training",
+  },
+];
+
+const trainingAlerts = [
+  { id: "cert", label: "Pitch certification expiring", detail: "4 reps need renewal", progress: 60 },
+  { id: "wallet", label: "Wallet setup pending", detail: "2 reps missing payout forms", progress: 40 },
+  { id: "academy", label: "Academy checkpoint", detail: "Complete Stage 3 lessons", progress: 75 },
+];
+
+const coverageGaps = [
+  { segment: "Healthcare", owner: "Unassigned", need: "Enterprise hunter" },
+  { segment: "LATAM", owner: "Jordan Kim", need: "Spanish-speaking closer" },
+  { segment: "eCommerce", owner: "Avery Diaz", need: "Operations specialist" },
+];
+
+export function RecruitmentTeamContent() {
+  const router = useRouter();
+
+  return (
+    <PartnersPageShell initialState={{ activeDrawerSection: "recruitment" }}>
+      <div className="space-y-6 p-4 lg:p-8">
+        <div className="grid gap-4 lg:grid-cols-2">
+          {teamHighlights.map((card) => (
+            <HighlightCard
+              key={card.title}
+              color="orange"
+              title={card.title}
+              description={card.description}
+              metricValue={card.metricValue}
+              metricLabel={card.metricLabel}
+              buttonText={card.buttonText}
+              onButtonClick={() => router.push(card.href)}
+              icon={<span className="text-xl" aria-hidden>{card.icon}</span>}
+              hideDivider
+              showCornerIcon={false}
+              titleClassName="uppercase tracking-[0.35em] text-white"
+              descriptionClassName="text-sm"
+            />
+          ))}
+        </div>
+
+        <SettingsGroupCallout icon={<span className="text-xl">🧑‍🤝‍🧑</span>} title="Roster" subtitle="Every rep, their role, and current focus." showChevron={false}>
+          <div className="space-y-3">
+            {roster.map((member) => (
+              <div key={member.name} className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm text-white/80 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                  <p className="text-lg font-semibold text-white">{member.name}</p>
+                  <p className="text-xs uppercase tracking-[0.35em] text-white/60">{member.role}</p>
+                </div>
+                <div className="text-xs text-white/60">{member.activity}</div>
+                <Badge className="bg-white/10 text-white">{member.tier}</Badge>
+                <Badge variant="outline" className="border-white/20 text-white">
+                  {member.status}
+                </Badge>
+              </div>
+            ))}
+          </div>
+        </SettingsGroupCallout>
+
+        <div className="grid gap-4 lg:grid-cols-2">
+          <SettingsGroupCallout icon={<span className="text-xl">🎯</span>} title="Training & compliance" subtitle="Stay ahead of expirations and onboarding tasks." showChevron={false}>
+            <div className="space-y-4">
+              {trainingAlerts.map((alert) => (
+                <div key={alert.id} className="space-y-2 rounded-2xl border border-white/10 bg-black/20 p-4">
+                  <div className="flex items-center justify-between text-sm text-white">
+                    <span>{alert.label}</span>
+                    <span className="text-xs text-white/60">{alert.detail}</span>
+                  </div>
+                  <Progress value={alert.progress} className="h-2" />
+                </div>
+              ))}
+              <Button variant="ghost" size="sm" className="border border-white/10">
+                Open academy checklist
+              </Button>
+            </div>
+          </SettingsGroupCallout>
+
+          <SettingsGroupCallout icon={<span className="text-xl">🗺️</span>} title="Coverage gaps" subtitle="Where we still need expertise." showChevron={false}>
+            <div className="space-y-3 text-sm text-white/80">
+              {coverageGaps.map((gap) => (
+                <div key={gap.segment} className="rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3">
+                  <p className="text-white font-semibold">{gap.segment}</p>
+                  <p className="text-xs text-white/60">Owner: {gap.owner}</p>
+                  <p className="text-xs text-white/60">Need: {gap.need}</p>
+                </div>
+              ))}
+              <Button variant="ghost" size="sm" className="border border-white/10">
+                Log recruiting request
+              </Button>
+            </div>
+          </SettingsGroupCallout>
+        </div>
+      </div>
+    </PartnersPageShell>
+  );
+}

@@ -1,3 +1,5 @@
+"use client";
+
 import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
@@ -22,7 +24,7 @@ export default function CommunityDashboardPage() {
           description="See the social pulse, pinned guidelines, and quick ways to ask for help."
           metricValue="3"
           metricLabel="active threads"
-          buttonText="Open #general-chat"
+          buttonText="Open General Chat"
           onButtonClick={() => router.push("/partners/community/channels/general-chat")}
           icon={<span className="text-xl">💬</span>}
           hideDivider

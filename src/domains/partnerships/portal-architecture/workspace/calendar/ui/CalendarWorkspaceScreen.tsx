@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Clock, CloudCog, Filter, MapPin, Sparkles, TrendingUp, Zap } from 'lucide-react';
+import { CalendarClock, Camera, Clock, CloudCog, Filter, MapPin, PlayCircle, Presentation, Sparkles, TrendingUp, Users, Zap } from 'lucide-react';
 import { HighlightCard } from '@/components/ui/card-5-static';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -17,6 +17,8 @@ import {
   calendarSyncProviders,
 } from '../data/events';
 import { SettingsGroupCallout } from '@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout';
+import { availableSlots, expertProfiles, upcomingSessions } from '@/domains/partnerships/portal-architecture/workspace/calendar/office-hours/data';
+import { replayLibrary, upcomingWebinars, webinarCategories, webinarStats } from '@/domains/partnerships/portal-architecture/workspace/calendar/webinars/data';
 
 type CalendarViewMode = 'month' | 'week' | 'day';
 
@@ -41,6 +43,21 @@ export function CalendarWorkspaceScreen() {
 
   const todaysEvents = eventsByDay[dayKey] ?? [];
   const priorityEvents = visibleEvents.filter((event) => event.tierAccess !== 'all');
+  const expertMap = useMemo(() => {
+    const map = new Map<string, (typeof expertProfiles)[number]>();
+    expertProfiles.forEach((expert) => map.set(expert.id, expert));
+    return map;
+  }, []);
+  const webinarCategoryMap = useMemo(() => {
+    const map = new Map<string, string>();
+    webinarCategories.forEach((category) => map.set(category.id, category.label));
+    return map;
+  }, []);
+  const upcomingOfficeSlots = useMemo(() => availableSlots.slice(0, 4), []);
+  const officeHourBookings = useMemo(() => upcomingSessions.slice(0, 2), []);
+  const liveWebinar = useMemo(() => upcomingWebinars.find((webinar) => webinar.status === 'live'), []);
+  const queuedWebinars = useMemo(() => upcomingWebinars.filter((webinar) => webinar.status !== 'live'), []);
+  const replayHighlights = useMemo(() => replayLibrary.slice(0, 2), []);
 
   return (
     <section className="min-h-screen bg-[#030307] pb-24 text-white">
@@ -118,8 +135,201 @@ export function CalendarWorkspaceScreen() {
             />
           </div>
         </div>
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          <OfficeHoursPreview slots={upcomingOfficeSlots} sessions={officeHourBookings} expertMap={expertMap} />
+          <WebinarsPreview
+            liveSession={liveWebinar}
+            upcomingShows={queuedWebinars}
+            stats={webinarStats}
+            replays={replayHighlights}
+            categoryMap={webinarCategoryMap}
+          />
+        </div>
       </div>
     </section>
+  );
+}
+
+function OfficeHoursPreview({
+  slots,
+  sessions,
+  expertMap,
+}: {
+  slots: typeof availableSlots;
+  sessions: typeof upcomingSessions;
+  expertMap: Map<string, (typeof expertProfiles)[number]>;
+}) {
+  const upcomingSlots = slots.slice(0, 4);
+  const upcomingHolds = sessions.slice(0, 2);
+
+  return (
+    <div id="office-hours" className="scroll-mt-24">
+      <SettingsGroupCallout
+        icon={<CalendarClock className="h-4 w-4" />}
+        title="Office hours"
+        subtitle="Book or review coaching slots without leaving the calendar."
+        showChevron={false}
+      >
+        <div className="space-y-5">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-white/60">Available slots</p>
+            <div className="mt-3 space-y-3">
+              {upcomingSlots.map((slot) => {
+                const expert = expertMap.get(slot.expertId);
+                return (
+                  <div key={slot.id} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-semibold text-white">{expert?.name ?? 'SISO Mentor'}</p>
+                        <p className="text-xs text-white/70">{formatSlotRange(slot.startTime, slot.endTime)}</p>
+                      </div>
+                      <Badge className="bg-white/10 text-[11px] uppercase tracking-[0.3em] text-white">
+                        {slot.tierAccess === 'all' ? 'Open' : `${slot.tierAccess}+`}
+                      </Badge>
+                    </div>
+                    <p className="mt-2 text-[11px] uppercase tracking-[0.3em] text-white/50">
+                      {slot.isGroup ? 'Group workshop' : '1:1 focus'} • {expert?.timezone ?? 'ET'}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/60">
+              <Users className="h-4 w-4 text-white/50" />
+              Your upcoming holds
+            </div>
+            <div className="mt-3 space-y-3">
+              {upcomingHolds.length ? (
+                upcomingHolds.map((session) => (
+                  <div key={session.id} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p className="text-sm font-semibold text-white">{session.title}</p>
+                    <p className="text-xs text-white/70">{session.expertName} • {formatDateStamp(session.scheduledFor)}</p>
+                    <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-white/80">
+                      <Badge className="bg-white/15 text-white capitalize">{session.status}</Badge>
+                      {session.topic ? <span className="text-white/60">{session.topic.replace('_', ' ')}</span> : null}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="rounded-2xl border border-dashed border-white/15 bg-transparent p-4 text-sm text-white/60">
+                  No holds yet. Reserve a slot above to lock in a mentor.
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </SettingsGroupCallout>
+    </div>
+  );
+}
+
+function WebinarsPreview({
+  liveSession,
+  upcomingShows,
+  stats,
+  replays,
+  categoryMap,
+}: {
+  liveSession?: (typeof upcomingWebinars)[number];
+  upcomingShows: typeof upcomingWebinars;
+  stats: typeof webinarStats;
+  replays: typeof replayLibrary;
+  categoryMap: Map<string, string>;
+}) {
+  const queued = upcomingShows.slice(0, 3);
+
+  return (
+    <div id="webinars" className="scroll-mt-24 space-y-4">
+      <SettingsGroupCallout
+        icon={<Presentation className="h-4 w-4" />}
+        title="Webinars"
+        subtitle="Live enablement + replay analytics"
+        showChevron={false}
+      >
+        <div className="space-y-4">
+          <div className="grid gap-3 md:grid-cols-3">
+            {stats.map((stat) => (
+              <div key={stat.label} className="rounded-2xl border border-white/10 bg-black/25 p-4">
+                <p className="text-[11px] uppercase tracking-[0.3em] text-white/60">{stat.label}</p>
+                <p className="text-2xl font-semibold text-white">{stat.value}</p>
+                <p className="text-xs text-emerald-300">{stat.delta}</p>
+              </div>
+            ))}
+          </div>
+
+          {liveSession ? (
+            <div className="rounded-3xl border border-emerald-400/40 bg-gradient-to-r from-emerald-600/30 to-slate-900/70 p-4 text-white">
+              <div className="flex items-center gap-2 text-sm text-emerald-200">
+                <Camera className="h-4 w-4" /> Streaming now
+              </div>
+              <p className="mt-2 text-xl font-semibold">{liveSession.title}</p>
+              <p className="text-sm text-white/80">{liveSession.summary}</p>
+              <p className="mt-2 text-xs uppercase tracking-[0.3em] text-white/60">
+                {formatDateStamp(liveSession.startsAt)} • {liveSession.hosts.join(' • ')}
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Button size="sm" className="bg-white text-black hover:bg-white/90">
+                  {liveSession.cta ?? 'Join live room'}
+                </Button>
+                <Button size="sm" variant="outline" className="border-white/40 text-white hover:bg-white/10">
+                  Add to calendar
+                </Button>
+              </div>
+            </div>
+          ) : null}
+
+          <div className="space-y-3">
+            {queued.map((webinar) => (
+              <div key={webinar.id} className="rounded-3xl border border-white/10 bg-white/5 p-4">
+                <div className="flex items-center justify-between text-xs text-white/70">
+                  <span>{categoryMap.get(webinar.category) ?? webinar.category}</span>
+                  {webinar.rsvpCount ? <span>{webinar.rsvpCount} RSVPs</span> : null}
+                </div>
+                <p className="mt-2 text-lg font-semibold text-white">{webinar.title}</p>
+                <p className="text-sm text-white/75">{webinar.summary}</p>
+                <div className="mt-2 text-xs text-white/70">{formatDateStamp(webinar.startsAt)}</div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <Button size="sm" className="bg-white text-black hover:bg-white/90">
+                    {webinar.cta ?? 'Register'}
+                  </Button>
+                  <Button size="sm" variant="outline" className="border-white/30 text-white hover:bg-white/10">
+                    Add to calendar
+                  </Button>
+                  {webinar.tierAccess && webinar.tierAccess !== 'all' ? (
+                    <Badge className="bg-amber-500/20 text-amber-100">{webinar.tierAccess}+ only</Badge>
+                  ) : null}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </SettingsGroupCallout>
+
+      <SettingsGroupCallout
+        icon={<PlayCircle className="h-4 w-4" />}
+        title="Replay library"
+        subtitle="Catch up on recordings"
+        showChevron={false}
+      >
+        <div className="space-y-3">
+          {replays.map((webinar) => (
+            <div key={webinar.id} className="rounded-2xl border border-white/10 bg-black/25 p-4">
+              <p className="text-xs uppercase tracking-[0.3em] text-white/60">{new Date(webinar.startsAt).toLocaleDateString()}</p>
+              <p className="text-sm font-semibold text-white">{webinar.title}</p>
+              <p className="text-xs text-white/70">{webinar.summary}</p>
+              <div className="mt-2 flex flex-wrap gap-2 text-xs text-white/60">{webinar.hosts.join(' • ')}</div>
+              <Button size="sm" variant="ghost" className="mt-3 px-2 text-white/80">
+                Watch replay
+              </Button>
+            </div>
+          ))}
+        </div>
+      </SettingsGroupCallout>
+    </div>
   );
 }
 
@@ -193,6 +403,22 @@ function CalendarFilters({
       </div>
     </SettingsGroupCallout>
   );
+}
+
+function formatSlotRange(startISO: string, endISO: string) {
+  const start = new Date(startISO);
+  const end = new Date(endISO);
+  const day = start.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+  const startTime = start.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+  const endTime = end.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+  return `${day} · ${startTime} – ${endTime}`;
+}
+
+function formatDateStamp(input: string) {
+  const date = new Date(input);
+  const day = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  const time = date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+  return `${day} • ${time}`;
 }
 
 function WeekGrid({

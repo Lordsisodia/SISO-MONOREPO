@@ -38,6 +38,7 @@ export interface MenuItem {
   badge?: number | "dot";
   locked?: boolean;
   group?: string;
+  hidden?: boolean;
 }
 
 export interface MenuSection {

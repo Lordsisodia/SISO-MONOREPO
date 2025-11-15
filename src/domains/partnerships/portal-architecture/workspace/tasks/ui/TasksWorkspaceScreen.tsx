@@ -130,7 +130,7 @@ export function TasksWorkspaceScreen() {
   const slaRisk = useMemo(() => 1, []);
 
   return (
-    <section className="min-h-screen bg-[#03040f] pb-24 text-white">
+    <section className="min-h-screen bg-[#03040f] pb-24 text-white overflow-x-hidden">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 pt-12">
         <GradientHighlightCard
           color="orange"
@@ -143,7 +143,7 @@ export function TasksWorkspaceScreen() {
           icon={<ClipboardList className="h-5 w-5" />}
           hideDivider
           hideFooter
-          className="w-full pr-16"
+          className="w-full md:pr-16"
           showCornerIcon={false}
         >
           <div />
@@ -155,7 +155,7 @@ export function TasksWorkspaceScreen() {
           subtitle="Completion, overdue, SLA risk"
           showChevron={false}
         >
-          <div className="grid gap-3 rounded-[22px] border border-white/10 bg-white/5 p-4 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 rounded-[22px] border border-white/10 bg-white/5 p-4 md:grid-cols-3">
             <MetricTile label="Completion" value={`${completionRate}%`} helper="Past 7 days" />
             <MetricTile label="Overdue" value={`${overdueCount}`} helper="Need attention" tone="warning" />
             <MetricTile label="SLA risk" value={`${slaRisk}`} helper="Due within 2h" tone="danger" />
@@ -226,7 +226,7 @@ export function TasksWorkspaceScreen() {
           subtitle="Grouped view"
           showChevron={false}
         >
-          <div className="grid gap-4 rounded-[22px] border border-white/10 bg-white/5 p-4 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 rounded-[22px] border border-white/10 bg-white/5 p-4 md:grid-cols-3">
             {backlogColumns.map((column) => (
               <div key={column.id} className="space-y-3 rounded-2xl border border-white/10 bg-black/15 p-3">
                 <p className="text-xs uppercase tracking-[0.3em] text-white/60">{column.title}</p>

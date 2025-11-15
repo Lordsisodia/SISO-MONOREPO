@@ -1,3 +1,4 @@
+"use client";
 import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
@@ -36,7 +37,8 @@ export default function PipelineOpsDashboardPage() {
           metricLabel="deals in motion"
           buttonText="View prospects"
           onButtonClick={() => router.push("/partners/pipeline-ops/prospects")}
-          icon={<span className="text-xl">⚡</span>}
+          icon={<span className="sr-only">Pipeline Ops</span>}
+          showCornerIcon={false}
           hideDivider
           titleClassName="uppercase tracking-[0.35em] text-white"
           descriptionClassName="text-sm"

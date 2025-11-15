@@ -28,6 +28,8 @@ const nextConfig = {
       { source: '/partner/academy', destination: '/partners/academy' },
       { source: '/partner/academy/:path*', destination: '/partners/academy/:path*' },
       { source: '/partner/training-spotlight', destination: '/partners/academy/training-spotlight' },
+      { source: '/partners-academy', destination: '/partners/academy' },
+      { source: '/partners-academy/:path*', destination: '/partners/academy/:path*' },
       // Optional: legacy learning path to academy
       { source: '/partners/learning', destination: '/partners/academy' },
       { source: '/partners/learning/:path*', destination: '/partners/academy/:path*' },

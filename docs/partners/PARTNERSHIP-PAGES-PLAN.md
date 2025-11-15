@@ -89,6 +89,12 @@ Legend
 - Key CTAs: Complete, snooze, assign.
 - Telemetry: view_tasks_today, complete_task, snooze_task.
 
+### /partners/workspace/calendar — Calendar & Sessions
+- Primary objective: Give a unified view of scheduled events, office hours, and webinars.
+- Content modules: Month/week/day views, filters, RSVP booking cards, office hour availability, webinar highlights/replays.
+- Key CTAs: Add to calendar, RSVP, book office hours, register for webinars, watch recording.
+- Telemetry: view_calendar, rsvp_event, book_office_hours, register_webinar, watch_recording.
+
 ### /partner/tier-progress — Progress & Recognition
 - Primary objective: Make the path to the next tier obvious and motivating.
 - Content modules: Progress bar, required deals, unlocked perks table, estimate to next tier.
@@ -100,12 +106,6 @@ Legend
 - Content modules: Rankings, time ranges, filters (region/tier).
 - Key CTAs: View profile, challenge CTA, congratulate.
 - Telemetry: view_leaderboard, filter_leaderboard, open_partner_profile.
-
-### /partners/workspace/calendar/office-hours — Office Hours
-- Primary objective: Let partners self‑serve time with the team.
-- Content modules: Schedule slots, booking form, confirmation.
-- Key CTAs: Book, reschedule, add to calendar.
-- Telemetry: view_office_hours, book_slot, cancel_slot.
 
 ---
 
@@ -316,20 +316,11 @@ Legend
 
 ## Workspace
 
-### /partners/workspace/calendar — Calendar
-- Primary objective: Give a unified view of scheduled events.
-- Content modules: Month/week/day views, filters (type), RSVP.
-- Key CTAs: Add to calendar, RSVP, join session.
-- Telemetry: view_calendar, rsvp_event.
-
-### /partners/workspace/calendar/office-hours — Office Hours
-- See Hub.
-
-### /partners/workspace/calendar/webinars — Webinars
-- Primary objective: Promote and manage training sessions.
-- Content modules: Upcoming list, recordings, registration.
-- Key CTAs: Register, add to calendar, watch recording.
-- Telemetry: view_webinars, register_webinar, watch_recording.
+### /partners/workspace/calendar — Calendar & Sessions
+- Primary objective: Give a unified view of scheduled events, office hours, and webinars.
+- Content modules: Month/week/day views, filters (type), RSVP, office hour availability, webinar highlights, replay library.
+- Key CTAs: Add to calendar, RSVP, book office hours, register for webinars, watch recording.
+- Telemetry: view_calendar, rsvp_event, book_office_hours, register_webinar, watch_recording.
 
 ### /partners/workspace/tasks — Tasks
 - Primary objective: Centralized task management.
@@ -343,23 +334,11 @@ Legend
 - Key CTAs: New note, pin, share to support.
 - Telemetry: view_notes, create_note, search_notes.
 
-### /partners/workspace/files/my-files — My Files
-- Primary objective: Private document storage.
-- Content modules: File list, upload, preview.
-- Key CTAs: Upload, move, share link.
-- Telemetry: view_files, upload_file, open_file.
-
-### /partners/workspace/files/clients — Client Files
-- Primary objective: Deal‑specific materials by client.
-- Content modules: Client picker, files, versions.
-- Key CTAs: Upload to client, link to deal.
-- Telemetry: view_client_files, upload_client_file.
-
-### /partners/workspace/files/shared — Shared Files
-- Primary objective: Team‑accessible assets.
-- Content modules: Shared directories, permissions.
-- Key CTAs: Share, request access.
-- Telemetry: view_shared_files, request_access.
+### /partners/workspace/files — Files
+- Primary objective: Centralize My, Client, and Shared documents in one surface.
+- Content modules: Tabbed segments (My/Client/Shared), upload + permissions drawer, favorites, recent activity.
+- Key CTAs: Upload, switch segment, share link, request/manage access.
+- Telemetry: view_files, upload_file, manage_file_access.
 
 ---
 

@@ -110,6 +110,7 @@ export function IconNavigation({ activeSection, onSectionChange, heightClass = "
   const labelOverride: Record<string, string> = { pipeline: "Deals", growth: "Earnings" };
   const counts: Record<string, number | "dot" | undefined> = {
     pipeline: 3,
+    recruitment: "dot",
     tasks: 2,
     growth: 1,
     community: "dot",
@@ -132,7 +133,7 @@ export function IconNavigation({ activeSection, onSectionChange, heightClass = "
     };
   });
 
-  const FIXED_ORDER = ["home", "academy", "pipeline", "growth", "community", "workspace", "settings"];
+  const FIXED_ORDER = ["home", "academy", "pipeline", "recruitment", "growth", "community", "workspace", "settings"];
   const sorted = [...navItems].filter((item) => item.id !== "settings").sort((a, b) => {
     const aIdx = FIXED_ORDER.indexOf(a.id);
     const bIdx = FIXED_ORDER.indexOf(b.id);

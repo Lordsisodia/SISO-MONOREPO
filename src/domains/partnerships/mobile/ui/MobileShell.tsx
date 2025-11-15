@@ -18,13 +18,16 @@ import { NotificationsScreen } from "@/domains/partnerships/notifications/ui/mob
 import { LimelightNav, type NavItem } from "@/components/ui/limelight-nav";
 import { Home, GraduationCap, Bell, MessagesSquare, MoreHorizontal } from "lucide-react";
 import type { MobileTabId, QuickActionId } from "../types/navigation";
+import { FloatingNavButton } from "@/domains/partnerships/shared/ui/mobile/FloatingNavButton";
 
 const MESSAGES_CANONICAL_PATH = "/partners/community/messages";
 const LEGACY_MESSAGES_PATH = "/partners/messages";
+const ACADEMY_BASE_PATH = "/partners/academy";
+const LEGACY_ACADEMY_PATH = "/partners-academy";
 
 const TAB_ROUTE_MAP: Record<MobileTabId, string> = {
   campus: "/partners",
-  learning: "/partners/academy",
+  learning: ACADEMY_BASE_PATH,
   notifications: "/partners/inbox",
   messages: MESSAGES_CANONICAL_PATH,
   "quick-actions": QUICK_ACTION_DEFAULT_PATH,
@@ -46,7 +49,7 @@ const getTabFromPath = (pathname: string): MobileTabId => {
     return "campus";
   }
 
-  if (normalized.startsWith("/partners/learning") || normalized.startsWith("/partners/academy")) {
+  if (normalized.startsWith("/partners/learning") || normalized.startsWith(ACADEMY_BASE_PATH) || normalized.startsWith(LEGACY_ACADEMY_PATH)) {
     return "learning";
   }
 
@@ -74,7 +77,17 @@ const getQuickActionFromPath = (pathname: string): QuickActionId | null => {
   return QUICK_ACTION_PATH_LOOKUP[normalized] ?? null;
 };
 
-function ShellContent({ children }: { children?: ReactNode }) {
+type ViewportContentRenderer = (path: string) => ReactNode | null | undefined;
+
+function ShellContent({
+  children,
+  showFloatingNavButton = true,
+  renderViewportContent,
+}: {
+  children?: ReactNode;
+  showFloatingNavButton?: boolean;
+  renderViewportContent?: ViewportContentRenderer;
+}) {
   const router = useRouter();
   const pathname = usePathname() ?? "/partners";
   const normalizedPath = useMemo(() => normalizePartnersPath(pathname), [pathname]);
@@ -110,7 +123,7 @@ function ShellContent({ children }: { children?: ReactNode }) {
     }
 
     // Allow the drawer to remain open on selected tabs (campus, notifications, quick-actions, messages)
-    const drawerSafeTabs: MobileTabId[] = ["campus", "quick-actions", "notifications", "messages"];
+    const drawerSafeTabs: MobileTabId[] = ["campus", "learning", "quick-actions", "notifications", "messages"];
     if (!drawerSafeTabs.includes(nextTab) && isDrawerOpen) {
       closeDrawer();
     }
@@ -178,6 +191,12 @@ function ShellContent({ children }: { children?: ReactNode }) {
 
 
   const renderActiveTab = () => {
+    if (activeTab === "learning" && renderViewportContent) {
+      const override = renderViewportContent(normalizedPath);
+      if (override !== undefined) {
+        return override;
+      }
+    }
     switch (activeTab) {
       case "campus":
         return <CampusHubScreen />;
@@ -193,12 +212,18 @@ function ShellContent({ children }: { children?: ReactNode }) {
     }
   };
 
+  const viewportContent = renderActiveTab();
+  const shouldRenderViewport = viewportContent !== null && viewportContent !== false && viewportContent !== undefined;
+
   return (
     <>
       {isDrawerOpen ? <CampusDrawer /> : null}
-      <ScreenViewport isImmersive={isImmersiveMode} hasBottomNav={shouldShowNav}>
-        {renderActiveTab()}
-      </ScreenViewport>
+      {showFloatingNavButton ? <FloatingNavButton /> : null}
+      {shouldRenderViewport ? (
+        <ScreenViewport isImmersive={isImmersiveMode} hasBottomNav={shouldShowNav}>
+          {viewportContent}
+        </ScreenViewport>
+      ) : null}
       {children}
     </>
   );
@@ -208,6 +233,8 @@ export type MobileShellProps = {
   initialTab?: MobileTabId;
   initialQuickAction?: QuickActionId | null;
   initialImmersiveMode?: boolean;
+  showFloatingNavButton?: boolean;
+  renderViewportContent?: ViewportContentRenderer;
 };
 
 export function MobileShell({
@@ -215,6 +242,8 @@ export function MobileShell({
   initialTab = "campus",
   initialQuickAction = null,
   initialImmersiveMode,
+  showFloatingNavButton = true,
+  renderViewportContent,
 }: MobileShellProps) {
   const initialState = useMemo(
     () => ({
@@ -229,8 +258,13 @@ export function MobileShell({
   );
 
   return (
-      <MobileNavigationProvider initialState={initialState}>
-        <ShellContent>{children}</ShellContent>
-      </MobileNavigationProvider>
-    );
+    <MobileNavigationProvider initialState={initialState}>
+      <ShellContent
+        showFloatingNavButton={showFloatingNavButton}
+        renderViewportContent={renderViewportContent}
+      >
+        {children}
+      </ShellContent>
+    </MobileNavigationProvider>
+  );
 }

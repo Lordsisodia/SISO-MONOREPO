@@ -124,12 +124,12 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
   if (!top) return null;
   const titleOverride: Record<string, string> = { pipeline: "Pipeline Ops", growth: "Earnings" };
   const dashboardCallouts: Record<string, { targetId: string; title: string; subtitle: string }> = {
-    academy: { targetId: "training-hub", title: "Dashboard", subtitle: "Your quick launch into the Academy." },
+    academy: { targetId: "getting-started", title: "Academy", subtitle: "Kick off onboarding and courses." },
     pipeline: { targetId: "dashboard", title: "Dashboard", subtitle: "Track deals, submissions, and reviews." },
+    recruitment: { targetId: "dashboard", title: "Dashboard", subtitle: "Invite and track sales members you recruit." },
     growth: { targetId: "dashboard", title: "Dashboard", subtitle: "See payouts, tiers, and recognition." },
     community: { targetId: "dashboard", title: "Dashboard", subtitle: "Jump into broadcasts and threads." },
-    workspace: { targetId: "dashboard", title: "Dashboard", subtitle: "Calendar, tasks, and files at a glance." },
-    tools: { targetId: "app-plan-generator", title: "Dashboard", subtitle: "Launch the toolkit in seconds." },
+    workspace: { targetId: "calendar", title: "Dashboard", subtitle: "Calendar, bookings, and files at a glance." },
   };
   const displayTitle = titleOverride[top.id] ?? top.label;
 
@@ -149,7 +149,9 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
     const demo: Record<string, number | 'dot'> = {
       'pipeline:my-prospects': 3,
       'pipeline:active-deals': 1,
-      'pipeline:recruitment': 'dot',
+      'recruitment:prospects': 2,
+      'recruitment:team': 1,
+      'recruitment:performance': 'dot',
       'growth:earnings': 1,
       'growth:wallet': 'dot',
       'tasks:my-tasks': 2,
@@ -178,6 +180,8 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
         if (id.includes('recruit')) return <UserPlusIcon size={16} className="text-neutral-50" />;
         if (id.includes('team')) return <UsersIcon size={16} className="text-neutral-50" />;
         return <BriefcaseIcon size={16} className="text-neutral-50" />;
+      case 'recruitment':
+        return <UserPlusIcon size={16} className="text-neutral-50" />;
       case 'academy':
         if (id.includes('getting')) return <GradIcon size={16} className="text-neutral-50" />;
         if (id.includes('courses')) return <BookOpenIcon size={16} className="text-neutral-50" />;
@@ -257,12 +261,14 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
         badge,
         locked,
         group: sub.group,
+        hidden: sub.hidden,
       } as MenuItem;
     });
 
   const calloutPreset = dashboardCallouts[top.id];
   let calloutItem: MenuItem | undefined;
-  let items: MenuItem[] = mappedItems;
+  const items: MenuItem[] = mappedItems;
+  const visibleItems = items.filter((item) => !item.hidden);
   if (calloutPreset && mappedItems.length > 0) {
     const normalizedTarget = calloutPreset.targetId.toLowerCase();
     let targetIndex = mappedItems.findIndex((item) => ((item.id || item.label || "").toLowerCase()) === normalizedTarget);
@@ -271,7 +277,6 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
     }
     if (targetIndex >= 0) {
       calloutItem = mappedItems[targetIndex];
-      items = mappedItems.filter((_, index) => index !== targetIndex);
     }
   }
 
@@ -299,7 +304,7 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
     const groupMap = new Map<string, MenuItem[]>();
     const ungrouped: MenuItem[] = [];
 
-    items.forEach((item) => {
+    visibleItems.forEach((item) => {
       const key = item.group?.trim();
       if (key) {
         if (!groupMap.has(key)) groupMap.set(key, []);
@@ -329,9 +334,11 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
     const channels: MenuItem[] = [];
     const people: MenuItem[] = [];
 
-    items.forEach((it) => {
+    visibleItems.forEach((it) => {
       const id = (it.id || it.label).toLowerCase();
       if (id.includes('messages')) {
+        conversations.push(it);
+      } else if (id === 'all-partners') {
         conversations.push(it);
       } else if (id.includes('general') || id.includes('wins') || id.includes('questions') || id.includes('announcements') || id.startsWith('#')) {
         channels.push(it);
@@ -345,8 +352,8 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
     const sections: MenuSection[] = [];
     // Order: Channels first (most unique to Community), then Conversations, then People & Help
     if (channels.length) sections.push({ title: 'Channels', items: channels });
-    if (conversations.length) sections.push({ title: 'Conversations', items: conversations });
-    if (people.length) sections.push({ title: 'People & Help', items: people });
+    if (conversations.length) sections.push({ title: 'People & Conversations', items: conversations });
+    if (people.length) sections.push({ title: 'Help Center', items: people });
     return composeSections(sections) as any;
   }
 
@@ -356,7 +363,7 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
     const tier: MenuItem[] = [];
     const recognition: MenuItem[] = [];
 
-    items.forEach((it) => {
+    visibleItems.forEach((it) => {
       const id = (it.id || it.label).toLowerCase();
       if (id.includes('earnings') || id.includes('wallet')) {
         moneyIn.push(it);
@@ -381,7 +388,7 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
   }
 
   if (top.id === "academy") {
-    const learningSections = groupedSections ?? [{ title: "Learning Flow", items }];
+    const learningSections = groupedSections ?? [{ title: "Learning Flow", items: visibleItems }];
     return composeSections(learningSections);
   }
 
@@ -399,11 +406,11 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
     return composeSections(groupedSections);
   }
 
-  const sections: MenuSection[] = items.length
+  const sections: MenuSection[] = visibleItems.length
     ? [
         {
           title: displayTitle,
-          items,
+          items: visibleItems,
         },
       ]
     : [];

@@ -12,7 +12,7 @@ const announcementsConfig: CommunityChannelScreenConfig = {
     icon: <Megaphone className="h-4 w-4" />,
     title: "Program announcements",
     subtitle: "Official SISO updates, release notes, and program alerts.",
-    body: "Only the SISO team can post here. Follow up in #general-chat if you need clarity.",
+    body: "Only the SISO team can post here. Follow up in General Chat if you need clarity.",
     pill: "Team only",
   },
   highlightsSubtitle: "Signal from HQ",

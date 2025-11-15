@@ -2,6 +2,12 @@ import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture
 import type { LiveSession } from "../data";
 import { CalendarClock } from "lucide-react";
 
+const sessionDateFormatter = new Intl.DateTimeFormat("en-US", {
+  dateStyle: "medium",
+  timeStyle: "short",
+  timeZone: "UTC",
+});
+
 interface LiveSessionsSectionProps {
   sessions: LiveSession[];
 }
@@ -24,7 +30,7 @@ export function LiveSessionsSection({ sessions }: LiveSessionsSectionProps) {
         {sessions.map((s) => (
           <article key={s.id} className="rounded-3xl border border-siso-border bg-siso-bg-secondary p-4">
             <h3 className="text-sm font-semibold text-siso-text-primary">{s.title}</h3>
-            <p className="text-xs text-siso-text-muted">{new Date(s.date).toLocaleString()}</p>
+            <p className="text-xs text-siso-text-muted">{sessionDateFormatter.format(new Date(s.date))}</p>
             <div className="mt-3">
               <button type="button" className="rounded-full border border-siso-border px-3 py-1 text-xs text-siso-text-muted">
                 {buttonLabel(s.status)}

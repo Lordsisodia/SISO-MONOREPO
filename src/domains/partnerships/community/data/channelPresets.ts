@@ -80,7 +80,7 @@ const minutesAgo = (minutes: number) => new Date(now.getTime() - minutes * 60 * 
 export const communityChannels: Record<string, CommunityChannelPreset> = {
   general: {
     id: "general",
-    label: "# general-chat",
+    label: "General Chat",
     icon: Hash,
     access: "post",
     description: "Program-wide channel for quick wins, questions, and daily stand-ups.",
@@ -109,11 +109,11 @@ export const communityChannels: Record<string, CommunityChannelPreset> = {
         description: "Tone, moderation rules, and unlock paths",
         href: "/partners/community/help#community-guidelines",
       },
-      {
-        label: "Ask SISO Anything",
-        description: "Live office hours schedule",
-        href: "/partners/workspace/calendar/office-hours",
-      },
+          {
+            label: "Ask SISO Anything",
+            description: "Live office hours schedule",
+            href: "/partners/workspace/calendar#office-hours",
+          },
       {
         label: "Conversation Search",
         description: "Archive of solved questions",
@@ -191,7 +191,7 @@ export const communityChannels: Record<string, CommunityChannelPreset> = {
     ],
     announcement: {
       title: "Say hello, earn your first badge",
-      body: "Drop an intro + what you’re building. Completing this unlocks the Social Kickoff badge and #wins posting access faster.",
+      body: "Drop an intro + what you’re building. Completing this unlocks the Social Kickoff badge and Wins posting access faster.",
       pill: "Starter Mission",
     },
     composer: {
@@ -201,7 +201,7 @@ export const communityChannels: Record<string, CommunityChannelPreset> = {
   },
   wins: {
     id: "wins",
-    label: "# wins",
+    label: "Wins",
     icon: Trophy,
     access: "read-only",
     description: "Celebrate partner deal flow and give others a playbook to replicate.",
@@ -264,7 +264,7 @@ export const communityChannels: Record<string, CommunityChannelPreset> = {
   },
   announcements: {
     id: "announcements",
-    label: "# announcements",
+    label: "Announcements",
     icon: Megaphone,
     access: "read-only",
     description: "Official SISO updates, release notes, and program alerts.",
@@ -328,7 +328,7 @@ export const communityChannels: Record<string, CommunityChannelPreset> = {
     ],
     composer: {
       placeholder: "Announcements are team-only.",
-      lockedCopy: "Only SISO staff can post here. Follow up in #general-chat if you need clarity.",
+      lockedCopy: "Only SISO staff can post here. Follow up in General Chat if you need clarity.",
     },
   },
   channels: {

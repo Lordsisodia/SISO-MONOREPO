@@ -221,7 +221,7 @@ export function PartnershipHubWidgets({ onNavigate }: { onNavigate?: (href: stri
         { label: "Office hours", value: "2 PM" },
         { label: "Unread messages", value: "3" },
       ],
-      primaryAction: { label: "Book office hours", href: "/partners/workspace/calendar/office-hours" },
+      primaryAction: { label: "Book office hours", href: "/partners/workspace/calendar#office-hours" },
       secondaryAction: { label: "Contact support", href: "/partners/support" },
       secondaryLink: { label: "Help center", href: "/partners/community/help" },
     },

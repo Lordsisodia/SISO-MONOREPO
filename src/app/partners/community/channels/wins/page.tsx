@@ -5,7 +5,7 @@ import { communityChannels } from "@/domains/partnerships/community/data/channel
 const channel = communityChannels.wins;
 
 export const metadata: Metadata = {
-  title: "# wins • SISO Partner Community",
+  title: "Wins • SISO Partner Community",
   description: channel.description,
 };
 

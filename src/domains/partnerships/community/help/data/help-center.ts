@@ -99,7 +99,7 @@ const connectionsSections: HelpArticleSection[] = [
   {
     heading: "When to DM vs. start a thread",
     body: [
-      "Use DMs for quick coordination or sharing links. For help that others might benefit from, post inside #general-chat or #wins.",
+      "Use DMs for quick coordination or sharing links. For help that others might benefit from, post inside General Chat or Wins.",
     ],
   },
 ];

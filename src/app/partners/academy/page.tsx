@@ -1,5 +1,4 @@
-import { LearningHubResponsive } from "@/domains/partnerships/portal-architecture/academy/ui/LearningHubResponsive";
-
 export default function PartnersAcademyLandingPage() {
-  return <LearningHubResponsive />;
+  // Base academy content is rendered by the MobileShell layout (learning tab).
+  return null;
 }

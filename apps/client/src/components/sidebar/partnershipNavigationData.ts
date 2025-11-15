@@ -25,11 +25,6 @@ export const getPartnershipMenuSections = (): MenuSection[] => {
           badge: 'Most Important'
         },
         {
-          href: '/partner/training-hub',
-          icon: BookOpen,
-          label: 'Training Hub',
-        },
-        {
           href: '/partner/support',
           icon: HelpCircle,
           label: 'Support',

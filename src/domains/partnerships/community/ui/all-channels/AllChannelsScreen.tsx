@@ -43,12 +43,12 @@ const requestedChannelIdeas = [
 
 const playbookCards = [
   {
-    tag: "# general-chat",
+    tag: "General Chat",
     title: "Thread format that gets answers",
     description: "Lead with context, include an ask, and close with the outcome to get faster responses.",
   },
   {
-    tag: "# wins",
+    tag: "Wins",
     title: "Win template cheat sheet",
     description: "Budget, hook, and asset links—the 3 elements that unlock badges fast.",
   },

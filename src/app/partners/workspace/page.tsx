@@ -29,7 +29,7 @@ export default function PartnersWorkspacePage() {
           <div className="space-y-3 text-xs text-siso-text-muted">
             <Link href="/partners/workspace/tasks" className="text-siso-orange block">Tasks</Link>
             <Link href="/partners/workspace/notes/my-notes" className="text-siso-orange block">My Notes</Link>
-            <Link href="/partners/workspace/files/my-files" className="text-siso-orange block">My Files</Link>
+            <Link href="/partners/workspace/files" className="text-siso-orange block">Files</Link>
           </div>
         </SettingsGroupCallout>
 
