@@ -1,0 +1,49 @@
+# Component Library Schema
+
+{
+  "type": "object",
+  "properties": {
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the component"
+          },
+          "name": {
+            "type": "string",
+            "description": "Component name"
+          },
+          "category": {
+            "type": "string",
+            "description": "Component category (e.g., navigation, form, media)"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed component description"
+          },
+          "properties": {
+            "type": "object",
+            "description": "Component properties/props",
+            "additionalProperties": true
+          },
+          "usage": {
+            "type": "string",
+            "description": "How the component is used"
+          },
+          "pages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Pages where this component is used"
+          }
+        },
+        "required": ["id", "name", "category", "description"]
+      }
+    }
+  },
+  "required": ["components"]
+}

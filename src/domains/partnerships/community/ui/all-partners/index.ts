@@ -1,0 +1,1 @@
+export { AllPartnersScreen } from "./AllPartnersScreen";

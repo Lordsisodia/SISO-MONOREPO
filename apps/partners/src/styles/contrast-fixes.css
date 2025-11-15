@@ -1,0 +1,169 @@
+/* SISO Contrast and Visibility Fixes */
+
+/* High Contrast Text Classes */
+.high-contrast-text {
+  color: var(--siso-text-primary);
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+}
+
+/* Fix white on light backgrounds */
+.text-on-brown,
+.text-on-light {
+  color: var(--siso-bg-primary) !important;
+  font-weight: 500;
+}
+
+/* Ensure proper contrast for important UI elements */
+.contrast-card {
+  background-color: var(--siso-bg-secondary);
+  border: 1px solid var(--siso-border-primary);
+  color: var(--siso-text-secondary);
+}
+
+.contrast-card:hover {
+  background-color: var(--siso-bg-tertiary);
+  border-color: var(--siso-border-secondary);
+}
+
+/* Button contrast improvements */
+.btn-high-contrast {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-high-contrast::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
+  pointer-events: none;
+}
+
+/* Input contrast fixes */
+input.high-contrast,
+textarea.high-contrast,
+select.high-contrast {
+  background-color: var(--siso-bg-primary) !important;
+  border: 1px solid var(--siso-border-secondary) !important;
+  color: var(--siso-text-primary) !important;
+}
+
+input.high-contrast:focus,
+textarea.high-contrast:focus,
+select.high-contrast:focus {
+  border-color: var(--siso-orange) !important;
+  box-shadow: 0 0 0 2px rgba(255, 167, 38, 0.25) !important;
+}
+
+/* Placeholder contrast */
+input.high-contrast::placeholder,
+textarea.high-contrast::placeholder {
+  color: var(--siso-text-muted) !important;
+  opacity: 0.8;
+}
+
+/* Badge and tag contrast */
+.contrast-badge {
+  background-color: var(--siso-bg-tertiary);
+  border: 1px solid var(--siso-border-secondary);
+  color: var(--siso-text-secondary);
+  font-weight: 500;
+}
+
+/* Status indicators with proper contrast */
+.status-active {
+  background-color: rgba(76, 175, 80, 0.2);
+  color: #66BB6A;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.status-warning {
+  background-color: rgba(255, 167, 38, 0.2);
+  color: var(--siso-orange);
+  border: 1px solid rgba(255, 167, 38, 0.3);
+}
+
+.status-error {
+  background-color: rgba(255, 87, 34, 0.2);
+  color: var(--siso-red);
+  border: 1px solid rgba(255, 87, 34, 0.3);
+}
+
+/* Table contrast improvements */
+.contrast-table th {
+  background-color: var(--siso-bg-tertiary);
+  color: var(--siso-text-primary);
+  font-weight: 600;
+}
+
+.contrast-table td {
+  background-color: var(--siso-bg-secondary);
+  color: var(--siso-text-secondary);
+  border-color: var(--siso-border-primary);
+}
+
+.contrast-table tr:hover td {
+  background-color: var(--siso-bg-hover);
+}
+
+/* Link contrast */
+a.high-contrast {
+  color: var(--siso-orange);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+a.high-contrast:hover {
+  color: #FFB84D;
+  text-decoration-thickness: 2px;
+}
+
+/* Focus indicators for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--siso-orange);
+  outline-offset: 2px;
+}
+
+/* Utility classes for quick fixes */
+.bg-contrast-primary { background-color: var(--siso-bg-primary) !important; }
+.bg-contrast-secondary { background-color: var(--siso-bg-secondary) !important; }
+.bg-contrast-tertiary { background-color: var(--siso-bg-tertiary) !important; }
+.text-contrast-primary { color: var(--siso-text-primary) !important; }
+.text-contrast-secondary { color: var(--siso-text-secondary) !important; }
+.text-contrast-muted { color: var(--siso-text-muted) !important; }
+.border-contrast { border-color: var(--siso-border-secondary) !important; }
+
+/* Special case: white text on brown background fix */
+.brown-bg-fix {
+  background-color: var(--siso-bg-secondary) !important;
+  color: var(--siso-text-secondary) !important;
+}
+
+/* Dropdown and popover contrast */
+.contrast-dropdown {
+  background-color: var(--siso-bg-tertiary);
+  border: 1px solid var(--siso-border-secondary);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+.contrast-dropdown-item:hover {
+  background-color: var(--siso-bg-hover);
+}
+
+/* Modal and dialog contrast */
+.contrast-modal {
+  background-color: var(--siso-bg-secondary);
+  border: 1px solid var(--siso-border-secondary);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.7);
+}
+
+/* Code block contrast */
+code.high-contrast,
+pre.high-contrast {
+  background-color: var(--siso-bg-primary);
+  border: 1px solid var(--siso-border-primary);
+  color: #FFA726;
+}

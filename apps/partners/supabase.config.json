@@ -1,0 +1,67 @@
+{
+  "project": {
+    "name": "SISO-PARTNERSHIP",
+    "id": "tcidaytqzruxqhsbfofy",
+    "url": "https://tcidaytqzruxqhsbfofy.supabase.co",
+    "region": "us-east-1",
+    "tier": "free",
+    "dashboard": "https://supabase.com/dashboard/project/tcidaytqzruxqhsbfofy",
+    "description": "Dedicated Supabase project for SISO Partnerships Portal - manages partner relationships, referrals, commissions, and training"
+  },
+  "environment": {
+    "development": {
+      "url": "https://tcidaytqzruxqhsbfofy.supabase.co",
+      "anonKey": "env:VITE_SUPABASE_ANON_KEY"
+    },
+    "production": {
+      "url": "https://tcidaytqzruxqhsbfofy.supabase.co",
+      "anonKey": "env:VITE_SUPABASE_ANON_KEY"
+    }
+  },
+  "database": {
+    "tables": [
+      "partners",
+      "partner_referrals",
+      "partner_commissions",
+      "partner_training",
+      "partner_resources"
+    ],
+    "setupScripts": [
+      "setup-database.sql",
+      "setup-rls-security.sql"
+    ],
+    "rlsEnabled": true
+  },
+  "features": {
+    "auth": true,
+    "storage": true,
+    "realtime": true,
+    "edgeFunctions": false
+  },
+  "relatedProjects": {
+    "sisoInternal": {
+      "name": "SISO-INTERNAL",
+      "description": "Main internal operations app",
+      "url": "https://avdgyrepwrvsvwgxrccr.supabase.co",
+      "id": "avdgyrepwrvsvwgxrccr"
+    }
+  },
+  "validation": {
+    "checkUrl": true,
+    "checkTables": true,
+    "checkRls": true,
+    "requiredEnvVars": [
+      "VITE_SUPABASE_URL",
+      "VITE_SUPABASE_ANON_KEY"
+    ]
+  },
+  "notes": [
+    "This is the PARTNERSHIPS portal - separate from SISO-INTERNAL",
+    "Project ID: tcidaytqzruxqhsbfofy",
+    "Never use SISO-INTERNAL credentials (avdgyrepwrvsvwgxrccr) in this project",
+    "Run setup-database.sql and setup-rls-security.sql in Supabase SQL Editor to initialize",
+    "MCP configuration in .mcp/config.json uses this project URL"
+  ],
+  "createdAt": "2025-10-05",
+  "updatedAt": "2025-10-05"
+}

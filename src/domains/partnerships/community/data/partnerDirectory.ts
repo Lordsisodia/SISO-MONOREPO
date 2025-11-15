@@ -1,0 +1,147 @@
+export type PartnerProfile = {
+  id: string;
+  name: string;
+  avatarInitials: string;
+  tier: "Starter" | "Active" | "Prime" | "Collective";
+  timezone: string;
+  location: string;
+  focus: string;
+  headline: string;
+  wins: number;
+  clients: number;
+  responseTime: string;
+  availability: "active" | "idle" | "offline";
+  openToMentor?: boolean;
+  hiring?: boolean;
+  tags: string[];
+};
+
+export const partnerDirectory: PartnerProfile[] = [
+  {
+    id: "nova",
+    name: "Nova Carter",
+    avatarInitials: "NC",
+    tier: "Prime",
+    timezone: "GMT-5",
+    location: "Brooklyn, NY",
+    focus: "Enterprise SaaS rollouts",
+    headline: "Doubling partner ACV through ops automation",
+    wins: 14,
+    clients: 6,
+    responseTime: "Typically replies in 15m",
+    availability: "active",
+    openToMentor: true,
+    tags: ["Automation", "Revenue Ops", "Mentor"],
+  },
+  {
+    id: "sienna",
+    name: "Sienna Rowe",
+    avatarInitials: "SR",
+    tier: "Active",
+    timezone: "GMT+1",
+    location: "Lisbon, PT",
+    focus: "Lifestyle commerce + retention",
+    headline: "Scaled DTC attach revenue 4x in 90 days",
+    wins: 9,
+    clients: 4,
+    responseTime: "Replies by 5 PM local",
+    availability: "idle",
+    hiring: true,
+    tags: ["Commerce", "Lifecycle", "Open roles"],
+  },
+  {
+    id: "leo",
+    name: "Leo Summers",
+    avatarInitials: "LS",
+    tier: "Collective",
+    timezone: "GMT+8",
+    location: "Singapore",
+    focus: "Manufacturing enablement",
+    headline: "Activated APAC supplier network in 6 weeks",
+    wins: 18,
+    clients: 11,
+    responseTime: "Usually within an hour",
+    availability: "active",
+    tags: ["APAC", "Supply Chain"],
+  },
+  {
+    id: "harper",
+    name: "Harper Quinn",
+    avatarInitials: "HQ",
+    tier: "Starter",
+    timezone: "GMT-7",
+    location: "Denver, CO",
+    focus: "Boutique retail expansion",
+    headline: "Closed 3 studio franchises with new deck",
+    wins: 6,
+    clients: 3,
+    responseTime: "Replies same day",
+    availability: "active",
+    openToMentor: false,
+    tags: ["Retail", "Pitch Kits"],
+  },
+  {
+    id: "amir",
+    name: "Amir Bashir",
+    avatarInitials: "AB",
+    tier: "Active",
+    timezone: "GMT+3",
+    location: "Dubai, UAE",
+    focus: "Gov + civic partnerships",
+    headline: "Led smart-campus rollout in MENA",
+    wins: 11,
+    clients: 5,
+    responseTime: "Within 2 hours",
+    availability: "idle",
+    openToMentor: true,
+    hiring: true,
+    tags: ["Gov", "Infra", "Mentor"],
+  },
+  {
+    id: "mila",
+    name: "Mila Ortega",
+    avatarInitials: "MO",
+    tier: "Prime",
+    timezone: "GMT-3",
+    location: "Buenos Aires",
+    focus: "Payments + fintech ops",
+    headline: "Unlocked LATAM payouts coverage",
+    wins: 15,
+    clients: 7,
+    responseTime: "Instant while online",
+    availability: "active",
+    tags: ["Fintech", "LATAM"],
+  },
+  {
+    id: "asher",
+    name: "Asher Patel",
+    avatarInitials: "AP",
+    tier: "Collective",
+    timezone: "GMT+0",
+    location: "London, UK",
+    focus: "AI agency pipelines",
+    headline: "Spun up 5 campus pilots with AI pods",
+    wins: 21,
+    clients: 9,
+    responseTime: "Replies overnight",
+    availability: "offline",
+    openToMentor: true,
+    tags: ["AI", "Campus"],
+  },
+  {
+    id: "lena",
+    name: "Lena Cho",
+    avatarInitials: "LC",
+    tier: "Active",
+    timezone: "GMT+9",
+    location: "Seoul",
+    focus: "Creator commerce",
+    headline: "Drove 120% uplift for hybrid launch",
+    wins: 8,
+    clients: 4,
+    responseTime: "24h turnaround",
+    availability: "idle",
+    hiring: true,
+    tags: ["Creators", "Growth"],
+  },
+];

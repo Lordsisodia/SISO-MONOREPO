@@ -1,0 +1,53 @@
+/* Global Scrollbar Fix */
+
+/* Prevent double scrollbars by ensuring only one scrollable container */
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body {
+  overflow: hidden;
+  height: 100vh;
+}
+
+#root {
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Main app container should handle all scrolling */
+.main-scroll-container {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Sidebar should not cause horizontal overflow */
+aside {
+  flex-shrink: 0;
+}
+
+/* Custom scrollbar styling */
+.main-scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-scroll-container::-webkit-scrollbar-track {
+  background: var(--siso-bg-primary);
+}
+
+.main-scroll-container::-webkit-scrollbar-thumb {
+  background: var(--siso-border-secondary);
+  border-radius: 4px;
+}
+
+.main-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: var(--siso-border-hover);
+}
+
+/* Firefox */
+.main-scroll-container {
+  scrollbar-width: thin;
+  scrollbar-color: var(--siso-border-secondary) var(--siso-bg-primary);
+}

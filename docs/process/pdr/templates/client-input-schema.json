@@ -1,0 +1,60 @@
+# Client Information Schema
+
+{
+  "type": "object",
+  "properties": {
+    "clientName": {
+      "type": "string",
+      "description": "Name of the client or business"
+    },
+    "industry": {
+      "type": "string",
+      "description": "Industry the client operates in"
+    },
+    "location": {
+      "type": "string",
+      "description": "Geographic location of the business"
+    },
+    "website": {
+      "type": "string",
+      "format": "uri",
+      "description": "Current website URL if exists"
+    },
+    "productsServices": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of products or services offered"
+    },
+    "businessGoals": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Client's business goals for the project"
+    },
+    "targetMarket": {
+      "type": "object",
+      "properties": {
+        "demographics": {
+          "type": "string",
+          "description": "Target demographic information"
+        },
+        "size": {
+          "type": "string",
+          "description": "Estimated size of target market"
+        }
+      }
+    },
+    "timeline": {
+      "type": "string",
+      "description": "Client's preferred timeline for project"
+    },
+    "budget": {
+      "type": "string",
+      "description": "Budget considerations (if provided)"
+    }
+  },
+  "required": ["clientName", "industry", "productsServices", "businessGoals"]
+}

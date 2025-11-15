@@ -1,0 +1,54 @@
+# Competitor List Schema
+
+{
+  "type": "object",
+  "properties": {
+    "competitors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the competitor"
+          },
+          "name": {
+            "type": "string",
+            "description": "Business name"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Website URL"
+          },
+          "description": {
+            "type": "string",
+            "description": "Business description"
+          },
+          "targetMarket": {
+            "type": "string",
+            "description": "Target market focus"
+          },
+          "location": {
+            "type": "string",
+            "description": "Geographic focus"
+          },
+          "productsServices": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Key products or services"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["direct", "indirect", "marketLeader", "local"],
+            "description": "Competitor category"
+          }
+        },
+        "required": ["id", "name", "url", "description", "category"]
+      }
+    }
+  },
+  "required": ["competitors"]
+}

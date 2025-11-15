@@ -1,0 +1,3 @@
+- TypeScript-first React/Next codebase; linting extends `next/core-web-vitals` with unused vars = error and `any` discouraged; legacy reference apps under `apps/**` are ignored by lint.
+- Formatting uses Prettier (no semicolons, single quotes, 2-space indent, 100-char width, es5 trailing commas); run `pnpm format` to apply.
+- UI stack mixes Tailwind utility classes with shared components/styled-components; prefer domain/feature folders over colocating logic in pages.

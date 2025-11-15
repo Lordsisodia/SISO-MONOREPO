@@ -1,0 +1,27 @@
+{
+  "version": "0.1",
+  "lastUpdated": "2025-11-11",
+  "publicBase": "/public/pitch",
+  "assets": [
+    {
+      "id": "deck-getting-started",
+      "type": "pitch_deck",
+      "title": "SISO Overview Deck",
+      "description": "High-level SISO story and partner value prop",
+      "isPublic": true,
+      "publicSlug": "siso-overview",
+      "industryTags": ["saas", "ecommerce"],
+      "capabilityTags": ["ai", "automation"]
+    },
+    {
+      "id": "deck-sales-discovery",
+      "type": "pitch_deck",
+      "title": "Sales Discovery Script + Slides",
+      "description": "Structured discovery framework with example slides",
+      "isPublic": false,
+      "industryTags": ["saas"],
+      "capabilityTags": ["sales"]
+    }
+  ]
+}
+

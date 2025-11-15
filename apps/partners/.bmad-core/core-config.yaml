@@ -1,0 +1,57 @@
+# <!-- Powered by BMAD™ Core -->
+# PARTNERSHIP PORTAL CONFIGURATION - Enhanced for partner-facing features
+markdownExploder: true
+qa:
+  qaLocation: docs/qa
+  partnerSecurityReviews: true
+  wcagComplianceChecks: true
+  commissionAccuracyTesting: true
+prd:
+  prdFile: docs/prd.md
+  prdVersion: v4
+  prdSharded: true
+  prdShardedLocation: docs/prd
+  epicFilePattern: epic-{n}*.md
+  partnerJourneyMappingRequired: true
+architecture:
+  architectureFile: docs/architecture.md
+  architectureVersion: v4
+  architectureSharded: true
+  architectureShardedLocation: docs/architecture
+  partnerPortalArchitecture: true
+customTechnicalDocuments: 
+  - docs/partner-security-requirements.md
+  - docs/partner-accessibility-standards.md
+  - docs/commission-calculation-standards.md
+devLoadAlwaysFiles:
+  - docs/architecture/coding-standards.md
+  - docs/architecture/tech-stack.md
+  - docs/architecture/source-tree.md
+  - docs/partnership-portal-patterns.md
+  - .bmad-core/knowledge-base/pdr-cookbook-context.md
+devDebugLog: .ai/debug-log.md
+devStoryLocation: docs/stories
+slashPrefix: PartnerBMad
+partnerPortal:
+  performanceRequirements:
+    firstContentfulPaint: "< 1.2s"
+    largestContentfulPaint: "< 2.0s"
+    mobileFirstDesign: true
+  security:
+    partnerDataIsolation: mandatory
+    commissionDataSecurity: critical
+    auditLogging: enabled
+    multiFactorAuth: required
+  accessibility:
+    wcagLevel: "AA"
+    complianceChecking: automated
+  commission:
+    baseRate: "20%"
+    overrideRate: "10%"
+    totalMaxRate: "30%"
+    accuracyRequired: "100%"
+    calculationAuditing: mandatory
+  testing:
+    crossDeviceTesting: required
+    partnerJourneyTesting: mandatory
+    commissionCalculationTesting: critical

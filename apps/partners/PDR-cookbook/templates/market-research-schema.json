@@ -1,0 +1,65 @@
+# Market Research Schema
+
+{
+  "type": "object",
+  "properties": {
+    "industryOverview": {
+      "type": "string",
+      "description": "Overview of the client's industry"
+    },
+    "marketSize": {
+      "type": "string",
+      "description": "Size of the market with statistics"
+    },
+    "marketTrends": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Current market trends"
+    },
+    "targetDemographics": {
+      "type": "object",
+      "properties": {
+        "age": {
+          "type": "string"
+        },
+        "income": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "interests": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "marketOpportunities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Identified market opportunities"
+    },
+    "challenges": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Market challenges"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      },
+      "description": "Sources of information"
+    }
+  },
+  "required": ["industryOverview", "marketSize", "marketTrends", "targetDemographics"]
+}

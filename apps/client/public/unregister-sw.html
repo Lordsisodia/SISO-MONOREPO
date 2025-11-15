@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unregister Service Workers</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #0a0a0a;
+            color: #fff;
+        }
+        .status {
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            background: #1a1a1a;
+            border: 1px solid #333;
+        }
+        .success {
+            background: #0f3d0f;
+            border-color: #2d5f2d;
+        }
+        .error {
+            background: #3d0f0f;
+            border-color: #5f2d2d;
+        }
+        button {
+            background: #ea384c;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #d42c47;
+        }
+        #log {
+            margin-top: 20px;
+            padding: 15px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧹 Service Worker Cleanup</h1>
+
+    <div class="status">
+        <h2>Status: <span id="status">Checking...</span></h2>
+        <p id="sw-count">Found 0 service workers</p>
+    </div>
+
+    <button onclick="unregisterAllServiceWorkers()">🗑️ Unregister All Service Workers</button>
+    <button onclick="clearAllCaches()">🧹 Clear All Caches</button>
+    <button onclick="doEverything()">⚡ Do Everything (Recommended)</button>
+
+    <div id="log"></div>
+
+    <script>
+        const log = document.getElementById('log');
+        const statusEl = document.getElementById('status');
+        const swCountEl = document.getElementById('sw-count');
+
+        function addLog(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.style.color = type === 'success' ? '#4ade80' :
+                              type === 'error' ? '#f87171' :
+                              '#94a3b8';
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        async function checkServiceWorkers() {
+            if (!('serviceWorker' in navigator)) {
+                addLog('Service Workers not supported in this browser', 'error');
+                statusEl.textContent = 'Not Supported';
+                return [];
+            }
+
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            swCountEl.textContent = `Found ${registrations.length} service worker(s)`;
+
+            if (registrations.length === 0) {
+                statusEl.textContent = 'Clean ✅';
+                addLog('No service workers found', 'success');
+            } else {
+                statusEl.textContent = 'Service Workers Active ⚠️';
+                registrations.forEach((reg, i) => {
+                    addLog(`SW ${i + 1}: ${reg.scope}`, 'info');
+                });
+            }
+
+            return registrations;
+        }
+
+        async function unregisterAllServiceWorkers() {
+            addLog('Starting service worker unregistration...', 'info');
+
+            try {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+
+                if (registrations.length === 0) {
+                    addLog('No service workers to unregister', 'success');
+                    return;
+                }
+
+                for (const registration of registrations) {
+                    const result = await registration.unregister();
+                    if (result) {
+                        addLog(`✅ Unregistered: ${registration.scope}`, 'success');
+                    } else {
+                        addLog(`❌ Failed to unregister: ${registration.scope}`, 'error');
+                    }
+                }
+
+                addLog(`✅ All ${registrations.length} service worker(s) unregistered!`, 'success');
+                await checkServiceWorkers();
+            } catch (error) {
+                addLog(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function clearAllCaches() {
+            addLog('Clearing all caches...', 'info');
+
+            if (!('caches' in window)) {
+                addLog('Cache API not supported', 'error');
+                return;
+            }
+
+            try {
+                const cacheNames = await caches.keys();
+                addLog(`Found ${cacheNames.length} cache(s)`, 'info');
+
+                for (const name of cacheNames) {
+                    await caches.delete(name);
+                    addLog(`✅ Deleted cache: ${name}`, 'success');
+                }
+
+                addLog(`✅ All ${cacheNames.length} cache(s) cleared!`, 'success');
+            } catch (error) {
+                addLog(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function doEverything() {
+            addLog('🚀 Starting complete cleanup...', 'info');
+            await unregisterAllServiceWorkers();
+            await clearAllCaches();
+            addLog('🎉 Cleanup complete! Now reload the main app.', 'success');
+            addLog('⚠️ You should now go to http://localhost:5173 and hard refresh', 'info');
+        }
+
+        // Check on page load
+        checkServiceWorkers();
+    </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+/* SISO Global Color System */
+
+:root {
+  /* Core Brand Colors */
+  --siso-black: #000000;
+  --siso-orange: #FFA726;
+  --siso-red: #FF5722;
+  
+  /* Color channels for Tailwind opacity support */
+  --siso-orange-rgb: 255 167 38;
+  --siso-red-rgb: 255 87 34;
+  
+  /* Background Colors */
+  --siso-bg-primary: #121212;
+  --siso-bg-secondary: #1A1A1A;
+  --siso-bg-tertiary: #242424;
+  --siso-bg-hover: #2A2A2A;
+  --siso-bg-active: #333333;
+  
+  /* Text Colors - Enhanced for better contrast */
+  --siso-text-primary: #FFFFFF;
+  --siso-text-secondary: #F5F5F5;
+  --siso-text-muted: #B8B8B8;
+  --siso-text-disabled: #757575;
+  
+  /* Border Colors */
+  --siso-border-primary: #2A2A2A;
+  --siso-border-secondary: #3A3A3A;
+  --siso-border-hover: #4A4A4A;
+  --siso-border-active: #5A5A5A;
+  
+  /* Status Colors */
+  --siso-success: #4CAF50;
+  --siso-success-bg: rgba(76, 175, 80, 0.1);
+  --siso-warning: #FF9800;
+  --siso-warning-bg: rgba(255, 152, 0, 0.1);
+  --siso-error: #F44336;
+  --siso-error-bg: rgba(244, 67, 54, 0.1);
+  --siso-info: #2196F3;
+  --siso-info-bg: rgba(33, 150, 243, 0.1);
+  
+  /* Gradients */
+  --siso-gradient-primary: linear-gradient(135deg, var(--siso-red) 0%, var(--siso-orange) 100%);
+  --siso-gradient-hover: linear-gradient(135deg, var(--siso-red) 0%, #FFB038 100%);
+  --siso-gradient-text: linear-gradient(90deg, var(--siso-red) 0%, var(--siso-orange) 100%);
+  
+  /* Shadows */
+  --siso-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+  --siso-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --siso-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --siso-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+  
+  /* Glow Effects */
+  --siso-glow-orange: 0 0 20px rgba(255, 167, 38, 0.3);
+  --siso-glow-red: 0 0 20px rgba(255, 87, 34, 0.3);
+  
+  /* Opacity Variants */
+  --siso-opacity-hover: 0.8;
+  --siso-opacity-active: 0.6;
+  --siso-opacity-disabled: 0.3;
+}
+
+/* Tailwind CSS Custom Properties for Compatibility */
+@layer base {
+  :root {
+    /* Map to existing Tailwind variables */
+    --background: 0 0% 7%;
+    --foreground: 0 0% 88%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 88%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 88%;
+    --primary: 15 100% 57%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 0 0% 88%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 62%;
+    --accent: 0 0% 16%;
+    --accent-foreground: 0 0% 88%;
+    --destructive: 4 90% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 16%;
+    --input: 0 0% 16%;
+    --ring: 15 100% 57%;
+  }
+}
+
+/* Utility Classes */
+.siso-gradient-text {
+  background: var(--siso-gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.siso-gradient-bg {
+  background: var(--siso-gradient-primary);
+}
+
+.siso-gradient-bg-hover:hover {
+  background: var(--siso-gradient-hover);
+}
+
+/* Component-specific color mappings */
+.siso-card {
+  background-color: var(--siso-bg-secondary);
+  border-color: var(--siso-border-primary);
+}
+
+.siso-card:hover {
+  background-color: var(--siso-bg-tertiary);
+  border-color: var(--siso-border-secondary);
+}
+
+.siso-button-primary {
+  background: var(--siso-gradient-primary);
+  color: var(--siso-text-primary);
+}
+
+.siso-button-primary:hover {
+  background: var(--siso-gradient-hover);
+  opacity: var(--siso-opacity-hover);
+}
+
+.siso-button-secondary {
+  background-color: var(--siso-bg-secondary);
+  border: 1px solid var(--siso-border-primary);
+  color: var(--siso-text-secondary);
+}
+
+.siso-button-secondary:hover {
+  background-color: var(--siso-bg-tertiary);
+  border-color: var(--siso-border-secondary);
+}
+
+/* Input styles */
+.siso-input {
+  background-color: var(--siso-bg-secondary);
+  border-color: var(--siso-border-primary);
+  color: var(--siso-text-primary);
+}
+
+.siso-input:focus {
+  border-color: var(--siso-orange);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 167, 38, 0.2);
+}
+
+/* Dark mode adjustments (if needed) */
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Light mode overrides could go here if needed */
+  }
+}

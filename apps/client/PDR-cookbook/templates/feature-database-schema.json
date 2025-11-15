@@ -1,0 +1,51 @@
+# Feature Database Schema
+
+{
+  "type": "object",
+  "properties": {
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the feature"
+          },
+          "name": {
+            "type": "string",
+            "description": "Feature name"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["core", "differentiating", "niceToHave", "competitor"],
+            "description": "Feature category"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed feature description"
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Technical requirements"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["high", "medium", "low"],
+            "description": "Implementation priority"
+          },
+          "version": {
+            "type": "string",
+            "enum": ["mvp", "v1", "v2", "v3", "mature"],
+            "description": "Planned version for implementation"
+          }
+        },
+        "required": ["id", "name", "category", "description", "priority", "version"]
+      }
+    }
+  },
+  "required": ["features"]
+}

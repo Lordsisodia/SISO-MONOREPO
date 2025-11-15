@@ -1,0 +1,1 @@
+Before handing off work: run `pnpm lint`, `pnpm typecheck`, and any relevant `pnpm test` suites; ensure `pnpm format` is clean; describe affected files and manual verification (e.g., visiting updated Next.js routes) in status notes.

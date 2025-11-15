@@ -1,0 +1,33 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-supabase"
+      ],
+      "env": {
+        "SUPABASE_URL": "https://yeqosbhihojkrgexenzj.supabase.co",
+        "SUPABASE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InllcW9zYmhpaG9qa3JnZXhlbnpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk1MTkzOTksImV4cCI6MjA3NTA5NTM5OX0.AOYh-XI7yxaUL-bCefYVTYaZk9v-ZApwa93XDT0icfU"
+      }
+    },
+    "notion": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-notion"
+      ],
+      "env": {
+        "NOTION_API_KEY": "${NOTION_API_KEY}"
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/shaansisodia/DEV/SISO-ECOSYSTEM/SISO-CLIENT-BASE"
+      ]
+    }
+  }
+}

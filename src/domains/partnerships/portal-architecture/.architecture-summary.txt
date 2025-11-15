@@ -1,0 +1,76 @@
+📚 PORTAL ARCHITECTURE DOCUMENTATION
+
+Three documents created:
+
+1. STANDARDS.md ⭐ START HERE
+   - Quick reference for daily work
+   - Decision tree
+   - Mandatory rules
+   - 2-minute read
+
+2. README.md 📖 DEEP DIVE
+   - Complete architectural guide
+   - Layer explanations with examples
+   - Common patterns
+   - Anti-patterns
+   - Testing strategy
+   - 15-minute read
+
+3. ARCHITECTURE_PLAN.md 🗺️ ROADMAP
+   - Feature-by-feature breakdown
+   - Implementation phases
+   - Where each feature should go
+   - Complexity analysis
+
+─────────────────────────────────────
+
+TLDR: THE THREE-LAYER SYSTEM
+
+Simple:    feature/ui/
+Medium:    feature/{domain, application, ui}
+Complex:   feature/{domain, application, infrastructure, subdomains, ui}
+
+Rule: Start simple, add layers only when needed.
+
+domain/          → Types, business rules (pure TS)
+application/     → Hooks, state, orchestration
+infrastructure/  → APIs, external services
+ui/              → React components only
+
+─────────────────────────────────────
+
+WHEN TO USE WHICH:
+
+Just displaying data?
+→ Simple (ui/ only)
+
+Forms + validation?
+→ Medium (domain/ + application/ + ui/)
+
+External APIs?
+→ Medium + infrastructure/
+
+Multiple sub-features?
+→ Complex (full layers + subdomains)
+
+─────────────────────────────────────
+
+GOLDEN RULES:
+
+✅ Business logic in domain/
+✅ API calls in infrastructure/
+✅ UI stays pure (no logic)
+✅ Follow decision tree
+✅ Use barrel exports (index.ts)
+
+❌ No business logic in UI
+❌ No API calls in UI
+❌ Don't skip layers for "small features"
+❌ No god hooks
+❌ No deviations without documenting
+
+─────────────────────────────────────
+
+NEXT STEP: Pick one feature and build it end-to-end
+Recommended: Pipeline Ops → Submit Client
+(Forms, validation, API, good reference example)

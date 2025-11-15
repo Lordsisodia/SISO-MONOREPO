@@ -1,0 +1,11 @@
+{
+  "version": "0.1",
+  "lastUpdated": "2025-11-11",
+  "industries": [
+    { "slug": "saas", "label": "SaaS" },
+    { "slug": "ecommerce", "label": "E-commerce" },
+    { "slug": "healthcare", "label": "Healthcare" },
+    { "slug": "finance", "label": "Finance" }
+  ]
+}
+

@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "supabase-partnerships": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-supabase"
+      ],
+      "env": {
+        "SUPABASE_URL": "https://tcidaytqzruxqhsbfofy.supabase.co",
+        "SUPABASE_SERVICE_ROLE_KEY": "${SUPABASE_SERVICE_ROLE_KEY}"
+      },
+      "disabled": false,
+      "alwaysAllow": []
+    },
+    "partnerships-memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "disabled": false,
+      "alwaysAllow": []
+    }
+  }
+}

@@ -1,0 +1,76 @@
+# Competitor Analysis Schema
+
+{
+  "type": "object",
+  "properties": {
+    "competitorId": {
+      "type": "string",
+      "description": "Unique identifier for the competitor"
+    },
+    "name": {
+      "type": "string",
+      "description": "Business name"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Website URL"
+    },
+    "websiteAnalysis": {
+      "type": "object",
+      "properties": {
+        "structure": {
+          "type": "string",
+          "description": "Website structure and navigation"
+        },
+        "pages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Key pages identified"
+        }
+      }
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "string",
+      },
+      "description": "Key features identified"
+    },
+    "valueProposition": {
+      "type": "string",
+      "description": "Stated value proposition"
+    },
+    "designElements": {
+      "type": "object",
+      "properties": {
+        "colorScheme": {
+          "type": "string"
+        },
+        "typography": {
+          "type": "string"
+        },
+        "layout": {
+          "type": "string"
+        }
+      }
+    },
+    "strengths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Identified strengths"
+    },
+    "weaknesses": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Identified weaknesses"
+    }
+  },
+  "required": ["competitorId", "name", "url", "features", "valueProposition"]
+}

@@ -1,0 +1,7 @@
+- `pnpm install` – install dependencies.
+- `pnpm dev` – run Next.js dev server for unified app in `src/`.
+- `pnpm build && pnpm start` – production build and serve.
+- `pnpm lint` / `pnpm typecheck` – lint + TS checks before commits.
+- `pnpm test` or `pnpm test:ui` – Vitest suites.
+- `pnpm format` – apply Prettier formatting.
+- `./scripts/generate-domain.sh <org> <domain>` – scaffold new domain modules.

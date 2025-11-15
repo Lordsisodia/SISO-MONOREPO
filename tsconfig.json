@@ -1,0 +1,69 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "jsx": "preserve",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "incremental": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@/app/*": [
+        "./src/app/*"
+      ],
+      "@/domains/*": [
+        "./src/domains/*"
+      ],
+      "@/features/*": [
+        "./src/features/*"
+      ],
+      "@/lib/*": [
+        "./src/lib/*"
+      ],
+      "@/providers/*": [
+        "./src/providers/*"
+      ],
+      "@/config/*": [
+        "./src/config/*"
+      ],
+      "@/components/*": [
+        "./components/*"
+      ],
+      "@/types/*": [
+        "./src/types/*"
+      ],
+      "lucide-react": [
+        "./node_modules/lucide-react/dist/lucide-react"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "noEmit": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "apps"
+  ]
+}

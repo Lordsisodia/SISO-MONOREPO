@@ -1,0 +1,79 @@
+{
+  "name": "SISO Partnerships",
+  "short_name": "Partners",
+  "description": "SISO Partnerships - Collaboration & Partner Management",
+  "start_url": "/partners",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#000000",
+  "theme_color": "#3b82f6",
+  "orientation": "any",
+  "scope": "/partners/",
+  "categories": ["business", "productivity"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/icons/partners-icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/partners-icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/partners-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/partners-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon-partners.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile-partners.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "SISO Partnerships Dashboard"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Active Partners",
+      "short_name": "Partners",
+      "description": "View active partnerships",
+      "url": "/partners/active",
+      "icons": [{ "src": "/icons/partners-icon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Opportunities",
+      "short_name": "Opportunities",
+      "description": "Partnership opportunities",
+      "url": "/partners/opportunities",
+      "icons": [{ "src": "/icons/partners-icon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Resources",
+      "short_name": "Resources",
+      "description": "Partner resources",
+      "url": "/partners/resources",
+      "icons": [{ "src": "/icons/partners-icon-96x96.png", "sizes": "96x96" }]
+    }
+  ]
+}

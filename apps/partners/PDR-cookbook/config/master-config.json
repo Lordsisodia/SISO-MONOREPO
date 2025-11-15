@@ -1,0 +1,190 @@
+{
+  "system": {
+    "name": "PDR Cookbook Automation System",
+    "version": "2.0.0",
+    "description": "Autonomous development framework for creating comprehensive PDRs",
+    "executionEngine": "Claude Code",
+    "parallelAgents": true
+  },
+  "workflow": {
+    "phases": [
+      {
+        "id": "discovery",
+        "name": "Discovery & Research",
+        "steps": ["01", "02", "03", "04"],
+        "parallelizable": ["02", "03"],
+        "timeEstimate": "2-3 hours"
+      },
+      {
+        "id": "planning",
+        "name": "Planning & Design",
+        "steps": ["05", "06", "07", "08", "09"],
+        "parallelizable": ["07", "08"],
+        "timeEstimate": "2-3 hours"
+      },
+      {
+        "id": "technical",
+        "name": "Technical Architecture",
+        "steps": ["10", "11", "12"],
+        "parallelizable": ["11", "12"],
+        "timeEstimate": "1-2 hours"
+      },
+      {
+        "id": "implementation",
+        "name": "Implementation Planning",
+        "steps": ["13", "14", "15"],
+        "parallelizable": false,
+        "timeEstimate": "1 hour"
+      }
+    ],
+    "qualityGates": {
+      "afterPhase": true,
+      "requireApproval": ["planning", "technical"],
+      "autoProgress": ["discovery", "implementation"]
+    }
+  },
+  "dataStructure": {
+    "inputDir": "client-input",
+    "outputDir": "PDR",
+    "folders": {
+      "discovery": "01-discovery",
+      "planning": "02-planning",
+      "design": "03-design",
+      "technical": "04-technical",
+      "implementation": "05-implementation"
+    },
+    "standardFiles": {
+      "clientRequirements": "01-discovery/client-requirements.json",
+      "marketResearch": "01-discovery/market-research.json",
+      "competitorAnalysis": "01-discovery/competitor-analysis.json",
+      "featureRoadmap": "02-planning/feature-roadmap.json",
+      "siteMap": "02-planning/sitemap.json",
+      "wireframes": "02-planning/wireframes/",
+      "designSystem": "03-design/design-system.json",
+      "databaseSchema": "04-technical/database-schema.json",
+      "apiIntegrations": "04-technical/api-integrations.json",
+      "taskList": "05-implementation/task-list.json",
+      "testingPlan": "05-implementation/testing-plan.json"
+    }
+  },
+  "tools": {
+    "required": [
+      {
+        "name": "Web Search",
+        "usage": "Market research, competitor discovery",
+        "mcp": "WebSearch"
+      },
+      {
+        "name": "Playwright",
+        "usage": "Competitor analysis, screenshots",
+        "mcp": "puppeteer",
+        "config": {
+          "headless": true,
+          "screenshot": true
+        }
+      },
+      {
+        "name": "Supabase",
+        "usage": "Database planning and testing",
+        "mcp": "supabase"
+      },
+      {
+        "name": "File System",
+        "usage": "Reading/writing project files",
+        "mcp": "fs"
+      }
+    ],
+    "optional": [
+      {
+        "name": "Claude Code Task",
+        "usage": "Parallel agent execution",
+        "mcp": "Task"
+      },
+      {
+        "name": "TodoWrite",
+        "usage": "Task tracking",
+        "mcp": "TodoWrite"
+      }
+    ]
+  },
+  "agentInstructions": {
+    "general": [
+      "Follow steps sequentially unless marked as parallelizable",
+      "Save all outputs to specified locations exactly",
+      "Validate JSON outputs against schemas",
+      "Document sources for all research",
+      "Flag uncertainties for human review",
+      "Use TodoWrite to track progress"
+    ],
+    "parallel": {
+      "maxAgents": 4,
+      "distribution": {
+        "research": ["market", "competitors", "technical", "keywords"],
+        "planning": ["features", "wireframes", "content", "testing"],
+        "implementation": ["ui", "database", "api", "deployment"]
+      }
+    }
+  },
+  "versionStrategy": {
+    "Day1": {
+      "focus": "Critical online presence",
+      "maxFeatures": 5,
+      "pages": 1,
+      "hours": 8
+    },
+    "Day2": {
+      "focus": "MVP functionality", 
+      "maxFeatures": 10,
+      "pages": 5,
+      "hours": 16
+    },
+    "Week2": {
+      "focus": "Full launch",
+      "maxFeatures": 25,
+      "pages": "all",
+      "hours": 80
+    },
+    "Month2": {
+      "focus": "Growth optimization",
+      "maxFeatures": 50,
+      "enhancement": true,
+      "hours": 320
+    },
+    "Year2": {
+      "focus": "Market leadership",
+      "innovation": true,
+      "hours": 1000
+    }
+  },
+  "qualityMetrics": {
+    "completeness": {
+      "required": ["client-requirements", "competitor-analysis", "feature-roadmap"],
+      "threshold": 100
+    },
+    "research": {
+      "minCompetitors": 5,
+      "maxDataAge": "12 months",
+      "minSources": 10
+    },
+    "planning": {
+      "wireframesRequired": true,
+      "userStoriesRequired": true,
+      "testCasesRequired": true
+    }
+  },
+  "outputFormats": {
+    "json": {
+      "prettify": true,
+      "validate": true
+    },
+    "markdown": {
+      "tocRequired": true,
+      "imagesEmbedded": true
+    },
+    "visuals": {
+      "format": "png",
+      "maxWidth": 1920,
+      "organize": "by-section"
+    }
+  }
+}

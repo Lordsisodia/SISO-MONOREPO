@@ -1,0 +1,4 @@
+- Purpose: Unified Next.js monorepo that consolidates SISO client-base and partnerships products into a single app, while keeping legacy reference apps under `apps/` for comparison.
+- Stack: Next.js 15 + React 18 with TypeScript, TailwindCSS, styled-components, Radix UI, TanStack Query, Supabase SDK, Vitest for unit tests.
+- Layout: `src/app` (routing), `src/domains` (domain logic split into client-base, partnerships, shared), `src/features`, `src/lib`, `src/providers`, plus `components/`, `packages/`, `scripts/` for shared resources.
+- Key docs: `README.md` plus architecture + migration guides under `docs/`.
