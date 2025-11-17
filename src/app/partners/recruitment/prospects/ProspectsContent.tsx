@@ -8,27 +8,22 @@ import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Calculator, Compass, Filter, Paperclip, SendHorizontal, Zap } from "lucide-react";
 
-const pipelineHighlights = [
-  {
-    title: "Recruitment pipeline",
-    description: "Qualified recruits currently in motion.",
-    metricValue: "32",
-    metricLabel: "active prospects",
-    buttonText: "Add prospect",
-    href: "/partners/recruitment/prospects",
-    icon: "🧭",
-  },
-  {
-    title: "Invites this week",
-    description: "Warm intros, referral links, and nurture flows.",
-    metricValue: "14",
-    metricLabel: "sent this week",
-    buttonText: "Review outreach",
-    href: "/partners/recruitment/team",
-    icon: "📨",
-  },
-];
+const pipelineHero = {
+  title: "Recruitment pipeline",
+  description: "Qualified recruits currently in motion.",
+  metricValue: "32",
+  metricLabel: "active prospects",
+  buttonText: "Add prospect",
+  href: "/partners/recruitment/prospects",
+};
+
+const inviteSnapshot = {
+  sent: 14,
+  conversion: "62% invite ➜ approval",
+  bottleneck: "4 invites waiting on compliance packets",
+};
 
 const prospectFilters = ["All prospects", "Needs outreach", "Interviewing", "Compliance", "Dormant"];
 
@@ -85,27 +80,39 @@ export function RecruitmentProspectsContent() {
   return (
     <PartnersPageShell initialState={{ activeDrawerSection: "recruitment" }}>
       <div className="space-y-6 p-4 lg:p-8">
-        <div className="grid gap-4 lg:grid-cols-2">
-          {pipelineHighlights.map((card) => (
-            <HighlightCard
-              key={card.title}
-              color="orange"
-              title={card.title}
-              description={card.description}
-              metricValue={card.metricValue}
-              metricLabel={card.metricLabel}
-              buttonText={card.buttonText}
-              onButtonClick={() => router.push(card.href)}
-              icon={<span className="text-xl" aria-hidden>{card.icon}</span>}
-              hideDivider
-              showCornerIcon={false}
-              titleClassName="uppercase tracking-[0.35em] text-white"
-              descriptionClassName="text-sm"
-            />
-          ))}
-        </div>
+        <HighlightCard
+          color="orange"
+          title={pipelineHero.title}
+          description={pipelineHero.description}
+          metricValue={pipelineHero.metricValue}
+          metricLabel={pipelineHero.metricLabel}
+          buttonText={pipelineHero.buttonText}
+          onButtonClick={() => router.push(pipelineHero.href)}
+          icon={<Compass className="h-5 w-5" />}
+          hideDivider
+          showCornerIcon={false}
+          titleClassName="uppercase tracking-[0.35em] text-white"
+          descriptionClassName="text-sm"
+        />
 
-        <SettingsGroupCallout icon={<span className="text-xl">🧮</span>} title="Segment views" subtitle="Filter prospects by status, owner, or source." showChevron={false}>
+        <SettingsGroupCallout icon={<SendHorizontal className="h-4 w-4" />} title="Invites this week" subtitle="Warm intros, referral links, and nurture flows." showChevron={false}>
+          <div className="flex flex-wrap items-center gap-6 text-sm text-white">
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.35em] text-white/60">Sent</p>
+              <p className="text-2xl font-semibold">{inviteSnapshot.sent}</p>
+            </div>
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.35em] text-white/60">Conversion</p>
+              <p className="text-lg font-semibold text-siso-orange">{inviteSnapshot.conversion}</p>
+            </div>
+            <div className="flex-1 text-xs text-white/70">{inviteSnapshot.bottleneck}</div>
+            <Button variant="ghost" size="sm" className="border border-white/10" onClick={() => router.push("/partners/recruitment/team")}>
+              Review outreach
+            </Button>
+          </div>
+        </SettingsGroupCallout>
+
+        <SettingsGroupCallout icon={<Calculator className="h-4 w-4" />} title="Segment views" subtitle="Filter prospects by status, owner, or source." showChevron={false}>
           <div className="flex flex-wrap gap-2">
             {prospectFilters.map((filter) => (
               <button
@@ -152,7 +159,7 @@ export function RecruitmentProspectsContent() {
         </div>
 
         <div className="grid gap-4 lg:grid-cols-2">
-          <SettingsGroupCallout icon={<span className="text-xl">⚡</span>} title="Automation queue" subtitle="High-priority actions generated from playbooks." showChevron={false}>
+          <SettingsGroupCallout icon={<Zap className="h-4 w-4" />} title="Automation queue" subtitle="High-priority actions generated from playbooks." showChevron={false}>
             <div className="space-y-3">
               {automationQueue.map((task) => (
                 <div key={task.id} className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3">
@@ -166,7 +173,7 @@ export function RecruitmentProspectsContent() {
             </div>
           </SettingsGroupCallout>
 
-          <SettingsGroupCallout icon={<span className="text-xl">📎</span>} title="Quick resources" subtitle="Attach collateral before the next touch." showChevron={false}>
+          <SettingsGroupCallout icon={<Paperclip className="h-4 w-4" />} title="Quick resources" subtitle="Attach collateral before the next touch." showChevron={false}>
             <div className="space-y-3 text-sm text-white/70">
               {resourceLinks.map((resource) => (
                 <div key={resource.title} className="rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3">

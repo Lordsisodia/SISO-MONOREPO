@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -165,38 +166,20 @@ export function ActiveDealsWorkspace({ initialDeals }: ActiveDealsWorkspaceProps
   return (
     <main className="min-h-screen bg-[#03040A] text-white">
       <div className="mx-auto w-full max-w-6xl px-4 py-10 lg:px-8">
-        <Card className="overflow-hidden border-white/10 bg-gradient-to-r from-[#101828] via-[#0B1020] to-[#06080F] text-white">
-          <CardContent className="flex flex-col gap-8 px-8 py-10 lg:flex-row lg:items-center">
-            <div className="flex-1 space-y-4">
-              <Badge variant="outline" className="border-white/30 bg-white/5 text-white">
-                Pipeline Ops · Active Deals
-              </Badge>
-              <div>
-                <h1 className="text-3xl font-semibold sm:text-4xl">Active Deals</h1>
-                <p className="mt-3 text-base text-white/70">
-                  Monitor SISO status updates, next steps, and commission forecasts for every in-flight opportunity.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                <Button className="gap-2 bg-siso-orange text-black hover:bg-orange-400">
-                  <Sparkles className="h-4 w-4" />
-                  Request SISO help
-                </Button>
-                <Button variant="outline" className="border-white/30 text-white hover:bg-white/10">
-                  <ArrowRight className="mr-2 h-4 w-4" />
-                  Log new note
-                </Button>
-              </div>
-            </div>
-            <div className="grid flex-1 gap-4 rounded-2xl border border-white/10 bg-white/5 p-6 sm:grid-cols-3">
-              <HeroStat label="Pipeline" value={formatCurrency(pipelineValue)} helper="Filtered total" icon={Briefcase} />
-              <HeroStat label="Expected commission" value={formatCurrency(commissionValue)} helper="12% est." icon={DollarSign} />
-              <HeroStat label="At risk" value={`${healthSummary.risk ?? 0}`} helper="Deals flagged" icon={Target} />
-            </div>
-          </CardContent>
-        </Card>
+        <SettingsGroupCallout
+          icon={<Sparkles className="h-4 w-4" />}
+          title="Pipeline stats"
+          subtitle="Live snapshot of filtered deals"
+          showChevron={false}
+        >
+          <div className="grid gap-4 sm:grid-cols-3">
+            <HeroStat label="Pipeline" value={formatCurrency(pipelineValue)} helper="Filtered total" icon={Briefcase} />
+            <HeroStat label="Expected commission" value={formatCurrency(commissionValue)} helper="12% est." icon={DollarSign} />
+            <HeroStat label="At risk" value={`${healthSummary.risk ?? 0}`} helper="Deals flagged" icon={Target} />
+          </div>
+        </SettingsGroupCallout>
 
-        <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px]">
           <section>
             <Card className="border-white/10 bg-white/5">
               <CardHeader className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">

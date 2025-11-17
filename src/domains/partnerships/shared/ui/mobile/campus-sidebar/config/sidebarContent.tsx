@@ -122,7 +122,7 @@ function buildSettingsSidebarSections(): MenuSection[] {
 function buildSidebarFromConfig(topId: string): SidebarContent | null {
   const top: TopLevelIconSpec | undefined = partnerNavConfig.icons.find((i) => i.id === topId);
   if (!top) return null;
-  const titleOverride: Record<string, string> = { pipeline: "Pipeline Ops", growth: "Earnings" };
+  const titleOverride: Record<string, string> = { pipeline: "Client Pipeline", growth: "Earnings" };
   const dashboardCallouts: Record<string, { targetId: string; title: string; subtitle: string }> = {
     academy: { targetId: "getting-started", title: "Academy", subtitle: "Kick off onboarding and courses." },
     pipeline: { targetId: "dashboard", title: "Dashboard", subtitle: "Track deals, submissions, and reviews." },

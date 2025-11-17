@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { FallingPattern } from "@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern";
@@ -8,7 +8,7 @@ import { Trophy, Sparkles, UsersRound, Megaphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Progress from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FloatingNavButton } from "@/domains/partnerships/shared/ui/mobile/FloatingNavButton";
 import {
   badgeTotals,
   featuredBadges,
@@ -18,19 +18,12 @@ import {
 } from "@/domains/partnerships/earnings/data/earningsAchievements";
 import { cn } from "@/domains/shared/utils/cn";
 
-const leaderboardTabs = ["overall", "region", "industry", "newcomers"] as const;
-type LeaderboardTab = typeof leaderboardTabs[number];
-
 export function EarningsAchievementsScreen() {
-  const [activeTab, setActiveTab] = useState<LeaderboardTab>("overall");
-
-  const filteredLeaderboard = useMemo(() => {
-    if (activeTab === "overall") return leaderboardEntries;
-    return leaderboardEntries;
-  }, [activeTab]);
+  const filteredLeaderboard = useMemo(() => leaderboardEntries, []);
 
   return (
     <section className="relative flex min-h-screen flex-col bg-siso-bg-primary text-siso-text-primary">
+      <FloatingNavButton />
       <div className="pointer-events-none absolute inset-0 z-0">
         <FallingPattern className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
       </div>
@@ -50,6 +43,7 @@ export function EarningsAchievementsScreen() {
           metricLabel=""
           buttonText=""
           onButtonClick={() => {}}
+          showCornerIcon={false}
         />
 
         <SettingsGroupCallout
@@ -96,20 +90,6 @@ export function EarningsAchievementsScreen() {
           showChevron={false}
         >
           <div className="space-y-3 rounded-[22px] border border-white/10 bg-white/5 p-4">
-            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as LeaderboardTab)}>
-            <TabsList className="flex gap-2 overflow-x-auto border-0 bg-transparent p-0 [&::-webkit-scrollbar]:hidden">
-              {leaderboardTabs.map((tab) => (
-                <TabsTrigger
-                  key={tab}
-                  value={tab}
-                  className="rounded-full border border-white/10 px-4 py-1 text-[10px] uppercase tracking-[0.25em] text-white/70 whitespace-nowrap data-[state=active]:border-siso-orange data-[state=active]:bg-siso-orange/20 data-[state=active]:text-white"
-                >
-                  {tab}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            </Tabs>
-
             <div className="space-y-2">
               {filteredLeaderboard.map((entry) => (
                 <LeaderboardRow key={entry.rank} entry={entry} highlight={entry.name.toLowerCase() === "you"} />

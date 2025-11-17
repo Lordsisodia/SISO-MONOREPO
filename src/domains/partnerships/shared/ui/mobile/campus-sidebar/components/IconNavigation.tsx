@@ -107,7 +107,7 @@ export function IconNavigation({ activeSection, onSectionChange, heightClass = "
   const { openQuickActionsWith, closeDrawer } = useMobileNavigation();
   const summaries = getTopLevelIconSummaries();
 
-  const labelOverride: Record<string, string> = { pipeline: "Deals", growth: "Earnings" };
+  const labelOverride: Record<string, string> = { pipeline: "Client Pipeline", growth: "Earnings" };
   const counts: Record<string, number | "dot" | undefined> = {
     pipeline: 3,
     recruitment: "dot",

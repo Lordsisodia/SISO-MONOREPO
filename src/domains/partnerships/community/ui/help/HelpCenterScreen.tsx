@@ -2,7 +2,7 @@
 
 import { useMemo, useState, type ComponentType } from "react";
 import Link from "next/link";
-import { Search, Globe, ArrowRight, ChevronRight, BookmarkCheck, Share2, Sparkles, CreditCard, ShieldCheck, BarChart3, UsersRound, LifeBuoy } from "lucide-react";
+import { Search, Globe, ArrowRight, ChevronRight, BookmarkCheck, Share2, Sparkles, CreditCard, ShieldCheck, BarChart3, UsersRound, LifeBuoy, Clock3, Edit3 } from "lucide-react";
 
 import { SettingsDetailLayout } from "@/domains/partnerships/portal-architecture/settings/components/SettingsDetailLayout";
 import { HighlightCard } from "@/components/ui/card-5-static";
@@ -11,6 +11,7 @@ import type {
   HelpArticle,
   HelpCollectionIcon,
 } from "@/domains/partnerships/community/help/data/help-center";
+import type { HelpArticleSection } from "@/domains/partnerships/community/help/data/help-center";
 import { cn } from "@/domains/shared/utils/cn";
 
 type HelpCenterScreenProps = {
@@ -121,15 +122,7 @@ export function HelpArticleScreen({ collection, article }: HelpArticleScreenProp
         </header>
         <div className="space-y-4 text-sm text-siso-text-muted">
           {article.sections.map((section, index) => (
-            <div
-              key={section.heading ?? index}
-              className="space-y-2 rounded-2xl border border-siso-border bg-siso-bg-primary/60 p-4"
-            >
-              {section.heading ? <h2 className="text-base font-semibold text-white">{section.heading}</h2> : null}
-              {section.body.map((paragraph, idx) => (
-                <p key={idx}>{paragraph}</p>
-              ))}
-            </div>
+            <HelpArticleSectionCard key={section.heading ?? index} section={section} />
           ))}
         </div>
         <footer className="flex flex-col gap-3 rounded-2xl border border-siso-border bg-siso-bg-primary/60 p-4 text-xs text-siso-text-muted md:flex-row md:items-center md:justify-between">
@@ -222,6 +215,13 @@ const iconMap: Record<HelpCollectionIcon, ComponentType<{ className?: string }>>
 
 const resolveIcon = (key: HelpCollectionIcon) => iconMap[key] ?? LifeBuoy;
 
+const sectionIconMap: Partial<Record<NonNullable<HelpArticleSection["icon"]>, ComponentType<{ className?: string }>>> = {
+  clock: Clock3,
+  sparkles: Sparkles,
+  "credit-card": CreditCard,
+  edit: Edit3,
+};
+
 function HelpCollectionCard({ collection }: { collection: HelpCollection }) {
   const Icon = resolveIcon(collection.icon);
   return (
@@ -240,6 +240,29 @@ function HelpCollectionCard({ collection }: { collection: HelpCollection }) {
       </div>
       <ArrowRight className="h-4 w-4 text-siso-text-muted" />
     </Link>
+  );
+}
+
+function HelpArticleSectionCard({ section }: { section: HelpArticleSection }) {
+  const Icon = section.icon ? sectionIconMap[section.icon] : undefined;
+  return (
+    <div className="rounded-2xl border border-siso-border bg-siso-bg-primary/60 p-4">
+      <div className="flex items-start gap-3">
+        {Icon ? (
+          <span className="mt-1 inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+            <Icon className="h-4 w-4 text-siso-orange" />
+          </span>
+        ) : null}
+        <div className="space-y-2">
+          {section.heading ? <h2 className="text-base font-semibold text-white">{section.heading}</h2> : null}
+          {section.body.map((paragraph, idx) => (
+            <p key={idx} className="text-sm text-siso-text-muted">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 

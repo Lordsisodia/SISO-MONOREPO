@@ -238,7 +238,7 @@ export function PartnershipHubWidgets({ onNavigate }: { onNavigate?: (href: stri
         { label: "Next rival", value: "Maya · 1,340" },
         { label: "Deals to pass", value: "2" },
       ],
-      primaryAction: { label: "View leaderboard", href: "/partners/leaderboard" },
+      primaryAction: { label: "View leaderboard", href: "/partners/earnings/leaderboard" },
       secondaryAction: { label: "Post a win", href: "/partners/wins-feed" },
     },
     {

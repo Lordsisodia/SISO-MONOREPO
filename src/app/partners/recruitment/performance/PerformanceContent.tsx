@@ -7,6 +7,7 @@ import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { BarChart3, LineChart, Medal, CheckCircle2 } from "lucide-react";
 
 const performanceHighlights = [
   {
@@ -16,16 +17,7 @@ const performanceHighlights = [
     metricLabel: "invite-to-approval",
     buttonText: "View funnel",
     href: "/partners/recruitment/prospects",
-    icon: "📊",
-  },
-  {
-    title: "Overrides paid",
-    description: "Commission distributed to recruiting team.",
-    metricValue: "$42K",
-    metricLabel: "last 90 days",
-    buttonText: "Open wallet",
-    href: "/partners/earnings/wallet",
-    icon: "💸",
+    icon: <BarChart3 className="h-5 w-5" aria-hidden />,
   },
 ];
 
@@ -54,7 +46,7 @@ export function RecruitmentPerformanceContent() {
   return (
     <PartnersPageShell initialState={{ activeDrawerSection: "recruitment" }}>
       <div className="space-y-6 p-4 lg:p-8">
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-4 lg:grid-cols-1">
           {performanceHighlights.map((card) => (
             <HighlightCard
               key={card.title}
@@ -65,7 +57,7 @@ export function RecruitmentPerformanceContent() {
               metricLabel={card.metricLabel}
               buttonText={card.buttonText}
               onButtonClick={() => router.push(card.href)}
-              icon={<span className="text-xl" aria-hidden>{card.icon}</span>}
+              icon={card.icon}
               hideDivider
               showCornerIcon={false}
               titleClassName="uppercase tracking-[0.35em] text-white"
@@ -74,7 +66,7 @@ export function RecruitmentPerformanceContent() {
           ))}
         </div>
 
-        <SettingsGroupCallout icon={<span className="text-xl">📈</span>} title="Funnel health" subtitle="See where recruits drop." showChevron={false}>
+        <SettingsGroupCallout icon={<LineChart className="h-4 w-4" />} title="Funnel health" subtitle="See where recruits drop." showChevron={false}>
           <div className="space-y-4">
             {funnelStages.map((stage) => (
               <div key={stage.stage} className="space-y-2">
@@ -91,7 +83,7 @@ export function RecruitmentPerformanceContent() {
         </SettingsGroupCallout>
 
         <div className="grid gap-4 lg:grid-cols-2">
-          <SettingsGroupCallout icon={<span className="text-xl">🏅</span>} title="Leaderboard" subtitle="Top recruiters by approvals and overrides." showChevron={false}>
+          <SettingsGroupCallout icon={<Medal className="h-4 w-4" />} title="Leaderboard" subtitle="Top recruiters by approvals and overrides." showChevron={false}>
             <div className="space-y-3 text-sm text-white/80">
               {leaderboard.map((row, index) => (
                 <div key={row.name} className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3">
@@ -108,7 +100,7 @@ export function RecruitmentPerformanceContent() {
             </div>
           </SettingsGroupCallout>
 
-          <SettingsGroupCallout icon={<span className="text-xl">✅</span>} title="Recommended actions" subtitle="Take immediate steps to unblock referrals." showChevron={false}>
+          <SettingsGroupCallout icon={<CheckCircle2 className="h-4 w-4" />} title="Recommended actions" subtitle="Take immediate steps to unblock referrals." showChevron={false}>
             <div className="space-y-3 text-sm text-white/80">
               {actions.map((action) => (
                 <div key={action.label} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3">

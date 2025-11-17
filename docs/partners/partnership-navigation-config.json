@@ -138,7 +138,7 @@
               {
                 "id": "leaderboard-shortcut",
                 "label": "Leaderboard",
-                "path": "/partners/leaderboard",
+                "path": "/partners/earnings/leaderboard",
                 "description": "Where you rank this week"
               }
             ]
@@ -280,7 +280,7 @@
     },
     {
       "id": "pipeline",
-      "label": "Pipeline Ops",
+      "label": "Client Pipeline",
       "icon": "Handshake",
       "order": 3,
       "subsections": [
@@ -468,7 +468,7 @@
         {
           "id": "leaderboard",
           "label": "Leaderboard",
-          "path": "/partners/leaderboard",
+          "path": "/partners/earnings/leaderboard",
           "tierRequired": "active",
           "hasHashtag": false,
           "description": "Rankings and top performers",

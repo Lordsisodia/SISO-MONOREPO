@@ -8,6 +8,7 @@ import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+import { Handshake, Users, Target, Map as MapIcon } from "lucide-react";
 
 const teamHighlights = [
   {
@@ -17,16 +18,7 @@ const teamHighlights = [
     metricLabel: "live partners",
     buttonText: "Invite partner",
     href: "/partners/recruitment/prospects",
-    icon: "🤝",
-  },
-  {
-    title: "Ramp & compliance",
-    description: "Track training, wallet setup, and access.",
-    metricValue: "6",
-    metricLabel: "in onboarding",
-    buttonText: "View checklist",
-    href: "/partners/academy/getting-started",
-    icon: "📋",
+    icon: <Handshake className="h-5 w-5" aria-hidden />,
   },
 ];
 
@@ -79,7 +71,7 @@ export function RecruitmentTeamContent() {
   return (
     <PartnersPageShell initialState={{ activeDrawerSection: "recruitment" }}>
       <div className="space-y-6 p-4 lg:p-8">
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid gap-4 lg:grid-cols-1">
           {teamHighlights.map((card) => (
             <HighlightCard
               key={card.title}
@@ -90,7 +82,7 @@ export function RecruitmentTeamContent() {
               metricLabel={card.metricLabel}
               buttonText={card.buttonText}
               onButtonClick={() => router.push(card.href)}
-              icon={<span className="text-xl" aria-hidden>{card.icon}</span>}
+              icon={card.icon}
               hideDivider
               showCornerIcon={false}
               titleClassName="uppercase tracking-[0.35em] text-white"
@@ -99,7 +91,7 @@ export function RecruitmentTeamContent() {
           ))}
         </div>
 
-        <SettingsGroupCallout icon={<span className="text-xl">🧑‍🤝‍🧑</span>} title="Roster" subtitle="Every rep, their role, and current focus." showChevron={false}>
+        <SettingsGroupCallout icon={<Users className="h-4 w-4" />} title="Roster" subtitle="Every rep, their role, and current focus." showChevron={false}>
           <div className="space-y-3">
             {roster.map((member) => (
               <div key={member.name} className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm text-white/80 lg:flex-row lg:items-center lg:justify-between">
@@ -118,7 +110,7 @@ export function RecruitmentTeamContent() {
         </SettingsGroupCallout>
 
         <div className="grid gap-4 lg:grid-cols-2">
-          <SettingsGroupCallout icon={<span className="text-xl">🎯</span>} title="Training & compliance" subtitle="Stay ahead of expirations and onboarding tasks." showChevron={false}>
+          <SettingsGroupCallout icon={<Target className="h-4 w-4" />} title="Training & compliance" subtitle="Stay ahead of expirations and onboarding tasks." showChevron={false}>
             <div className="space-y-4">
               {trainingAlerts.map((alert) => (
                 <div key={alert.id} className="space-y-2 rounded-2xl border border-white/10 bg-black/20 p-4">
@@ -135,7 +127,7 @@ export function RecruitmentTeamContent() {
             </div>
           </SettingsGroupCallout>
 
-          <SettingsGroupCallout icon={<span className="text-xl">🗺️</span>} title="Coverage gaps" subtitle="Where we still need expertise." showChevron={false}>
+          <SettingsGroupCallout icon={<MapIcon className="h-4 w-4" />} title="Coverage gaps" subtitle="Where we still need expertise." showChevron={false}>
             <div className="space-y-3 text-sm text-white/80">
               {coverageGaps.map((gap) => (
                 <div key={gap.segment} className="rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3">

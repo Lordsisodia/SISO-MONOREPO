@@ -126,7 +126,7 @@ export function ProspectsWorkspace({ initialProspects }: ProspectsWorkspaceProps
           <CardContent className="flex flex-col gap-8 px-8 py-10 lg:flex-row lg:items-center">
             <div className="flex-1 space-y-4">
               <Badge variant="outline" className="border-white/30 bg-white/5 text-white">
-                Pipeline Ops · My Prospects
+                Client Pipeline · My Prospects
               </Badge>
               <div>
                 <h1 className="text-3xl font-semibold sm:text-4xl">My Prospects</h1>

@@ -7,5 +7,5 @@ interface ThreadPageProps {
 export default function PartnersCommunityMessageThreadPage({ params }: ThreadPageProps) {
   void params.threadId;
 
-  return <MobileShell initialTab="messages" initialImmersiveMode />;
+  return <MobileShell initialTab="messages" initialImmersiveMode showFloatingNavButton={false} />;
 }

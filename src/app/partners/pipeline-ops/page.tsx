@@ -27,17 +27,17 @@ const pipelineWidgets = [
 export default function PipelineOpsDashboardPage() {
   const router = useRouter();
   return (
-    <PartnersPageShell>
+    <PartnersPageShell initialState={{ activeDrawerSection: "pipeline" }}>
       <div className="space-y-6 p-4 lg:p-8">
         <HighlightCard
           color="orange"
-          title="Pipeline Ops Dashboard"
-          description="Centralize your revenue pipeline, referrals, and deal health in one place."
+          title="Client Pipeline Dashboard"
+          description="Centralize your client pipeline, referrals, and deal health in one place."
           metricValue="6"
           metricLabel="deals in motion"
           buttonText="View prospects"
           onButtonClick={() => router.push("/partners/pipeline-ops/prospects")}
-          icon={<span className="sr-only">Pipeline Ops</span>}
+          icon={<span className="sr-only">Client Pipeline</span>}
           showCornerIcon={false}
           hideDivider
           titleClassName="uppercase tracking-[0.35em] text-white"

@@ -229,7 +229,7 @@ export const communityChannels: Record<string, CommunityChannelPreset> = {
       {
         label: "Leaderboard",
         description: "See who’s closing this month",
-        href: "/partners/leaderboard",
+        href: "/partners/earnings/leaderboard",
       },
     ],
     pinned: [

@@ -588,7 +588,7 @@ function SubmitClientExperience() {
                       )}
                     </div>
                     <div className="mt-4 flex flex-col gap-3 border-t border-white/10 pt-4 md:flex-row md:items-center md:justify-between">
-                      <p className="text-sm text-white/70">Submitting routes to Pipeline Ops and updates My Prospects immediately.</p>
+                      <p className="text-sm text-white/70">Submitting routes to Client Pipeline and updates My Prospects immediately.</p>
                       <div className="flex flex-wrap gap-3">
                         <Button type="submit" disabled={isPending} className="rounded-2xl bg-siso-orange px-6 py-3 text-black hover:bg-orange-400">
                           {isPending ? "Submitting…" : "Submit to SISO"}

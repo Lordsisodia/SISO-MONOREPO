@@ -1,6 +1,7 @@
 export type HelpArticleSection = {
   heading?: string;
   body: string[];
+  icon?: "clock" | "sparkles" | "credit-card" | "edit";
 };
 
 export type HelpArticle = {
@@ -33,6 +34,7 @@ const formatDate = (value: string) => new Date(value).toISOString();
 const payoutsSections: HelpArticleSection[] = [
   {
     heading: "Deposit cadence",
+    icon: "clock",
     body: [
       "We clear available balances every Tuesday and Thursday at 1 PM PT. Transfers hit most US banks within 1 business day.",
       "If you connected Stripe Express, you'll see a push notification inside Wallet → Activity 10 minutes before the transfer starts.",
@@ -40,12 +42,14 @@ const payoutsSections: HelpArticleSection[] = [
   },
   {
     heading: "Fast-track your payout",
+    icon: "sparkles",
     body: [
       "Complete tax verification and connect a realtime payout rail. We pre-authorize instant transfers up to $25k when both are enabled.",
     ],
   },
   {
     heading: "Need to adjust a payout?",
+    icon: "credit-card",
     body: [
       "Submit adjustments from Earnings → Wallet at least 24 hours before cutoff. Late requests may roll into the next cycle.",
     ],
