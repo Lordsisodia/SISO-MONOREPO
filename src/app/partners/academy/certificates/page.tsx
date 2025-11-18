@@ -6,15 +6,8 @@ import { HighlightCard } from "@/components/ui/card-5-static";
 import { Awards } from "@/components/ui/award";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import dynamic from "next/dynamic";
-
-const FallingPattern = dynamic(
-  () =>
-    import("@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern").then(
-      (m) => m.FallingPattern,
-    ),
-  { ssr: false, loading: () => null },
-);
+import { Waves } from "@/components/ui/wave-background";
+import { Waves } from "@/components/ui/wave-background";
 
 const certificates = [
   { id: "cert-sales", title: "Sales Foundations", issued: "Jan 2025", status: "In progress" },
@@ -26,8 +19,11 @@ export default function CertificatesPage() {
 
   return (
     <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 z-0" style={{ filter: "blur(6px)", opacity: 0.65 }}>
-        <FallingPattern className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{ filter: "blur(6px)", opacity: 0.9 }}
+      >
+        <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="#0b0b0f" pointerSize={0.35} />
       </div>
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
         <div className="relative min-h-[128px]">

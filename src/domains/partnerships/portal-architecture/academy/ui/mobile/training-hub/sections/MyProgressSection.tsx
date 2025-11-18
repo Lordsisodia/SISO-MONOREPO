@@ -14,9 +14,9 @@ export function MyProgressSection({ summaries }: MyProgressSectionProps) {
       subtitle="Track completion by training area"
       showChevron={false}
     >
-      <div className="grid gap-3 rounded-[22px] border border-white/10 bg-white/5 p-4 sm:grid-cols-3">
+      <div className="grid gap-3 rounded-[22px] border border-white/12 bg-[#0F0F0F] p-4 sm:grid-cols-3 shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
         {summaries.map((sum) => (
-          <article key={sum.id} className="rounded-3xl border border-siso-border bg-siso-bg-secondary p-4">
+          <article key={sum.id} className="rounded-3xl border border-white/8 bg-[#1F1F1F] p-4">
             <h3 className="text-sm font-semibold text-siso-text-primary">{sum.label}</h3>
             <div className="mt-2 h-2 w-full rounded-full bg-siso-bg-hover">
               <div className="h-2 rounded-full bg-siso-orange" style={{ width: `${sum.progress}%` }} />

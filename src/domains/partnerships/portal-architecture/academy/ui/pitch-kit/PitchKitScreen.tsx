@@ -1,6 +1,5 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { ArrowRight, DownloadCloud, Filter, Layers, Link as LinkIcon, Share2, Sparkles } from "lucide-react";
 import { HighlightCard } from "@/components/ui/card-5-static";
@@ -9,14 +8,7 @@ import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture
 import { cn } from "@/domains/shared/utils/cn";
 import { useRouter } from "next/navigation";
 import { assetTypes, pitchAssets } from "./data";
-
-const FallingPattern = dynamic(
-  () =>
-    import("@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern").then(
-      (m) => m.FallingPattern,
-    ),
-  { ssr: false, loading: () => null },
-);
+import { Waves } from "@/components/ui/wave-background";
 
 const guideSteps = [
   "Pick the asset type that matches your prospect",
@@ -96,8 +88,11 @@ export function PitchKitScreen() {
 
   return (
     <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 z-0" style={{ filter: "blur(6px)", opacity: 0.65 }}>
-        <FallingPattern className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{ filter: "blur(6px)", opacity: 0.9 }}
+      >
+        <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="#0b0b0f" pointerSize={0.35} />
       </div>
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
         <HighlightCard
@@ -116,7 +111,7 @@ export function PitchKitScreen() {
           subtitle="Three steps to send a winning pitch."
           showChevron={false}
         >
-          <div className="rounded-[18px] bg-white/5 p-4 space-y-3">
+          <div className="rounded-[18px] border border-white/8 bg-[#1F1F1F] p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)] space-y-3">
             <ol className="space-y-2 text-xs text-siso-text-muted">
               {guideSteps.map((step, index) => (
                 <li key={step} className="flex items-start gap-2">
@@ -139,7 +134,7 @@ export function PitchKitScreen() {
           subtitle="Find the industry you're trying to approach."
           showChevron={false}
         >
-          <div className="rounded-[18px] bg-white/5 p-4 space-y-2 siso-inner-card">
+          <div className="rounded-[18px] border border-white/8 bg-[#1F1F1F] p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)] space-y-2 siso-inner-card">
             <label className="relative block">
               <span className="sr-only">Search pitch kits</span>
               <input
@@ -174,7 +169,7 @@ export function PitchKitScreen() {
           subtitle="Jump to portfolio to pair your pitch with proof."
           showChevron={false}
         >
-          <div className="rounded-[18px] bg-white/5 p-4 space-y-3">
+          <div className="rounded-[18px] border border-white/8 bg-[#1F1F1F] p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)] space-y-3">
             <div className="flex items-center justify-between">
               <p className="text-xs text-siso-text-muted">Browse portfolio case studies and attach to your pitch.</p>
               <Button variant="secondary" size="sm" onClick={() => router.push("/partners/academy/portfolio")}> 

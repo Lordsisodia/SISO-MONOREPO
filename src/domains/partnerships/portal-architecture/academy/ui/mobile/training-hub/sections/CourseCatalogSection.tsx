@@ -19,7 +19,7 @@ export function CourseCatalogSection({ courses, activeTab = "All" }: CourseCatal
       subtitle="Curated by track with smart filters"
       showChevron={false}
     >
-      <section className="space-y-4 rounded-[22px] border border-white/10 bg-white/5 p-4">
+    <section className="space-y-4 rounded-[22px] border border-white/12 bg-[#0F0F0F] p-4 shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
         <div className="flex gap-2">
           {tabs.map((tab) => (
             <button
@@ -35,7 +35,7 @@ export function CourseCatalogSection({ courses, activeTab = "All" }: CourseCatal
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
           {courses.map((course) => (
-            <article key={course.id} className="rounded-3xl border border-siso-border bg-siso-bg-secondary p-4">
+            <article key={course.id} className="rounded-3xl border border-white/8 bg-[#1F1F1F] p-4">
               <div className="flex items-center justify-between text-xs text-siso-text-muted">
                 <span>{course.track}</span>
                 <span>{course.duration}</span>

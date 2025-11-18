@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 
 import { cn } from "@/domains/shared/utils/cn";
-import { FallingPattern } from "@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern";
+import { Waves } from "@/components/ui/wave-background";
 
 interface SettingsDetailLayoutProps {
   title: string;
@@ -20,7 +20,7 @@ interface SettingsDetailLayoutProps {
   compactHeader?: boolean; // reduce default top padding and hide background pattern
   hideHeader?: boolean; // suppress visual header block
   srTitle?: string; // render visually-hidden h1 when header is hidden
-  showBackground?: boolean; // show FallingPattern behind content
+  showBackground?: boolean; // show animated Waves behind content
 }
 
 export function SettingsDetailLayout({
@@ -86,8 +86,16 @@ export function SettingsDetailLayout({
       )}
     >
       {showBackground && (
-        <div className="pointer-events-none absolute inset-0 z-0">
-          <FallingPattern className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
+        <div
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{ filter: "blur(6px)", opacity: 0.9 }}
+        >
+          <Waves
+            className="h-full w-full"
+            strokeColor="#f8a75c"
+            backgroundColor="#0b0b0f"
+            pointerSize={0.35}
+          />
         </div>
       )}
       {showHeader ? (

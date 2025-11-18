@@ -9,15 +9,7 @@ import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture
 import { CustomDropdown } from "@/domains/partnerships/portal-architecture/settings/general/ui/CustomDropdown";
 import { courses, type CourseCategory } from "./data";
 import { cn } from "@/domains/shared/utils/cn";
-import dynamic from "next/dynamic";
-
-const FallingPattern = dynamic(
-  () =>
-    import("@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern").then(
-      (m) => m.FallingPattern,
-    ),
-  { ssr: false, loading: () => null },
-);
+import { Waves } from "@/components/ui/wave-background";
 
 const levels = ["all", "beginner", "intermediate", "advanced"] as const;
 const statuses = ["all", "not-started", "in-progress", "completed"] as const;
@@ -352,8 +344,11 @@ export function CourseCatalogScreen() {
 
   return (
     <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen overflow-x-hidden relative">
-      <div className="pointer-events-none absolute inset-0 z-0" style={{ filter: "blur(6px)", opacity: 0.65 }}>
-        <FallingPattern className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{ filter: "blur(6px)", opacity: 0.9 }}
+      >
+        <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="#0b0b0f" pointerSize={0.35} />
       </div>
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
         <HighlightCard

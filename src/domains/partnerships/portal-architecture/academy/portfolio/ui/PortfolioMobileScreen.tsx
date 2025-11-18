@@ -10,15 +10,7 @@ import { Button } from "@/components/ui/button";
 import { usePortfolioData } from "@/domains/partnerships/portfolio/hooks/use-portfolio-data";
 import type { PortfolioClient } from "@/domains/partnerships/portfolio/types";
 import { IndustrySelect } from "@/domains/partnerships/portfolio/ui/IndustrySelect";
-import dynamic from "next/dynamic";
-
-const FallingPattern = dynamic(
-  () =>
-    import("@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern").then(
-      (m) => m.FallingPattern,
-    ),
-  { ssr: false, loading: () => null },
-);
+import { Waves } from "@/components/ui/wave-background";
 
 const DEFAULT_THUMB = "https://via.placeholder.com/512x320/111/fff?text=Portfolio";
 
@@ -40,8 +32,11 @@ export function PortfolioMobileScreen() {
 
   return (
     <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0">
-        <FallingPattern className="h-full opacity-60 [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ filter: "blur(6px)", opacity: 0.9 }}
+      >
+        <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="#0b0b0f" pointerSize={0.35} />
       </div>
       <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
         <HighlightCard

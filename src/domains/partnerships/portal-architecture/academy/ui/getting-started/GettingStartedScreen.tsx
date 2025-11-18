@@ -1,7 +1,5 @@
 "use client";
 
-"use client";
-
 import { Sparkles, Users, ShieldCheck, Info } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -9,7 +7,7 @@ import { Awards } from "@/components/ui/award";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { Button } from "@/components/ui/button";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
-import { FallingPattern } from "@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern";
+import { Waves } from "@/components/ui/wave-background";
 
 export function GettingStartedScreen() {
   const router = useRouter();
@@ -48,8 +46,16 @@ export function GettingStartedScreen() {
 
   return (
     <main className="relative min-h-screen bg-siso-bg-primary text-siso-text-primary">
-      <div className="pointer-events-none absolute inset-0 z-0">
-        <FallingPattern className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{ filter: "blur(6px)", opacity: 0.9 }}
+      >
+        <Waves
+          className="h-full w-full"
+          strokeColor="#f8a75c"
+          backgroundColor="#0b0b0f"
+          pointerSize={0.35}
+        />
       </div>
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
         <HighlightCard
@@ -222,7 +228,7 @@ export function GettingStartedScreen() {
           subtitle="Your earned credentials"
           showChevron={false}
         >
-          <div className="space-y-3 rounded-2xl border border-white/10 bg-[rgba(19,13,7,0.65)] px-4 py-4 text-sm text-white shadow-inner">
+          <div className="space-y-3 rounded-2xl border border-white/10 siso-inner-card px-4 py-4 text-sm text-white shadow-inner">
             <div className="flex items-center justify-between gap-2">
               <div className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.25em] text-siso-text-muted">
                 <span>Next certificate</span>
@@ -232,7 +238,7 @@ export function GettingStartedScreen() {
               </span>
             </div>
             <div className="space-y-1">
-              <div className="h-2 rounded-full bg-white/5">
+              <div className="h-2 rounded-full bg-siso-bg-hover">
                 <div className="h-full rounded-full bg-siso-orange" style={{ width: "60%" }} />
               </div>
               <p className="text-xs text-siso-text-muted">60% to next certificate</p>

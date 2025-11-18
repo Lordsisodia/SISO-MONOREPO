@@ -1,18 +1,13 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import { Cog, LogOut, Menu as MenuIcon, Shield, Plug } from "lucide-react";
 import { SETTINGS_MENU_ITEMS, type SettingsMenuItem } from "./settings-menu.config";
 import { SettingsGroupCallout } from "./SettingsGroupCallout";
+import { Waves } from "@/components/ui/wave-background";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingMenuItem } from "./SettingMenuItem";
 import { useMobileNavigation } from "@/domains/partnerships/mobile/application/navigation-store";
-
-const FallingPattern = dynamic(
-  () => import("@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern").then(m => m.FallingPattern),
-  { ssr: false, loading: () => null },
-);
 
 function useShouldShowBackground() {
   const [ready, setReady] = useState(false);
@@ -39,8 +34,11 @@ export function SettingsPanel() {
     <section className="settings-panel-scope relative flex flex-1 flex-col gap-6 px-4 pt-8 pb-[calc(env(safe-area-inset-bottom,0px)+96px)] text-sm text-siso-text-secondary min-h-screen">
       <style jsx global>{``}</style>
       {showBg ? (
-        <div className="pointer-events-none absolute inset-0 z-0">
-          <FallingPattern className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
+        <div
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{ filter: "blur(6px)", opacity: 0.9 }}
+        >
+          <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="#0b0b0f" pointerSize={0.35} />
         </div>
       ) : null}
       <div className="relative z-10">
