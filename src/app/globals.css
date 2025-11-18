@@ -44,10 +44,11 @@ body {
 
 /* Shared inner callout scrim to match Settings inner cards */
 .siso-inner-card {
-  background-color: var(--siso-bg-secondary);
+  /* Lighter inner scrim matching settings nested cards */
+  background-color: var(--siso-bg-tertiary);
 }
 .siso-inner-card-strong {
-  background-color: var(--siso-bg-tertiary);
+  background-color: var(--siso-bg-hover);
 }
 
 :root {

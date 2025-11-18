@@ -50,7 +50,7 @@ export function TrainingSpotlightScreen() {
 
   return (
     <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 z-0">
+      <div className="pointer-events-none absolute inset-0 z-0" style={{ filter: "blur(6px)", opacity: 0.65 }}>
         <FallingPattern className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
       </div>
       <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
@@ -75,7 +75,7 @@ export function TrainingSpotlightScreen() {
           subtitle="Jump to the next required step"
           showChevron={false}
         >
-          <div className="rounded-3xl border border-white/10 siso-inner-card p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)]">
+          <div className="rounded-3xl border border-white/5 bg-[#1F1F1F] p-4 shadow-[0_15px_40px_rgba(0,0,0,0.22)]">
             <div className="space-y-3 text-sm text-siso-text-muted">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
@@ -108,7 +108,7 @@ export function TrainingSpotlightScreen() {
           subtitle="Tying the lesson to today’s priorities"
           showChevron={false}
         >
-          <div className="rounded-3xl border border-white/10 siso-inner-card p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)] space-y-3">
+          <div className="rounded-3xl border border-white/5 bg-[#1F1F1F] p-4 shadow-[0_15px_40px_rgba(0,0,0,0.22)] space-y-3">
             <p className="text-sm font-semibold text-white">{spotlight.title}</p>
             <p className="text-xs text-siso-text-muted">{spotlight.summary}</p>
             <p className="text-[11px] uppercase tracking-[0.3em] text-siso-orange">Current priority</p>
@@ -137,7 +137,7 @@ export function TrainingSpotlightScreen() {
           subtitle="Pre-reqs + related proof"
           showChevron={false}
         >
-          <div className="rounded-3xl border border-white/10 siso-inner-card p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)] space-y-2 text-[11px]">
+          <div className="rounded-3xl border border-white/5 bg-[#1F1F1F] p-4 shadow-[0_15px_40px_rgba(0,0,0,0.22)] space-y-2 text-[11px]">
             <p className="font-semibold text-white">Prerequisites</p>
             <ul className="list-inside list-disc text-siso-text-muted">
               {spotlight.prerequisites.map((item) => (
@@ -166,7 +166,7 @@ export function TrainingSpotlightScreen() {
           subtitle="Preview the lesson plan"
           showChevron={false}
         >
-          <div className="rounded-3xl border border-white/10 siso-inner-card p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)]">
+          <div className="rounded-3xl border border-white/5 bg-[#1F1F1F] p-4 shadow-[0_15px_40px_rgba(0,0,0,0.22)]">
             <div className="flex items-center justify-between">
               <p className="text-xs uppercase tracking-[0.35em] text-siso-text-muted">Stay on track</p>
               <Button variant="link" size="sm" className="text-siso-orange" onClick={() => router.push(spotlight.lessonPath)}>

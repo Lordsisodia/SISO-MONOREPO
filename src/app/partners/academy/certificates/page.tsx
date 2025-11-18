@@ -26,7 +26,7 @@ export default function CertificatesPage() {
 
   return (
     <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 z-0">
+      <div className="pointer-events-none absolute inset-0 z-0" style={{ filter: "blur(6px)", opacity: 0.65 }}>
         <FallingPattern className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
       </div>
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">

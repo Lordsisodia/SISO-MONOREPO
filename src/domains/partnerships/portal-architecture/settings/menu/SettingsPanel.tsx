@@ -60,15 +60,6 @@ export function SettingsPanel() {
           buttonText=""
           onButtonClick={() => {}}
         />
-        <button
-          type="button"
-          onClick={openDrawer}
-          aria-label="Open menu"
-          className="absolute z-20 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-neutral-700 bg-black/70 text-white transition hover:bg-black/80 hover:border-neutral-600"
-          style={{ top: "-1rem", right: "calc(env(safe-area-inset-right, 0px) + 0.25rem)" }}
-        >
-          <MenuIcon className="h-5 w-5" />
-        </button>
       </header>
 
       <div className="flex flex-col gap-5 mt-8">

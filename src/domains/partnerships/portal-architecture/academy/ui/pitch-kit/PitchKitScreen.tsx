@@ -26,7 +26,7 @@ const guideSteps = [
 
 function AssetCard({ asset, onCopy }: { asset: PitchAsset; onCopy: (value: string) => void }) {
   return (
-    <article className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+    <article className="rounded-3xl border border-white/8 bg-[#1F1F1F] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.35em] text-siso-text-muted">{asset.type.replace("-", " ")}</p>
@@ -66,7 +66,7 @@ function AssetCard({ asset, onCopy }: { asset: PitchAsset; onCopy: (value: strin
           <span className="ml-1">Save & share</span>
         </Button>
       </div>
-      <div className="mt-4 space-y-2 rounded-2xl border border-white/10 bg-white/[0.02] p-3 text-xs">
+      <div className="mt-4 space-y-2 rounded-2xl border border-white/10 bg-white/[0.04] p-3 text-xs">
         <p className="font-semibold text-white">Related proof</p>
         <div className="flex flex-wrap gap-2">
           {asset.relatedProofs.map((proof) => (
@@ -96,7 +96,7 @@ export function PitchKitScreen() {
 
   return (
     <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 z-0">
+      <div className="pointer-events-none absolute inset-0 z-0" style={{ filter: "blur(6px)", opacity: 0.65 }}>
         <FallingPattern className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
       </div>
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">

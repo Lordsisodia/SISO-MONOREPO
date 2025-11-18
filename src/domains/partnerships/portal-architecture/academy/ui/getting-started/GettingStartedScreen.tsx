@@ -83,6 +83,21 @@ export function GettingStartedScreen() {
           showChevron={false}
         >
           <div className="space-y-3 rounded-2xl border border-white/10 siso-inner-card px-4 py-4 text-sm text-siso-text-muted shadow-inner">
+            <div className="relative overflow-hidden rounded-2xl border border-white/10">
+              {currentTier.art ? (
+                <Image
+                  src={currentTier.art}
+                  alt={`${currentTier.title} crest`}
+                  width={1200}
+                  height={260}
+                  className="h-40 w-full object-cover"
+                  priority
+                  sizes="100vw"
+                />
+              ) : null}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/25 to-transparent" />
+            </div>
+
             <div className="space-y-1 text-base text-white">
               <p className="text-[11px] uppercase tracking-[0.25em] text-white/70">
                 Current tier • {currentTier.title} • {tierPct}%
