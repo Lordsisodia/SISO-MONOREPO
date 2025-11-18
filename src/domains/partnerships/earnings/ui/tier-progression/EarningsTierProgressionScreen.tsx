@@ -26,11 +26,11 @@ export function EarningsTierProgressionScreen() {
         <SettingsGroupCallout
           icon={<Target className="h-4 w-4" />}
           title="Upcoming unlock missions"
-          subtitle="Complete these to fast-track Prime"
+          subtitle="Complete these to fast-track your next tier"
           showChevron={false}
         >
           <div className="space-y-4">
-            {unlockMissions.map((mission) => (
+            {unlockMissions.slice(0, 3).map((mission) => (
               <div key={mission.id} className="rounded-[22px] border border-white/10 bg-white/5 p-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
@@ -52,6 +52,19 @@ export function EarningsTierProgressionScreen() {
                 </div>
               </div>
             ))}
+            <div className="flex justify-center">
+              <Button
+                size="sm"
+                variant="outline"
+                className="rounded-2xl border-white/20 text-white/80"
+                onClick={() => {
+                  // TODO: route to real missions page once built
+                  window.location.href = "/partners/earnings/missions";
+                }}
+              >
+                View all missions
+              </Button>
+            </div>
           </div>
         </SettingsGroupCallout>
 
@@ -198,7 +211,6 @@ function TierBadges() {
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="text-xs text-siso-text-muted">{index + 1} / {tiers.length}</div>
           <div className="flex flex-wrap gap-2 text-[11px] text-siso-text-muted">
             <span className="rounded-full bg-white/10 px-2.5 py-1 text-white">{current.xpRequired.toLocaleString()} XP+</span>
             <span className="rounded-full bg-siso-orange/15 px-2.5 py-1 text-siso-orange">{current.commission}% commission</span>
@@ -210,6 +222,7 @@ function TierBadges() {
               <span className="rounded-full bg-white/10 px-2.5 py-1 text-white">Top tier unlocked</span>
             )}
           </div>
+          <div className="text-xs text-siso-text-muted">{index + 1} / {tiers.length}</div>
         </div>
 
         {current.description && (
@@ -221,7 +234,7 @@ function TierBadges() {
 
         {current.perks.length ? (
           <div className="flex flex-wrap gap-2 text-[11px] text-siso-text-muted">
-            {current.perks.slice(0, 3).map((perk) => (
+            {current.perks.slice(0, 2).map((perk) => (
               <span key={perk} className="rounded-full border border-white/15 px-3 py-1">
                 {perk}
               </span>

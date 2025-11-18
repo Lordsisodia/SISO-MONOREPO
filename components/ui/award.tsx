@@ -17,6 +17,7 @@ export interface AwardsComponentProps {
   className?: string
   showIcon?: boolean
   customIcon?: React.ReactNode
+  logoSrc?: string
 }
 
 const levelColors = {
@@ -36,6 +37,7 @@ export function Awards({
   level = "gold",
   className,
   showIcon = true,
+  logoSrc,
 }: AwardsComponentProps) {
   // Stamp Variant
   if (variant === "stamp") {
@@ -229,6 +231,12 @@ export function Awards({
           className
         )}
       >
+        {logoSrc ? (
+          <div className="absolute left-1/2 top-4 h-10 w-10 -translate-x-1/2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={logoSrc} alt="Logo" className="h-full w-full object-contain opacity-90" />
+          </div>
+        ) : null}
         <div className="bg-card z-10 rounded-sm border p-6 px-8 text-center">
           <Badge />
           <h1
@@ -558,4 +566,3 @@ export function Awards({
   // Default fallback
   return null
 }
-

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Bookmark, Share2, Sparkles, CheckCircle2, AlertTriangle } from "lucide-react";
+import { ArrowRight, Bookmark, Share2, Sparkles, CheckCircle2, AlertTriangle, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { courses } from "./data";
@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 export function CourseDetailScreen({ courseId }: { courseId: string }) {
   const course = courses.find((item) => item.id === courseId);
   const router = useRouter();
+  const lessons = course?.lessons ?? [];
+  const relatedAssets = course?.relatedAssets ?? [];
 
   if (!course) {
     return (
@@ -22,64 +24,87 @@ export function CourseDetailScreen({ courseId }: { courseId: string }) {
   return (
     <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen">
       <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
-        <SettingsGroupCallout
-          icon={<Sparkles className="h-4 w-4" />}
-          title={course.title}
-          subtitle={course.overview}
-          showChevron={false}
-        >
-          <div className="space-y-3">
-            <p className="text-xs uppercase tracking-[0.3em] text-siso-text-muted">{course.focus}</p>
-            <div className="flex flex-wrap gap-2">
-              <span className="rounded-full border border-white/10 px-3 py-1 text-[11px] text-siso-text-muted">{course.industry}</span>
-              <span className="rounded-full border border-white/10 px-3 py-1 text-[11px] text-siso-text-muted">{course.legend}</span>
-              {course.comingSoon ? (
-                <span className="rounded-full bg-siso-orange/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-siso-orange">
-                  Coming soon
-                </span>
-              ) : null}
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                variant="secondary"
-                size="sm"
-                className="border border-white/10"
-                disabled={!course.lessons.length || course.comingSoon}
-                onClick={() =>
-                  course.lessons.length
-                    ? router.push(`/partners/academy/courses/${course.id}/lessons/${course.lessons[0].id}`)
-                    : undefined
-                }
-              >
-                {course.comingSoon ? "Coming soon" : course.lessons.length ? "Start / Resume" : "No lessons yet"}
-              </Button>
-              <Button variant="ghost" size="sm" className="border border-white/10">
-                <Bookmark className="h-3 w-3" />
-                <span className="ml-1">Save to Saved Docs</span>
-              </Button>
-              <Button variant="ghost" size="sm" className="border border-white/10">
-                <Share2 className="h-3 w-3" />
-                <span className="ml-1">Copy link</span>
-              </Button>
-            </div>
+        {/* Hero */}
+        <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-5 shadow-[0_20px_45px_rgba(0,0,0,0.3)] space-y-4">
+          <div className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-siso-text-muted">
+            <span className="rounded-full bg-siso-orange/15 px-2 py-[2px] text-[10px] font-semibold uppercase tracking-[0.25em] text-siso-orange">
+              {course.level}
+            </span>
+            <span className="rounded-full border border-white/15 px-2 py-[2px]">{course.industry}</span>
+            <span className="rounded-full border border-white/15 px-2 py-[2px]">{course.legend}</span>
+            {course.comingSoon ? (
+              <span className="rounded-full bg-siso-orange/15 px-2 py-[2px] text-[10px] font-semibold uppercase tracking-[0.25em] text-siso-orange">
+                Coming soon
+              </span>
+            ) : null}
           </div>
-        </SettingsGroupCallout>
+          <div className="flex flex-col gap-2">
+            <h1 className="text-2xl font-semibold text-white leading-tight">{course.title}</h1>
+            <p className="text-sm leading-relaxed text-siso-text-muted max-w-3xl">{course.overview}</p>
+          </div>
+          <div className="flex flex-wrap gap-2 text-[11px] text-siso-text-muted">
+            <span className="rounded-full border border-white/10 px-3 py-1">Duration: {course.duration}</span>
+            <span className="rounded-full border border-white/10 px-3 py-1">
+              Lessons: {lessons.length || "TBD"}
+            </span>
+            <span className="rounded-full border border-white/10 px-3 py-1">Focus: {course.focus}</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              variant="secondary"
+              size="sm"
+              className="border border-white/10 px-3"
+              disabled={!lessons.length || course.comingSoon}
+              onClick={() =>
+                lessons.length
+                  ? router.push(`/partners/academy/courses/${course.id}/lessons/${lessons[0].id}`)
+                  : undefined
+              }
+            >
+              <Play className="mr-1 h-3.5 w-3.5" />
+              {course.comingSoon ? "Coming soon" : "Start"}
+            </Button>
+            <Button variant="ghost" size="icon" className="border border-white/10 h-9 w-9">
+              <Bookmark className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="border border-white/10 h-9 w-9">
+              <Share2 className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
 
-        <section className="rounded-3xl border border-white/10 bg-white/[0.02] p-5 shadow-[0_20px_45px_rgba(0,0,0,0.3)]">
+        {/* Video + info callouts */}
+        <section className="rounded-3xl border border-white/10 bg-white/[0.02] p-5 shadow-[0_20px_45px_rgba(0,0,0,0.3)] space-y-4">
           <div className="aspect-video w-full overflow-hidden rounded-2xl border border-white/10 bg-black/40">
-            {course.videoUrl ? (
-              <iframe
-                src={course.videoUrl}
-                title={`${course.title} video`}
-                className="h-full w-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            ) : (
-              <div className="flex h-full items-center justify-center text-siso-text-muted">Video coming soon</div>
-            )}
+            <iframe
+              src={course.videoUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ"}
+              title={`${course.title} video`}
+              className="h-full w-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </div>
-          <p className="mt-4 text-sm text-siso-text-muted">{course.longDescription || course.overview}</p>
+          <div className="grid gap-3 md:grid-cols-2">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-siso-text-muted">Summary</p>
+              <p className="mt-2 text-sm leading-relaxed text-white/90">
+                {course.longDescription || course.overview}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 space-y-2">
+              <p className="text-xs uppercase tracking-[0.2em] text-siso-text-muted">Details</p>
+              <p className="text-sm text-white/90">Level: {course.level}</p>
+              <p className="text-sm text-white/90">Duration: {course.duration}</p>
+              <p className="text-sm text-white/90">Status: {course.comingSoon ? "Coming soon" : "Available"}</p>
+              <div className="flex flex-wrap gap-2 text-[11px] text-siso-text-muted">
+                {(course.tags ?? []).slice(0, 4).map((tag) => (
+                  <span key={tag} className="rounded-full border border-white/10 px-3 py-1">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
         </section>
 
         <SettingsGroupCallout
@@ -88,9 +113,9 @@ export function CourseDetailScreen({ courseId }: { courseId: string }) {
           subtitle="Lessons that make up this course"
           showChevron={false}
         >
-          {course.lessons.length ? (
+          {lessons.length ? (
             <div className="space-y-3">
-              {course.lessons.map((lesson) => (
+              {lessons.map((lesson) => (
                 <Link
                   href={`/partners/academy/courses/${course.id}/${lesson.id}`}
                   key={lesson.id}
@@ -118,9 +143,9 @@ export function CourseDetailScreen({ courseId }: { courseId: string }) {
           subtitle="Assets that complement this course"
           showChevron={false}
         >
-          {course.relatedAssets.length ? (
+          {relatedAssets.length ? (
             <div className="flex flex-wrap gap-2 text-[11px]">
-              {course.relatedAssets.map((asset) => (
+              {relatedAssets.map((asset) => (
                 <Link key={asset.href} href={asset.href} className="inline-flex items-center gap-1 rounded-full border border-white/10 px-3 py-1 text-siso-orange">
                   <ArrowRight className="h-3 w-3" />
                   {asset.label}

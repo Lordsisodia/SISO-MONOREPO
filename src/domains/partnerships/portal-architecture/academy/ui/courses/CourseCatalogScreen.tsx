@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Bookmark, Sparkles } from "lucide-react";
+import { ArrowRight, Bookmark, Sparkles, Play } from "lucide-react";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { Button } from "@/components/ui/button";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
@@ -103,30 +103,39 @@ function CourseCard({
         {course.progress}% complete • {course.legend}
       </p>
 
-      <div className="mt-4 grid gap-2 sm:flex sm:flex-wrap sm:gap-2">
-        <Button asChild variant="secondary" size="sm" className="border border-white/10 w-full sm:w-auto">
-          <Link href={`/partners/academy/courses/${course.id}`}>Start / Resume</Link>
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <Button
+          asChild
+          variant="secondary"
+          size="sm"
+          className="border border-white/10 px-3"
+          aria-label="Start or resume"
+        >
+          <Link href={`/partners/academy/courses/${course.id}`} className="inline-flex items-center gap-1">
+            <Play className="h-3.5 w-3.5" />
+            <span className="text-xs">Start</span>
+          </Link>
         </Button>
         <Button
           variant={saved ? "default" : "ghost"}
-          size="sm"
+          size="icon"
           className={cn(
-            "border border-white/10",
+            "border border-white/10 h-9 w-9",
             saved ? "bg-siso-orange/20 text-white" : "",
           )}
+          aria-label={saved ? "Saved" : "Save"}
           onClick={onToggleSave}
         >
-          <Bookmark className="h-3 w-3" />
-          <span className="ml-1">{saved ? "Saved" : "Save"}</span>
+          <Bookmark className="h-4 w-4" />
         </Button>
         <Button
           variant="ghost"
-          size="sm"
-          className="border border-white/10 w-full sm:w-auto"
+          size="icon"
+          className="border border-white/10 h-9 w-9"
+          aria-label="Copy link"
           onClick={onCopyLink}
         >
-          <ArrowRight className="h-3 w-3" />
-          <span className="ml-1">Copy link</span>
+          <ArrowRight className="h-4 w-4" />
         </Button>
       </div>
 
@@ -347,7 +356,7 @@ export function CourseCatalogScreen() {
           subtitle="Find a course by level, status, or keyword."
           showChevron={false}
         >
-          <div className="space-y-4">
+          <div className="rounded-[20px] border border-white/10 bg-white/5 p-4 space-y-4">
             <label className="block">
               <span className="sr-only">Search courses</span>
               <input
@@ -355,7 +364,7 @@ export function CourseCatalogScreen() {
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 placeholder="Search by keyword, tag, or lesson"
-                className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-2 text-sm text-white placeholder:text-siso-text-muted focus:border-siso-orange focus:outline-none"
+                className="w-full rounded-2xl border border-white/15 bg-black/25 px-4 py-2.5 text-sm text-white placeholder:text-siso-text-muted focus:border-siso-orange focus:outline-none"
               />
             </label>
 
@@ -411,19 +420,16 @@ export function CourseCatalogScreen() {
                     onCopyLink={() => handleCopyLink(essentialsProgram.id)}
                   />
                 ) : (
-                  <div className="-mx-4 overflow-x-auto px-4 pb-2">
-                    <div className="flex gap-4 snap-x snap-mandatory">
-                      {rail.courses.map((course) => (
-                        <div key={course.id} className="snap-start">
-                          <CourseCard
-                            course={course}
-                            saved={!!savedMap[course.id]}
-                            onToggleSave={() => handleToggleSave(course.id)}
-                            onCopyLink={() => handleCopyLink(course.id)}
-                          />
-                        </div>
-                      ))}
-                    </div>
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {rail.courses.map((course) => (
+                      <CourseCard
+                        key={course.id}
+                        course={course}
+                        saved={!!savedMap[course.id]}
+                        onToggleSave={() => handleToggleSave(course.id)}
+                        onCopyLink={() => handleCopyLink(course.id)}
+                      />
+                    ))}
                   </div>
                 )}
               </section>

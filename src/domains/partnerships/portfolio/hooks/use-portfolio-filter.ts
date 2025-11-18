@@ -62,3 +62,5 @@ export function usePortfolioFilter(initialClients: PortfolioClient[]) {
     hasActiveFilters,
   };
 }
+  // not used in mobile screen atm, but readily available
+  const setSelectedProjectTypes = (types: string[]) => setSelectedTech(types);

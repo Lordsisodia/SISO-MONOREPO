@@ -8,19 +8,33 @@ import { Awards } from "@/components/ui/award";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { Button } from "@/components/ui/button";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
+import { tierDefinitions } from "@/domains/partnerships/portal-architecture/earnings/tier-progress/ui/tier-definitions";
 
 export function GettingStartedScreen() {
   const router = useRouter();
 
   // Mocked data until API wiring
   const levelData = {
-    currentLevel: 3,
+    currentLevel: 2,
     currentPoints: 1250,
     pointsToNextLevel: 500,
-    nextLevel: 4,
-    tierName: "Explorer",
-    nextTierName: "Pro",
-  };
+    nextLevel: 3,
+    currentTierId: "builder",
+    nextTierId: "vanguard",
+  } as const;
+
+  // Program tiers (Trailblazer → Builder → Vanguard → Apex → Sovereign) with crest icons from tier-definitions
+  const tierCatalog = tierDefinitions.map(td => ({
+    id: td.id,
+    title: td.title,
+    accent: td.color,
+    crestIcon: td.visuals.crestIcon,
+    gradient: td.visuals.crestGradient ?? "from-[#0a0a0a] to-[#111]",
+  }));
+
+  const currentTier = tierCatalog.find(t => t.id === levelData.currentTierId) ?? tierCatalog[0];
+  const nextTier = tierCatalog.find(t => t.id === levelData.nextTierId) ?? tierCatalog[1];
+  const CrestIcon = currentTier.crestIcon;
 
   const xpFeed = [
     { title: "Finished Discovery Basics", source: "Course", xp: 120, when: "2h ago" },
@@ -62,26 +76,31 @@ export function GettingStartedScreen() {
           subtitle="Your path to next tier"
           showChevron={false}
         >
-          <div className="space-y-4 text-sm text-siso-text-muted">
-            <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-2">
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-siso-orange/15 text-siso-orange">
-                <ShieldCheck className="h-4 w-4" />
-              </span>
-              <div className="min-w-0">
-                <p className="text-xs uppercase tracking-[0.3em] text-white/70">Current tier</p>
-                <p className="text-base font-semibold text-white break-words">
-                  Level {levelData.currentLevel} • {levelData.tierName}
-                </p>
+          <div className="space-y-3 rounded-3xl border border-white/10 bg-white/[0.025] px-4 py-4 text-sm text-siso-text-muted">
+            <div
+              className="relative overflow-hidden rounded-2xl border border-white/10 px-4 py-3 text-white shadow-[0_15px_40px_rgba(0,0,0,0.35)]"
+              style={{ backgroundImage: `linear-gradient(135deg, rgba(255,255,255,0.06), transparent), linear-gradient(120deg, ${currentTier.accent}22, transparent 55%)` }}
+            >
+              <div className="absolute inset-0 rounded-2xl bg-white/5 opacity-15" />
+              <div className="relative flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/15 bg-white/10 text-lg font-semibold">
+                  <CrestIcon className="h-6 w-6" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[11px] uppercase tracking-[0.28em] text-white/70">Current tier</p>
+                  <p className="text-lg font-semibold text-white break-words">{currentTier.title}</p>
+                  <p className="text-[11px] text-white/70">
+                    {Math.round((levelData.currentPoints / (levelData.currentPoints + levelData.pointsToNextLevel)) * 100)}% of this tier
+                  </p>
+                </div>
               </div>
             </div>
 
             <div className="space-y-1 text-base text-white">
               <p className="font-semibold">
-                {levelData.pointsToNextLevel} pts to Level {levelData.nextLevel} • {levelData.nextTierName}
+                {levelData.pointsToNextLevel} pts to {nextTier?.title ?? "next tier"}
               </p>
-              <p className="text-xs text-siso-text-muted">
-                Est. 2–3 wins or 1 course completion to level up
-              </p>
+              <p className="text-xs text-siso-text-muted">Est. 2–3 wins or 1 course completion to level up</p>
             </div>
 
             <div className="h-3 rounded-full bg-white/5">
@@ -102,26 +121,16 @@ export function GettingStartedScreen() {
 
             <div className="flex flex-wrap items-center gap-2 text-xs text-siso-text-muted">
               <Info className="h-3.5 w-3.5 text-siso-orange" />
-              <span>
-                Complete “Discovery Basics” or log a closed-won deal to add +200 pts instantly.
-              </span>
+              <span>Complete “Discovery Basics” or log a closed-won deal to add +200 pts instantly.</span>
             </div>
 
-            <div className="flex flex-wrap gap-2 pt-1">
+            <div className="flex justify-center pt-2">
               <Button
                 size="sm"
-                className="rounded-2xl"
+                className="rounded-2xl px-5"
                 onClick={() => router.push("/partners/earnings/tier-progression")}
               >
                 View tiers & perks
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                className="rounded-2xl border-white/20 text-white/80"
-                onClick={() => router.push("/partners/academy/training-spotlight")}
-              >
-                How to level up faster
               </Button>
             </div>
           </div>
@@ -133,32 +142,34 @@ export function GettingStartedScreen() {
           subtitle="Recent points you earned"
           showChevron={false}
         >
-          <div className="space-y-3 text-sm text-white">
+          <div className="space-y-3 text-sm text-white rounded-2xl border border-white/0 bg-white/5 px-4 py-4 shadow-inner">
             <div className="flex items-center gap-2 text-[11px] text-siso-text-muted">
-              <span className="inline-flex items-center gap-1 rounded-full border border-white/10 px-2 py-0.5">
+              <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-0.5">
                 Past 7 days
               </span>
             </div>
 
-            {xpFeed.map((item) => (
-              <div
-                key={item.title}
-                className="flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-2 transition hover:-translate-y-[1px] hover:bg-white/[0.05]"
-              >
-                <div className="space-y-1">
-                  <p className="font-semibold">{item.title}</p>
-                  <div className="flex items-center gap-2 text-[11px] text-siso-text-muted">
-                    <span className="rounded-full bg-white/[0.08] px-2 py-[2px] uppercase tracking-[0.08em]">
-                      {item.source}
-                    </span>
-                    <span>{item.when}</span>
+            <div className="space-y-2">
+              {xpFeed.map((item) => (
+                <div
+                  key={item.title}
+                  className="flex items-center justify-between rounded-xl bg-white/[0.02] px-3 py-2 transition hover:bg-white/[0.05]"
+                >
+                  <div className="space-y-1">
+                    <p className="font-semibold">{item.title}</p>
+                    <div className="flex items-center gap-2 text-[11px] text-siso-text-muted">
+                      <span className="rounded-full bg-white/[0.08] px-2 py-[2px] uppercase tracking-[0.08em]">
+                        {item.source}
+                      </span>
+                      <span>{item.when}</span>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-bold text-siso-orange">+{item.xp} XP</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm font-bold text-siso-orange">+{item.xp} XP</p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
 
             <div className="space-y-1 text-[11px] text-siso-text-muted">
               <div className="flex items-center justify-between">
@@ -209,7 +220,7 @@ export function GettingStartedScreen() {
           subtitle="Your earned credentials"
           showChevron={false}
         >
-          <div className="space-y-3 rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-4 text-sm text-white shadow-inner">
+          <div className="space-y-3 rounded-2xl border border-white/0 bg-white/5 px-4 py-4 text-sm text-white shadow-inner">
             <div className="flex items-center justify-between gap-2">
               <div className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.25em] text-siso-text-muted">
                 <span>Next certificate</span>

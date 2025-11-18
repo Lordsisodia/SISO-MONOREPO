@@ -1,12 +1,11 @@
 "use client";
 
-"use client";
-
-import { Sparkles, Award } from "lucide-react";
+import { Sparkles, Award, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { Awards } from "@/components/ui/award";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const certificates = [
   { id: "cert-sales", title: "Sales Foundations", issued: "Jan 2025", status: "In progress" },
@@ -19,7 +18,16 @@ export default function CertificatesPage() {
   return (
     <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
-        <div className="relative">
+        <div className="relative min-h-[128px]">
+          <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
+            <button
+              onClick={() => router.back()}
+              aria-label="Back"
+              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+          </div>
           <HighlightCard
             color="orange"
             title="Certificates"
@@ -27,20 +35,13 @@ export default function CertificatesPage() {
             metricValue={`${certificates.length} total`}
             metricLabel="Issued & in progress"
             icon={<Sparkles className="h-5 w-5 text-siso-orange" />}
+            className="w-full pl-12"
             hideDivider
             hideFooter
             showCornerIcon={false}
             titleClassName="uppercase tracking-[0.35em] text-white"
             descriptionClassName="text-sm"
           />
-          <Button
-            variant="ghost"
-            size="sm"
-            className="absolute left-1 top-1/2 -translate-y-1/2 text-white"
-            onClick={() => router.back()}
-          >
-            ←
-          </Button>
         </div>
 
         <section className="space-y-4">
@@ -49,6 +50,7 @@ export default function CertificatesPage() {
               <Awards
                 variant="certificate"
                 title={cert.title}
+                logoSrc="/branding/siso-logo.svg"
                 subtitle={`This is to certify that you have ${cert.status.toLowerCase() === "in progress" ? "started" : "successfully completed"} the mastery of design.`}
                 recipient="You"
                 date={cert.issued}

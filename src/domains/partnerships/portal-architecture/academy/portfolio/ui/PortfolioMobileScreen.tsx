@@ -8,8 +8,8 @@ import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { Button } from "@/components/ui/button";
 import { usePortfolioData } from "@/domains/partnerships/portfolio/hooks/use-portfolio-data";
-import { industries } from "@/domains/partnerships/portfolio/data";
 import type { PortfolioClient } from "@/domains/partnerships/portfolio/types";
+import { IndustrySelect } from "@/domains/partnerships/portfolio/ui/IndustrySelect";
 
 const DEFAULT_THUMB = "https://via.placeholder.com/512x320/111/fff?text=Portfolio";
 
@@ -56,17 +56,7 @@ export function PortfolioMobileScreen() {
           subtitle="Filter proofs fast"
           showChevron={false}
         >
-          <div className="flex flex-wrap gap-2">
-            <IndustryPill label="All" active={activeIndustry === "all"} onClick={() => setActiveIndustry("all")} />
-            {industries.map((ind) => (
-              <IndustryPill
-                key={ind.slug}
-                label={ind.name}
-                active={activeIndustry === ind.slug}
-                onClick={() => setActiveIndustry(ind.slug)}
-              />
-            ))}
-          </div>
+          <IndustrySelect value={activeIndustry} onChange={setActiveIndustry} />
         </SettingsGroupCallout>
 
         <SettingsGroupCallout
