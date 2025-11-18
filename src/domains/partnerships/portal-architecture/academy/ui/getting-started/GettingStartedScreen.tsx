@@ -35,6 +35,9 @@ export function GettingStartedScreen() {
 
   const currentTier = tierCatalog.find(t => t.id === levelData.currentTierId) ?? tierCatalog[0];
   const nextTier = tierCatalog.find(t => t.id === levelData.nextTierId) ?? tierCatalog[1];
+  const tierPct = Math.round(
+    (levelData.currentPoints / (levelData.currentPoints + levelData.pointsToNextLevel)) * 100
+  );
 
   const xpFeed = [
     { title: "Finished Discovery Basics", source: "Course", xp: 120, when: "2h ago" },
@@ -79,30 +82,11 @@ export function GettingStartedScreen() {
           subtitle="Your path to next tier"
           showChevron={false}
         >
-          <div className="space-y-3 rounded-2xl border border-white/10 bg-siso-bg-secondary px-4 py-4 text-sm text-siso-text-muted shadow-inner">
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 text-white shadow-[0_15px_40px_rgba(0,0,0,0.35)]">
-              {currentTier.art ? (
-                <Image
-                  src={currentTier.art}
-                  alt={`${currentTier.title} crest`}
-                  width={600}
-                  height={180}
-                  className="h-full w-full object-cover"
-                  priority
-                  sizes="100vw"
-                />
-              ) : null}
-              <div className="absolute inset-0 bg-gradient-to-br from-black/65 via-black/55 to-black/60" />
-              <div className="relative flex flex-col gap-1 px-4 py-3">
-                <p className="text-[11px] uppercase tracking-[0.28em] text-white/70">Current tier</p>
-                <p className="text-lg font-semibold text-white break-words">{currentTier.title}</p>
-                <p className="text-[11px] text-white/70">
-                  {Math.round((levelData.currentPoints / (levelData.currentPoints + levelData.pointsToNextLevel)) * 100)}% of this tier
-                </p>
-              </div>
-            </div>
-
+          <div className="space-y-3 rounded-2xl border border-white/10 siso-inner-card px-4 py-4 text-sm text-siso-text-muted shadow-inner">
             <div className="space-y-1 text-base text-white">
+              <p className="text-[11px] uppercase tracking-[0.25em] text-white/70">
+                Current tier • {currentTier.title} • {tierPct}%
+              </p>
               <p className="font-semibold">
                 {levelData.pointsToNextLevel} pts to {nextTier?.title ?? "next tier"}
               </p>
@@ -111,19 +95,15 @@ export function GettingStartedScreen() {
 
             <div className="h-3 rounded-full bg-white/5">
               <div
-                className="h-full rounded-full bg-siso-orange"
-                style={{
-                  width: `${Math.min(
-                    100,
-                    Math.round(
-                      (levelData.currentPoints /
-                        (levelData.currentPoints + levelData.pointsToNextLevel)) *
-                        100
-                    )
-                  )}%`,
-                }}
-              />
-            </div>
+                  className="h-full rounded-full bg-siso-orange"
+                  style={{
+                    width: `${Math.min(
+                      100,
+                      tierPct
+                    )}%`,
+                  }}
+                />
+              </div>
 
             <div className="flex flex-wrap items-center gap-2 text-xs text-siso-text-muted">
               <Info className="h-3.5 w-3.5 text-siso-orange" />
@@ -149,7 +129,7 @@ export function GettingStartedScreen() {
           subtitle="Recent points you earned"
           showChevron={false}
         >
-          <div className="space-y-3 text-sm text-white rounded-2xl border border-white/10 bg-siso-bg-secondary px-4 py-4 shadow-inner">
+          <div className="space-y-3 text-sm text-white rounded-2xl border border-white/10 siso-inner-card px-4 py-4 shadow-inner">
             <div className="flex items-center gap-2 text-[11px] text-siso-text-muted">
               <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-0.5">
                 Past 7 days
@@ -160,7 +140,7 @@ export function GettingStartedScreen() {
               {xpFeed.map((item) => (
                 <div
                   key={item.title}
-                  className="flex items-center justify-between rounded-xl bg-siso-bg-tertiary px-3 py-2 transition hover:bg-white/[0.05]"
+                  className="flex items-center justify-between rounded-xl siso-inner-card-strong px-3 py-2 transition hover:bg-white/[0.05]"
                 >
                   <div className="space-y-1">
                     <p className="font-semibold">{item.title}</p>

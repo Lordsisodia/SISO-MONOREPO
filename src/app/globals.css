@@ -42,6 +42,14 @@ body {
   min-height: 100vh;
 }
 
+/* Shared inner callout scrim to match Settings inner cards */
+.siso-inner-card {
+  background-color: var(--siso-bg-secondary);
+}
+.siso-inner-card-strong {
+  background-color: var(--siso-bg-tertiary);
+}
+
 :root {
   --component-inactive-color: var(--muted-foreground);
   --component-bg: var(--card);
