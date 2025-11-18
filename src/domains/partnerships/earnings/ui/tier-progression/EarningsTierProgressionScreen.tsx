@@ -1,7 +1,5 @@
 "use client";
 
- "use client";
-
 import { HighlightCard } from "@/components/ui/card-5-static";
 import Image from "next/image";
 import { useState } from "react";
