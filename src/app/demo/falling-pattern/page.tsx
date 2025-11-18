@@ -1,8 +1,8 @@
 "use client";
 
-export const dynamic = 'force-dynamic';
-
 import { FallingPattern } from "@/domains/shared/components/falling-pattern";
+
+export const dynamic = "force-dynamic";
 
 export default function FallingPatternDemo() {
   return (

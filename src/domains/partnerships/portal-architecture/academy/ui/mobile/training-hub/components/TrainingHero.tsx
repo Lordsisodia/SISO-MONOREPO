@@ -27,7 +27,7 @@ export function TrainingHero({ overallProgress, stageLabel, streakDays }: Traini
         <HighlightCard
           color="orange"
           icon={<span />}
-          title="Training Hub"
+          title="Dashboard"
           description="Enablement resources & live training"
           metricValue=""
           metricLabel=""
@@ -54,7 +54,7 @@ export function TrainingHero({ overallProgress, stageLabel, streakDays }: Traini
         <div className="flex items-center justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-siso-text-muted">Overall progress</p>
-            <p className="text-lg font-semibold text-siso-text-primary">Training hub</p>
+            <p className="text-lg font-semibold text-siso-text-primary">Academy progress</p>
           </div>
           <span className="text-sm font-semibold text-siso-text-primary">{overallProgress}%</span>
         </div>

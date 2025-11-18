@@ -1,4 +1,6 @@
+import { redirect } from "next/navigation";
+
+// Redirect academy root to My Progress so users land on a concrete screen
 export default function PartnersAcademyLandingPage() {
-  // Base academy content is rendered by the MobileShell layout (learning tab).
-  return null;
+  redirect("/partners/academy/my-progress");
 }

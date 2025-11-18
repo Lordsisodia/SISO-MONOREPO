@@ -181,7 +181,7 @@ export const onboardingSteps: OnboardingStep[] = [
     title: "Start your first lesson",
     description: "Kick off the Discovery Basics module to unlock certification.",
     actionLabel: "Launch Lesson",
-    href: "/partners/academy/getting-started",
+    href: "/partners/academy/my-progress",
   },
   {
     id: "save-docs",
@@ -239,7 +239,7 @@ export const heroCopy = {
   metricLabel: "steps complete",
   primaryCta: {
     label: "Resume onboarding",
-    href: "/partners/academy/getting-started",
+    href: "/partners/academy/my-progress",
   },
   secondaryCta: {
     label: "Chat with Partner Success",

@@ -7,10 +7,10 @@
 - [x] All Channels — looks good; no changes requested.
 
 ## Messages
-- [ ] Remove the floating burger / nav button on the Messages page; keep only the embedded in-page menu so there’s a single navigation affordance.
+- [x] Remove the floating burger / nav button on the Messages page; keep only the embedded in-page menu so there’s a single navigation affordance.
 
 ## All Partners
 - [x] Looks good; no changes requested.
 
 ## Help Center
-- [ ] Payout Schedule article detail pages: update callout boxes to the branded style (icon inside the callout heading) so they match the standard UI pattern used elsewhere.
+- [x] Payout Schedule article detail pages: update callout boxes to the branded style (icon inside the callout heading) so they match the standard UI pattern used elsewhere.

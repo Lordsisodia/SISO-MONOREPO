@@ -24,9 +24,13 @@ import {
   ArrowRight,
   CheckCircle2,
   Clock,
+  BookOpen,
   FileText,
+  PenLine,
   ShieldCheck,
   Sparkles,
+  Tag,
+  Users,
   Upload,
   Zap,
 } from "lucide-react";
@@ -49,8 +53,7 @@ const partnershipTypes = [
   "Joint Venture",
 ];
 const budgetRanges = ["<$5k", "$5k-$10k", "$10k-$25k", "$25k-$50k", "$50k+", "Unknown"];
-const timelineOptions = ["ASAP", "1-2 months", "3-6 months", "6+ months"];
-const serviceOptions = ["AI Builder", "Web App", "Mobile App", "Automation", "Creative Studio", "Integrations", "Growth Ops"];
+const serviceOptions = ["Website", "Web App", "SEO", "Automation", "AI Builder", "Integrations"];
 const probabilityBuckets = ["0-25%", "25-50%", "50-75%", "75%+" ];
 
 const reviewerTeam = [
@@ -76,6 +79,7 @@ type FormState = {
   contactName: string;
   contactEmail: string;
   contactPhone: string;
+  socialLink: string;
   website: string;
   addressLine1: string;
   city: string;
@@ -106,6 +110,7 @@ const initialFormState: FormState = {
   contactName: "",
   contactEmail: "",
   contactPhone: "",
+  socialLink: "",
   website: "",
   addressLine1: "",
   city: "",
@@ -143,27 +148,16 @@ function SubmitClientExperience() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const requiredFields: (keyof FormState)[] = [
-    "companyName",
-    "industry",
-    "contactName",
-    "contactEmail",
-    "clientGoals",
-    "servicesRequested",
-    "timeline",
-    "budgetRange",
-    "expectedValue",
-  ];
+  const softFields: (keyof FormState)[] = ["companyName", "contactName", "contactEmail", "contactPhone", "businessDescription", "servicesRequested", "socialLink", "budgetRange", "expectedValue", "specialRequirements"];
 
   const completion = useMemo(() => {
-    const filled = requiredFields.filter((field) => {
-      if (field === "servicesRequested") {
-        return formState.servicesRequested.length > 0;
-      }
+    const total = softFields.length || 1;
+    const filled = softFields.filter((field) => {
+      if (field === "servicesRequested") return formState.servicesRequested.length > 0;
       const value = formState[field];
       return typeof value === "string" ? value.trim().length > 0 : Boolean(value);
     });
-    return Math.round((filled.length / requiredFields.length) * 100);
+    return Math.round((filled.length / total) * 100);
   }, [formState]);
 
   const validationScore = useMemo(() => {
@@ -238,19 +232,22 @@ function SubmitClientExperience() {
         const response = await submitClient({
           companyName: formState.companyName,
           contactEmail: formState.contactEmail,
+          contactPhone: formState.contactPhone,
+          website: formState.website,
+          socialLink: formState.socialLink,
           dealSizeEstimate: Number(formState.expectedValue) || 0,
           notes: [
-            `Goals: ${formState.clientGoals}`,
-            `Timeline: ${formState.timeline}`,
-            `Budget: ${formState.budgetRange}`,
+            formState.clientGoals ? `Business: ${formState.clientGoals}` : null,
+            formState.budgetRange ? `Budget: ${formState.budgetRange}` : null,
             formState.contextNotes ? `Context: ${formState.contextNotes}` : null,
             formState.commercialNotes ? `Commercials: ${formState.commercialNotes}` : null,
+            formState.specialRequirements ? `Requirements: ${formState.specialRequirements}` : null,
           ]
             .filter(Boolean)
             .join(" | "),
           vertical: formState.industry || "General",
         });
-        setResultMessage(`Intake ${response.intakeId} received • SLA ${response.estimatedSlaHrs}h`);
+        setResultMessage(`Intake ${response.intakeId} received • Instant review`);
         setActiveTab("review");
       } catch (error) {
         setErrorMessage(error instanceof Error ? error.message : "Something went wrong");
@@ -259,7 +256,7 @@ function SubmitClientExperience() {
   };
 
   const quickStats = [
-    { label: "Completion", value: `${completion}%`, helper: "Required fields" },
+    { label: "Completion", value: `${completion}%`, helper: "Optional fields filled" },
     { label: "Validation", value: `${validationScore}%`, helper: "Quality score" },
     { label: "Auto-Approval", value: `${autoApprovalChance}%`, helper: "Prediction" },
   ];
@@ -338,69 +335,29 @@ function SubmitClientExperience() {
                 <TabsContent value="profile" className="space-y-4">
                   <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                     <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">Client profile</p>
-                    <p className="text-xs text-white/70">Company, contacts, and basics required for validation.</p>
+                    <p className="text-xs text-white/70">Share whatever you have now; you can edit later.</p>
                     <div className="mt-4 space-y-6">
                       <div className="grid gap-4 md:grid-cols-2">
-                        <Field label="Company Name" required>
-                          <Input value={formState.companyName} onChange={(e) => handleFieldChange("companyName", e.target.value)} placeholder="Brookstone Labs" required />
+                        <Field label="Company name">
+                          <Input value={formState.companyName} onChange={(e) => handleFieldChange("companyName", e.target.value)} placeholder="Brookstone Labs" />
                         </Field>
-                        <Field label="Legal Name">
-                          <Input value={formState.legalName} onChange={(e) => handleFieldChange("legalName", e.target.value)} placeholder="Brookstone Labs Inc." />
+                        <Field label="Company size">
+                          <Input value={formState.companySize} onChange={(e) => handleFieldChange("companySize", e.target.value)} placeholder="e.g., 10-50" />
                         </Field>
-                        <Field label="Industry" required>
-                          <Select value={formState.industry} onValueChange={(value) => handleFieldChange("industry", value)}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select industry" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {industryOptions.map((option) => (
-                                <SelectItem key={option} value={option}>
-                                  {option}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                        <Field label="Contact name">
+                          <Input value={formState.contactName} onChange={(e) => handleFieldChange("contactName", e.target.value)} placeholder="Jenna Ruiz" />
                         </Field>
-                        <Field label="Company Size">
-                          <Input value={formState.companySize} onChange={(e) => handleFieldChange("companySize", e.target.value)} placeholder="e.g., 50-100" />
+                        <Field label="Contact email">
+                          <Input type="email" value={formState.contactEmail} onChange={(e) => handleFieldChange("contactEmail", e.target.value)} placeholder="jenna@brookstone.io" />
                         </Field>
-                        <Field label="Partnership Type">
-                          <Select value={formState.partnershipType} onValueChange={(value) => handleFieldChange("partnershipType", value)}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Choose partnership" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {partnershipTypes.map((option) => (
-                                <SelectItem key={option} value={option}>
-                                  {option}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                        <Field label="WhatsApp / phone">
+                          <Input value={formState.contactPhone} onChange={(e) => handleFieldChange("contactPhone", e.target.value)} placeholder="+1 555..." />
                         </Field>
                         <Field label="Website">
                           <Input value={formState.website} onChange={(e) => handleFieldChange("website", e.target.value)} placeholder="https://" />
                         </Field>
-                      </div>
-
-                      <div className="grid gap-4 md:grid-cols-2">
-                        <Field label="Primary Contact" required>
-                          <Input value={formState.contactName} onChange={(e) => handleFieldChange("contactName", e.target.value)} placeholder="Jenna Ruiz" required />
-                        </Field>
-                        <Field label="Contact Email" required>
-                          <Input type="email" value={formState.contactEmail} onChange={(e) => handleFieldChange("contactEmail", e.target.value)} placeholder="jenna@brookstone.io" required />
-                        </Field>
-                        <Field label="Contact Phone">
-                          <Input value={formState.contactPhone} onChange={(e) => handleFieldChange("contactPhone", e.target.value)} placeholder="+1 (555) 555-0101" />
-                        </Field>
-                        <Field label="Headquarters">
-                          <Input value={formState.addressLine1} onChange={(e) => handleFieldChange("addressLine1", e.target.value)} placeholder="123 Market St" />
-                        </Field>
-                        <Field label="City">
-                          <Input value={formState.city} onChange={(e) => handleFieldChange("city", e.target.value)} />
-                        </Field>
-                        <Field label="Region / Country">
-                          <Input value={formState.region} onChange={(e) => handleFieldChange("region", e.target.value)} placeholder="CA, USA" />
+                        <Field label="Social / profile link">
+                          <Input value={formState.socialLink} onChange={(e) => handleFieldChange("socialLink", e.target.value)} placeholder="Instagram, LinkedIn, TikTok, site" />
                         </Field>
                       </div>
                     </div>
@@ -410,51 +367,13 @@ function SubmitClientExperience() {
                 <TabsContent value="context" className="space-y-4">
                   <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                     <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">Project context</p>
-                    <p className="text-xs text-white/70">What the client needs and why now.</p>
+                    <p className="text-xs text-white/70">Briefly describe the business and what they want.</p>
                     <div className="mt-4 space-y-6">
-                      <Field label="Client Goals" required>
-                        <Textarea value={formState.clientGoals} onChange={(e) => handleFieldChange("clientGoals", e.target.value)} rows={4} placeholder="Launch AI powered quoting flow, reduce manual ops..." required />
+                      <Field label="Business description">
+                        <Textarea value={formState.clientGoals} onChange={(e) => handleFieldChange("clientGoals", e.target.value)} rows={4} placeholder="What they do, current problem, desired outcome" />
                       </Field>
-                      <div className="grid gap-4 md:grid-cols-2">
-                        <Field label="Challenges">
-                          <Textarea value={formState.challenges} onChange={(e) => handleFieldChange("challenges", e.target.value)} rows={3} placeholder="No internal engineering bandwidth, compliance blockers..." />
-                        </Field>
-                        <Field label="Objectives">
-                          <Textarea value={formState.objectives} onChange={(e) => handleFieldChange("objectives", e.target.value)} rows={3} placeholder="Close pilot before Q2, cut onboarding time by 40%..." />
-                        </Field>
-                      </div>
-                      <div className="grid gap-4 md:grid-cols-2">
-                        <Field label="Timeline" required>
-                          <Select value={formState.timeline} onValueChange={(value) => handleFieldChange("timeline", value)}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Pick timeline" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {timelineOptions.map((option) => (
-                                <SelectItem key={option} value={option}>
-                                  {option}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </Field>
-                        <Field label="Budget Range" required>
-                          <Select value={formState.budgetRange} onValueChange={(value) => handleFieldChange("budgetRange", value)}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select range" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {budgetRanges.map((option) => (
-                                <SelectItem key={option} value={option}>
-                                  {option}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </Field>
-                      </div>
-                      <Field label="Additional Notes">
-                        <Textarea value={formState.contextNotes} onChange={(e) => handleFieldChange("contextNotes", e.target.value)} rows={3} placeholder="Preferred tooling, stakeholders, brand requirements..." />
+                      <Field label="Additional notes (optional)">
+                        <Textarea value={formState.contextNotes} onChange={(e) => handleFieldChange("contextNotes", e.target.value)} rows={3} placeholder="Anything else we should know" />
                       </Field>
                     </div>
                   </div>
@@ -463,7 +382,7 @@ function SubmitClientExperience() {
                 <TabsContent value="scope" className="space-y-4">
                   <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                     <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">Solution scope</p>
-                    <p className="text-xs text-white/70">Pick services + attach context for the build.</p>
+                    <p className="text-xs text-white/70">Pick the services they’re interested in and add any requirements.</p>
                     <div className="mt-4 space-y-6">
                       <div className="space-y-2">
                         <Label>Services Requested</Label>
@@ -486,10 +405,7 @@ function SubmitClientExperience() {
                           })}
                         </div>
                       </div>
-                      <Field label="Risk factors & blockers">
-                        <Textarea value={formState.riskNotes} onChange={(e) => handleFieldChange("riskNotes", e.target.value)} rows={3} placeholder="Vendor lock-in, compliance review, missing brief..." />
-                      </Field>
-                      <Field label="Special requirements">
+                      <Field label="Special requirements (optional)">
                         <Textarea
                           value={formState.specialRequirements}
                           onChange={(e) => handleFieldChange("specialRequirements", e.target.value)}
@@ -522,29 +438,32 @@ function SubmitClientExperience() {
                 <TabsContent value="commercials" className="space-y-4">
                   <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                     <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">Commercials</p>
-                    <p className="text-xs text-white/70">Value, probability, and deal math.</p>
+                    <p className="text-xs text-white/70">Optional signals only—share what you know.</p>
                     <div className="mt-4 space-y-6">
                       <div className="grid gap-4 md:grid-cols-2">
-                        <Field label="Expected value ($)" required>
-                          <Input type="number" value={formState.expectedValue} onChange={(e) => handleFieldChange("expectedValue", e.target.value)} placeholder="50000" required />
+                        <Field label="Expected value (optional)">
+                          <Input type="number" value={formState.expectedValue} onChange={(e) => handleFieldChange("expectedValue", e.target.value)} placeholder="e.g., 50000" />
                         </Field>
-                        <Field label="Success probability">
-                          <Select value={formState.successProbability} onValueChange={(value) => handleFieldChange("successProbability", value)}>
+                        <Field label="Budget range (optional)">
+                          <Select value={formState.budgetRange} onValueChange={(value) => handleFieldChange("budgetRange", value)}>
                             <SelectTrigger>
-                              <SelectValue />
+                              <SelectValue placeholder="Select range or Unknown" />
                             </SelectTrigger>
                             <SelectContent>
-                              {probabilityBuckets.map((bucket) => (
-                                <SelectItem key={bucket} value={bucket}>
-                                  {bucket}
+                              {budgetRanges.map((option) => (
+                                <SelectItem key={option} value={option}>
+                                  {option}
                                 </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
                         </Field>
                       </div>
-                      <Field label="Commercial notes">
-                        <Textarea value={formState.commercialNotes} onChange={(e) => handleFieldChange("commercialNotes", e.target.value)} rows={3} placeholder="Procurement constraints, commission structure, payment schedule..." />
+                      <Field label="Special requirements (optional)">
+                        <Textarea value={formState.specialRequirements} onChange={(e) => handleFieldChange("specialRequirements", e.target.value)} rows={3} placeholder="Compliance, integrations, languages..." />
+                      </Field>
+                      <Field label="Commercial notes (optional)">
+                        <Textarea value={formState.commercialNotes} onChange={(e) => handleFieldChange("commercialNotes", e.target.value)} rows={3} placeholder="Anything about budget, payments, or commission" />
                       </Field>
                       <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm">
                         <div>
@@ -566,15 +485,14 @@ function SubmitClientExperience() {
                       </div>
                       <div className="flex items-center gap-2 text-sm text-white/80">
                         <ShieldCheck className="h-4 w-4 text-siso-orange" />
-                        Validation score {validationScore}% · SLA 8h
+                        Instant review · optional fields
                       </div>
                     </div>
                     <div className="mt-5 space-y-5">
-                      <SummaryRow label="Company" value={formState.companyName || "–"} helper={formState.industry || ""} />
-                      <SummaryRow label="Primary contact" value={formState.contactName || "–"} helper={formState.contactEmail || ""} />
-                      <SummaryRow label="Timeline" value={formState.timeline || "–"} helper={formState.budgetRange ? `Budget ${formState.budgetRange}` : ""} />
-                      <SummaryRow label="Services" value={formState.servicesRequested.join(", ") || "Select services"} helper={formState.partnershipType || undefined} />
-                      <SummaryRow label="Value" value={`$${Number(formState.expectedValue || 0).toLocaleString()}`} helper={`Probability ${formState.successProbability}`} />
+                      <SummaryRow label="Company" value={formState.companyName || "–"} helper={formState.companySize || ""} />
+                      <SummaryRow label="Primary contact" value={formState.contactName || "–"} helper={formState.contactEmail || formState.contactPhone || ""} />
+                      <SummaryRow label="Services" value={formState.servicesRequested.join(", ") || "Select services"} helper={formState.website || ""} />
+                      <SummaryRow label="Value" value={formState.expectedValue ? `$${Number(formState.expectedValue).toLocaleString()}` : "Unknown"} helper={formState.budgetRange ? `Budget ${formState.budgetRange}` : "Budget Unknown"} />
                       <SummaryRow label="Notes" value={formState.contextNotes || formState.commercialNotes || "No additional notes"} />
                       {resultMessage && (
                         <Alert className="border-emerald-500/60 bg-emerald-500/10 text-emerald-100">

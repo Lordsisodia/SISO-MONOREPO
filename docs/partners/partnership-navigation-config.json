@@ -197,15 +197,15 @@
       "icon": "GraduationCap",
       "order": 2,
       "subsections": [
-        {
-          "id": "getting-started",
-          "label": "Getting Started",
-          "path": "/partners/academy/getting-started",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Onboarding content and SISO process overview",
-          "group": "Learning Flow"
-        },
+    {
+      "id": "my-progress",
+      "label": "My Progress",
+      "path": "/partners/academy/my-progress",
+      "tierRequired": "starter",
+      "hasHashtag": false,
+      "description": "Onboarding content and SISO process overview",
+      "group": "Learning Flow"
+    },
         {
           "id": "courses",
           "label": "Courses",
@@ -290,7 +290,7 @@
           "path": "/partners/pipeline-ops",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Pipeline Ops dashboard with quick insights",
+          "description": "Client Pipeline dashboard with quick insights",
           "hidden": true,
           "group": "Manage Pipeline"
         },
@@ -310,42 +310,6 @@
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Airtable-style view of all logged clients",
-          "dropdown": {
-            "id": "deal-stages",
-            "label": "Deal Stages",
-            "items": [
-              {
-                "id": "prospecting",
-                "label": "Prospecting",
-                "description": "Partner hasn't reached out yet"
-              },
-              {
-                "id": "contacted",
-                "label": "Contacted",
-                "description": "Initial contact made with client"
-              },
-              {
-                "id": "demo-ready",
-                "label": "Demo Ready",
-                "description": "SISO built something to show"
-              },
-              {
-                "id": "negotiating",
-                "label": "Negotiating",
-                "description": "Deal being closed, terms discussed"
-              },
-              {
-                "id": "won",
-                "label": "Won",
-                "description": "Client signed, commission earned"
-              },
-              {
-                "id": "lost",
-                "label": "Lost",
-                "description": "Deal didn't close (archived)"
-              }
-            ]
-          },
           "group": "Manage Pipeline"
         },
         {
@@ -399,7 +363,7 @@
           "path": "/partners/recruitment/team",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Who’s currently selling and their status",
+          "description": "Who\u2019s currently selling and their status",
           "group": "Grow Team"
         },
         {

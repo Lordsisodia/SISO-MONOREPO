@@ -4,29 +4,33 @@ export interface GettingStartedStep {
   description: string;
   actionLabel: string;
   actionHref: string;
+  icon: string;
 }
 
 export const gettingStartedSteps: GettingStartedStep[] = [
   {
     id: "intro-video",
-    title: "Watch the welcome video",
-    description: "See how SISO partners collaborate, where to drop content, and how to prioritize your first week.",
-    actionLabel: "Watch video",
+    title: "Watch the 2‑min welcome",
+    description: "Understand how to navigate Academy and where to find the quickest wins.",
+    actionLabel: "Play intro",
     actionHref: "/partners/academy/training-spotlight",
+    icon: "PlayCircle",
   },
   {
     id: "first-lesson",
-    title: "Complete the first lesson",
-    description: "Start 'Discovery Basics' so you can practice the five questions that uncover real decision criteria.",
-    actionLabel: "Open lesson",
+    title: "Finish Discovery Basics",
+    description: "Complete the first core lesson to unlock your skill assessment and level progress.",
+    actionLabel: "Start lesson",
     actionHref: "/partners/academy/courses/enterprise-sales-101/lessons/discovery-basics",
+    icon: "BookOpen",
   },
   {
     id: "office-hours",
     title: "Book office hours",
-    description: "Reserve a 20-minute slot with Partner Success to review what you learned and ask about real accounts.",
-    actionLabel: "View calendar",
+    description: "Schedule 20 minutes with Partner Success to review pipeline and next steps.",
+    actionLabel: "Book time",
     actionHref: "/partners/workspace",
+    icon: "CalendarClock",
   },
 ];
 

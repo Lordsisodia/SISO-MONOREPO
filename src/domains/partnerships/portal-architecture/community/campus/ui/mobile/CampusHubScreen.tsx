@@ -137,7 +137,7 @@ export function CampusHubScreen() {
                 variant="ghost"
                 size="sm"
                 className="border border-white/10 text-white hover:border-white/30"
-                onClick={() => handleNavigate("/partners/academy/getting-started")}
+                onClick={() => handleNavigate("/partners/academy/my-progress")}
               >
                 View roadmap
               </Button>

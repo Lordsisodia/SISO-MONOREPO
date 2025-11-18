@@ -1,15 +1,17 @@
 "use client";
 
+ "use client";
+
 import { HighlightCard } from "@/components/ui/card-5-static";
+import Image from "next/image";
+import { useState } from "react";
 import { FallingPattern } from "@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
-import { tierBenefits, tierHistory, tierMeta, tierMetrics, unlockMissions } from "@/domains/partnerships/earnings/data/tierProgression";
+import { tierHistory, tierMeta, unlockMissions } from "@/domains/partnerships/earnings/data/tierProgression";
 import Progress from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Trophy, Target, History } from "lucide-react";
-
-const tiers: Array<"Starter" | "Active" | "Prime" | "Collective"> = ["Starter", "Active", "Prime", "Collective"];
 
 export function EarningsTierProgressionScreen() {
   return (
@@ -21,58 +23,7 @@ export function EarningsTierProgressionScreen() {
       <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+96px)] pt-8">
         <TierHero />
 
-        <SettingsGroupCallout
-          icon={<Target className="h-4 w-4" />}
-          title="Progress breakdown"
-          subtitle="Each gauge must hit its target to unlock Prime"
-          showChevron={false}
-        >
-          <div className="grid gap-3 rounded-[22px] border border-white/10 bg-white/5 p-4 sm:grid-cols-3">
-            {tierMetrics.map((metric) => (
-              <div key={metric.id} className="rounded-2xl border border-white/10 bg-black/15 px-4 py-3">
-                <p className="text-[10px] uppercase tracking-[0.35em] text-white/60">{metric.label}</p>
-                <p className="text-2xl font-semibold text-white">{metric.value}</p>
-                <p className="text-xs text-white/70">Target {metric.target}</p>
-                <Progress value={(metric.value / metric.target) * 100} className="mt-3" />
-                <p className="text-[11px] uppercase tracking-[0.3em] text-white/50">{metric.helper}</p>
-              </div>
-            ))}
-          </div>
-        </SettingsGroupCallout>
-
-        <SettingsGroupCallout
-          icon={<Trophy className="h-4 w-4" />}
-          title="Benefits by tier"
-          subtitle="Everything that unlocks as you climb"
-          showChevron={false}
-        >
-          <div className="overflow-x-auto rounded-[22px] border border-white/10 bg-white/5">
-            <table className="w-full min-w-[640px] text-left text-sm text-white/80">
-              <thead>
-                <tr>
-                  <th className="px-4 py-3 text-[11px] uppercase tracking-[0.3em] text-white/60">Perk</th>
-                  {tiers.map((tier) => (
-                    <th key={tier} className="px-4 py-3 text-[11px] uppercase tracking-[0.3em] text-white/60">
-                      {tier}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {tierBenefits.map((benefit) => (
-                  <tr key={benefit.perk} className="border-t border-white/5">
-                    <td className="px-4 py-3 font-semibold text-white">{benefit.perk}</td>
-                    {tiers.map((tier) => (
-                      <td key={`${benefit.perk}-${tier}`} className="px-4 py-3">
-                        {benefit.tiers[tier]}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </SettingsGroupCallout>
+        <TierBadges />
 
         <SettingsGroupCallout
           icon={<Target className="h-4 w-4" />}
@@ -167,5 +118,139 @@ function TierHero() {
         </Button>
       </div>
     </HighlightCard>
+  );
+}
+
+function TierBadges() {
+  const tiers = [
+    {
+      name: "Trailblazer",
+      commission: 20,
+      xpRequired: 0,
+      src: "/tiers/Trailblazer.svg",
+      perks: ["Launch previews", "Weekly learn boost", "Standard SLA"],
+      description: "Kickstart your journey with core access and faster learning boosts.",
+      unlockHint: "Default tier. Start earning XP to unlock Builder at 1,000 XP.",
+    },
+    {
+      name: "Builder",
+      commission: 23,
+      xpRequired: 1000,
+      src: "/tiers/Builder.svg",
+      perks: ["+2% payout boost", "Ops betas", "Quarterly coaching"],
+      description: "Solidify your fundamentals with payouts and ops betas.",
+      unlockHint: "Reach 3,000 XP to hit Vanguard. Close 2 wins or finish 3 courses to bridge the gap faster.",
+    },
+    {
+      name: "Vanguard",
+      commission: 26,
+      xpRequired: 3000,
+      src: "/tiers/Vanguard.svg",
+      perks: ["+4% payout boost", "Growth betas", "Co-marketing"],
+      description: "Lead the pack with growth betas and co-marketing eligibility.",
+      unlockHint: "Target 10,000 XP for Apex. Stack verified wins and growth missions.",
+    },
+    {
+      name: "Apex",
+      commission: 28,
+      xpRequired: 10000,
+      src: "/tiers/Apex.svg",
+      perks: ["+5% payout boost", "Roadmap vote", "Priority launches"],
+      description: "Influence the roadmap and get priority launches.",
+      unlockHint: "Push to 25,000 XP for Sovereign. Large deals + mentorship hours move you fastest.",
+    },
+    {
+      name: "Sovereign",
+      commission: 30,
+      xpRequired: 25000,
+      src: "/tiers/Sovereign.svg",
+      perks: ["+6% payout boost", "Rev-share pilots", "Concierge"],
+      description: "Top-tier privileges with revenue-share pilots and concierge help.",
+      unlockHint: "You’ve reached the summit. Maintain activity to keep the crown.",
+    },
+  ];
+
+  const [index, setIndex] = useState(0);
+  const current = tiers[index];
+  // TODO: replace with real user XP once wired to API
+  const userXp = 1250;
+  const nextTier = tiers[index + 1];
+  const xpToNext = nextTier ? Math.max(0, nextTier.xpRequired - userXp) : 0;
+
+  const canPrev = index > 0;
+  const canNext = index < tiers.length - 1;
+
+  return (
+    <SettingsGroupCallout
+      icon={<Trophy className="h-4 w-4" />}
+      title="Tier badges"
+      subtitle="Current artwork for each tier"
+      showChevron={false}
+    >
+      <div className="flex flex-col gap-3">
+        <div className="relative h-56 w-full overflow-hidden rounded-2xl">
+          <Image
+            src={current.src}
+            alt={`${current.name} badge`}
+            fill
+            sizes="100vw"
+            className="object-contain"
+            priority
+          />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="text-xs text-siso-text-muted">{index + 1} / {tiers.length}</div>
+          <div className="flex flex-wrap gap-2 text-[11px] text-siso-text-muted">
+            <span className="rounded-full bg-white/10 px-2.5 py-1 text-white">{current.xpRequired.toLocaleString()} XP+</span>
+            <span className="rounded-full bg-siso-orange/15 px-2.5 py-1 text-siso-orange">{current.commission}% commission</span>
+            {nextTier ? (
+              <span className="rounded-full bg-white/10 px-2.5 py-1 text-white">
+                {xpToNext.toLocaleString()} XP to {nextTier.name}
+              </span>
+            ) : (
+              <span className="rounded-full bg-white/10 px-2.5 py-1 text-white">Top tier unlocked</span>
+            )}
+          </div>
+        </div>
+
+        {current.description && (
+          <p className="text-sm text-white/85">{current.description}</p>
+        )}
+        {current.unlockHint && (
+          <p className="text-xs text-siso-text-muted">{current.unlockHint}</p>
+        )}
+
+        {current.perks.length ? (
+          <div className="flex flex-wrap gap-2 text-[11px] text-siso-text-muted">
+            {current.perks.slice(0, 3).map((perk) => (
+              <span key={perk} className="rounded-full border border-white/15 px-3 py-1">
+                {perk}
+              </span>
+            ))}
+          </div>
+        ) : null}
+
+        <div className="flex items-center justify-between pt-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="rounded-2xl border-white/20 text-white/80"
+            disabled={!canPrev}
+            onClick={() => setIndex((i) => Math.max(0, i - 1))}
+          >
+            Previous
+          </Button>
+          <Button
+            size="sm"
+            className="rounded-2xl"
+            disabled={!canNext}
+            onClick={() => setIndex((i) => Math.min(tiers.length - 1, i + 1))}
+          >
+            Next
+          </Button>
+        </div>
+      </div>
+    </SettingsGroupCallout>
   );
 }

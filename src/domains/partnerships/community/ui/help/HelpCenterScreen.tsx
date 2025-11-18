@@ -89,9 +89,10 @@ export function HelpCollectionScreen({ collection }: HelpCollectionScreenProps) 
             <Link
               key={article.slug}
               href={`/partners/community/help/${collection.slug}/${article.slug}`}
-              className="flex items-center justify-between rounded-[26px] border border-siso-border bg-siso-bg-primary/60 px-4 py-3 text-left text-white transition hover:border-siso-orange/70"
+              className="flex items-center justify-between gap-3 rounded-[26px] border border-siso-border bg-siso-bg-primary/60 px-4 py-3 text-left text-white transition hover:border-siso-orange/70"
             >
-              <div>
+              <ArticleIconStack collectionIcon={collection.icon} />
+              <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold">{article.title}</p>
                 <p className="text-xs text-siso-text-muted">{article.summary}</p>
               </div>
@@ -165,6 +166,21 @@ function HelpShell({ title, children, breadcrumbs }: HelpShellProps) {
         {children}
       </div>
     </SettingsDetailLayout>
+  );
+}
+
+function ArticleIconStack({ collectionIcon }: { collectionIcon: HelpCollectionIcon }) {
+  const Icon = resolveIcon(collectionIcon);
+  return (
+    <div className="relative flex h-11 w-11 items-center justify-center">
+      <div
+        className="absolute -left-1 -top-1 h-5 w-5 rounded-xl bg-siso-orange/25 blur-md"
+        aria-hidden
+      />
+      <div className="grid h-11 w-11 place-items-center rounded-2xl border border-white/10 bg-siso-bg-tertiary">
+        <Icon className="h-4 w-4 text-siso-orange" />
+      </div>
+    </div>
   );
 }
 

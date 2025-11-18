@@ -17,7 +17,7 @@ export default async function PartnerActiveDealsPage() {
           metricValue={`${deals.length}`}
           metricLabel="in flight"
           buttonText="Submit client"
-          onButtonClick={() => (window.location.href = "/partners/pipeline-ops/submit-client")}
+          buttonHref="/partners/pipeline-ops/submit-client"
           icon={<span className="text-xl">🤝</span>}
           hideDivider
           showCornerIcon={false}

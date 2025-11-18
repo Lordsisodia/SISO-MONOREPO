@@ -1,5 +1,8 @@
 "use client";
 
+"use client";
+
+import Link from "next/link";
 import { forwardRef } from "react";
 import { cn } from "@/lib/utils";
 
@@ -16,7 +19,8 @@ export interface HighlightCardProps {
   metricValue: string;
   metricLabel: string;
   buttonText: string;
-  onButtonClick: () => void;
+  buttonHref?: string;
+  onButtonClick?: () => void;
   icon: React.ReactNode;
   color?: keyof typeof colorThemes;
   className?: string;
@@ -35,6 +39,7 @@ export const HighlightCard = forwardRef<HTMLDivElement, HighlightCardProps>(
       metricValue,
       metricLabel,
       buttonText,
+      buttonHref,
       onButtonClick,
       icon,
       color = "default",
@@ -86,13 +91,23 @@ export const HighlightCard = forwardRef<HTMLDivElement, HighlightCardProps>(
                 <p className="text-4xl font-bold tracking-tighter">{metricValue}</p>
                 <p className="text-sm opacity-90">{metricLabel}</p>
               </div>
-              <button
-                onClick={onButtonClick}
-                className="rounded-full bg-white/30 px-4 py-2 text-sm font-semibold backdrop-blur-sm transition-colors hover:bg-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
-                aria-label={buttonText}
-              >
-                {buttonText}
-              </button>
+              {buttonHref ? (
+                <Link
+                  href={buttonHref}
+                  className="rounded-full bg-white/30 px-4 py-2 text-sm font-semibold backdrop-blur-sm transition-colors hover:bg-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                  aria-label={buttonText}
+                >
+                  {buttonText}
+                </Link>
+              ) : onButtonClick ? (
+                <button
+                  onClick={onButtonClick}
+                  className="rounded-full bg-white/30 px-4 py-2 text-sm font-semibold backdrop-blur-sm transition-colors hover:bg-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                  aria-label={buttonText}
+                >
+                  {buttonText}
+                </button>
+              ) : null}
             </div>
           )}
         </div>

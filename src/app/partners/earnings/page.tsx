@@ -1,3 +1,5 @@
+ "use client";
+
 import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";

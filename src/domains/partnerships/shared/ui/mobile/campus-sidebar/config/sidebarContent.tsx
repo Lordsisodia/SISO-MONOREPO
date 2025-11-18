@@ -122,9 +122,9 @@ function buildSettingsSidebarSections(): MenuSection[] {
 function buildSidebarFromConfig(topId: string): SidebarContent | null {
   const top: TopLevelIconSpec | undefined = partnerNavConfig.icons.find((i) => i.id === topId);
   if (!top) return null;
-  const titleOverride: Record<string, string> = { pipeline: "Client Pipeline", growth: "Earnings" };
+  const titleOverride: Record<string, string> = { pipeline: "Client Pipeline", growth: "Earnings", academy: "Academy" };
   const dashboardCallouts: Record<string, { targetId: string; title: string; subtitle: string }> = {
-    academy: { targetId: "getting-started", title: "Academy", subtitle: "Kick off onboarding and courses." },
+    academy: { targetId: "my-progress", title: "Dashboard", subtitle: "Kick off onboarding and courses." },
     pipeline: { targetId: "dashboard", title: "Dashboard", subtitle: "Track deals, submissions, and reviews." },
     recruitment: { targetId: "dashboard", title: "Dashboard", subtitle: "Invite and track sales members you recruit." },
     growth: { targetId: "dashboard", title: "Dashboard", subtitle: "See payouts, tiers, and recognition." },
@@ -183,7 +183,7 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
       case 'recruitment':
         return <UserPlusIcon size={16} className="text-neutral-50" />;
       case 'academy':
-        if (id.includes('getting')) return <GradIcon size={16} className="text-neutral-50" />;
+        if (id.includes('my-progress') || id.includes('getting')) return <GradIcon size={16} className="text-neutral-50" />;
         if (id.includes('courses')) return <BookOpenIcon size={16} className="text-neutral-50" />;
         if (id.includes('portfolio')) return <LucideFolderOpen size={16} className="text-neutral-50" />;
         if (id.includes('pitch')) return <MegaphoneIcon size={16} className="text-neutral-50" />;

@@ -14,7 +14,6 @@ export default function AppPlanGeneratorPage() {
           metricValue="Beta"
           metricLabel="status"
           buttonText="Start plan"
-          onButtonClick={() => {}}
           icon={<span className="text-xl">🛠️</span>}
           hideDivider
           showCornerIcon={false}

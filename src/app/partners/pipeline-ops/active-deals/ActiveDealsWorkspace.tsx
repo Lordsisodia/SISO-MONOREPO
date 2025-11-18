@@ -10,9 +10,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Timeline, type TimelineItem } from "@/components/ui/timeline";
+import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
 import type { DealSummary } from "@/domains/partnerships/portal-architecture/pipeline-ops/domain/types";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Briefcase, DollarSign, FileText, Filter, MessageSquare, Search, Sparkles, Target } from "lucide-react";
+import { ArrowRight, Briefcase, DollarSign, FileText, Filter, MessageSquare, Menu as MenuIcon, Search, Sparkles, Target } from "lucide-react";
 
 const boardColumns: Array<{ id: DealSummary["stage"]; label: string; accent: string }> = [
   { id: "qualified", label: "Qualified", accent: "text-sky-300" },
@@ -164,12 +165,13 @@ export function ActiveDealsWorkspace({ initialDeals }: ActiveDealsWorkspaceProps
   );
 
   return (
-    <main className="min-h-screen bg-[#03040A] text-white">
-      <div className="mx-auto w-full max-w-6xl px-4 py-10 lg:px-8">
+    <PartnersPageShell initialState={{ activeDrawerSection: "pipeline" }}>
+      <div className="space-y-6 bg-[#03040A] px-4 pb-12 pt-8 text-white lg:px-8">
         <SettingsGroupCallout
           icon={<Sparkles className="h-4 w-4" />}
-          title="Pipeline stats"
-          subtitle="Live snapshot of filtered deals"
+          title="Active Deals"
+          subtitle="Filtered value, commission, and risk at a glance"
+          endBadge={<MenuIcon className="h-4 w-4 text-siso-text-muted" aria-hidden />}
           showChevron={false}
         >
           <div className="grid gap-4 sm:grid-cols-3">
@@ -402,7 +404,7 @@ export function ActiveDealsWorkspace({ initialDeals }: ActiveDealsWorkspaceProps
           </aside>
         </div>
       </div>
-    </main>
+    </PartnersPageShell>
   );
 }
 

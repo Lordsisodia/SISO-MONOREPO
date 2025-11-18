@@ -1,5 +1,7 @@
 "use client";
 
+"use client";
+
 import { useEffect, useLayoutEffect, useMemo, useRef, type MouseEvent, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { MobileNavigationProvider, useMobileNavigation } from "../application/navigation-store";
