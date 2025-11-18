@@ -3,12 +3,13 @@
 "use client";
 
 import { Sparkles, Users, ShieldCheck, Info } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Awards } from "@/components/ui/award";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { Button } from "@/components/ui/button";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
-import { tierDefinitions } from "@/domains/partnerships/portal-architecture/earnings/tier-progress/ui/tier-definitions";
+import { FallingPattern } from "@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern";
 
 export function GettingStartedScreen() {
   const router = useRouter();
@@ -23,18 +24,17 @@ export function GettingStartedScreen() {
     nextTierId: "vanguard",
   } as const;
 
-  // Program tiers (Trailblazer → Builder → Vanguard → Apex → Sovereign) with crest icons from tier-definitions
-  const tierCatalog = tierDefinitions.map(td => ({
-    id: td.id,
-    title: td.title,
-    accent: td.color,
-    crestIcon: td.visuals.crestIcon,
-    gradient: td.visuals.crestGradient ?? "from-[#0a0a0a] to-[#111]",
-  }));
+  // Program tiers (Trailblazer → Builder → Vanguard → Apex → Sovereign) using saved SVG crests in /public/tiers
+  const tierCatalog = [
+    { id: "trailblazer", title: "Trailblazer", accent: "#f89f3c", art: "/tiers/Trailblazer.svg" },
+    { id: "builder", title: "Builder", accent: "#f89f3c", art: "/tiers/Builder.svg" },
+    { id: "vanguard", title: "Vanguard", accent: "#f89f3c", art: "/tiers/Vanguard.svg" },
+    { id: "apex", title: "Apex", accent: "#f89f3c", art: "/tiers/Apex.svg" },
+    { id: "sovereign", title: "Sovereign", accent: "#f89f3c", art: "/tiers/Sovereign.svg" },
+  ];
 
   const currentTier = tierCatalog.find(t => t.id === levelData.currentTierId) ?? tierCatalog[0];
   const nextTier = tierCatalog.find(t => t.id === levelData.nextTierId) ?? tierCatalog[1];
-  const CrestIcon = currentTier.crestIcon;
 
   const xpFeed = [
     { title: "Finished Discovery Basics", source: "Course", xp: 120, when: "2h ago" },
@@ -44,8 +44,11 @@ export function GettingStartedScreen() {
   const certificates = { count: 2, badges: 3 };
 
   return (
-    <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
+    <main className="relative min-h-screen bg-siso-bg-primary text-siso-text-primary">
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <FallingPattern className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
+      </div>
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
         <HighlightCard
           color="orange"
           title="My Progress"
@@ -76,23 +79,26 @@ export function GettingStartedScreen() {
           subtitle="Your path to next tier"
           showChevron={false}
         >
-          <div className="space-y-3 rounded-3xl border border-white/10 bg-white/[0.025] px-4 py-4 text-sm text-siso-text-muted">
-            <div
-              className="relative overflow-hidden rounded-2xl border border-white/10 px-4 py-3 text-white shadow-[0_15px_40px_rgba(0,0,0,0.35)]"
-              style={{ backgroundImage: `linear-gradient(135deg, rgba(255,255,255,0.06), transparent), linear-gradient(120deg, ${currentTier.accent}22, transparent 55%)` }}
-            >
-              <div className="absolute inset-0 rounded-2xl bg-white/5 opacity-15" />
-              <div className="relative flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/15 bg-white/10 text-lg font-semibold">
-                  <CrestIcon className="h-6 w-6" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-[11px] uppercase tracking-[0.28em] text-white/70">Current tier</p>
-                  <p className="text-lg font-semibold text-white break-words">{currentTier.title}</p>
-                  <p className="text-[11px] text-white/70">
-                    {Math.round((levelData.currentPoints / (levelData.currentPoints + levelData.pointsToNextLevel)) * 100)}% of this tier
-                  </p>
-                </div>
+          <div className="space-y-3 rounded-2xl border border-white/10 bg-siso-bg-secondary px-4 py-4 text-sm text-siso-text-muted shadow-inner">
+            <div className="relative overflow-hidden rounded-2xl border border-white/10 text-white shadow-[0_15px_40px_rgba(0,0,0,0.35)]">
+              {currentTier.art ? (
+                <Image
+                  src={currentTier.art}
+                  alt={`${currentTier.title} crest`}
+                  width={600}
+                  height={180}
+                  className="h-full w-full object-cover"
+                  priority
+                  sizes="100vw"
+                />
+              ) : null}
+              <div className="absolute inset-0 bg-gradient-to-br from-black/65 via-black/55 to-black/60" />
+              <div className="relative flex flex-col gap-1 px-4 py-3">
+                <p className="text-[11px] uppercase tracking-[0.28em] text-white/70">Current tier</p>
+                <p className="text-lg font-semibold text-white break-words">{currentTier.title}</p>
+                <p className="text-[11px] text-white/70">
+                  {Math.round((levelData.currentPoints / (levelData.currentPoints + levelData.pointsToNextLevel)) * 100)}% of this tier
+                </p>
               </div>
             </div>
 
@@ -126,8 +132,9 @@ export function GettingStartedScreen() {
 
             <div className="flex justify-center pt-2">
               <Button
+                variant="ghost"
                 size="sm"
-                className="rounded-2xl px-5"
+                className="w-full max-w-xs border border-white/15 rounded-2xl"
                 onClick={() => router.push("/partners/earnings/tier-progression")}
               >
                 View tiers & perks
@@ -142,7 +149,7 @@ export function GettingStartedScreen() {
           subtitle="Recent points you earned"
           showChevron={false}
         >
-          <div className="space-y-3 text-sm text-white rounded-2xl border border-white/0 bg-white/5 px-4 py-4 shadow-inner">
+          <div className="space-y-3 text-sm text-white rounded-2xl border border-white/10 bg-siso-bg-secondary px-4 py-4 shadow-inner">
             <div className="flex items-center gap-2 text-[11px] text-siso-text-muted">
               <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-0.5">
                 Past 7 days
@@ -153,7 +160,7 @@ export function GettingStartedScreen() {
               {xpFeed.map((item) => (
                 <div
                   key={item.title}
-                  className="flex items-center justify-between rounded-xl bg-white/[0.02] px-3 py-2 transition hover:bg-white/[0.05]"
+                  className="flex items-center justify-between rounded-xl bg-siso-bg-tertiary px-3 py-2 transition hover:bg-white/[0.05]"
                 >
                   <div className="space-y-1">
                     <p className="font-semibold">{item.title}</p>
@@ -171,7 +178,7 @@ export function GettingStartedScreen() {
               ))}
             </div>
 
-            <div className="space-y-1 text-[11px] text-siso-text-muted">
+          <div className="space-y-1 text-[11px] text-siso-text-muted">
               <div className="flex items-center justify-between">
                 <span>
                   {levelData.pointsToNextLevel} pts to Level {levelData.nextLevel}
@@ -203,9 +210,9 @@ export function GettingStartedScreen() {
 
             <div className="flex justify-center">
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
-                className="border border-white/15 text-white/90"
+                className="border border-white/15 w-full max-w-xs"
                 onClick={() => router.push("/partners/academy/xp-breakdown")}
               >
                 See XP breakdown →
@@ -220,7 +227,7 @@ export function GettingStartedScreen() {
           subtitle="Your earned credentials"
           showChevron={false}
         >
-          <div className="space-y-3 rounded-2xl border border-white/0 bg-white/5 px-4 py-4 text-sm text-white shadow-inner">
+          <div className="space-y-3 rounded-2xl border border-white/10 bg-[rgba(19,13,7,0.65)] px-4 py-4 text-sm text-white shadow-inner">
             <div className="flex items-center justify-between gap-2">
               <div className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.25em] text-siso-text-muted">
                 <span>Next certificate</span>

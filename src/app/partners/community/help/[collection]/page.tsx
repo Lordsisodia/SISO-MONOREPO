@@ -16,13 +16,13 @@ export function generateStaticParams() {
 }
 
 type PartnersCommunityHelpCollectionPageProps = {
-  params: Promise<{ collection: string }>;
+  params: { collection: string };
 };
 
 export default async function PartnersCommunityHelpCollectionPage({
   params,
 }: PartnersCommunityHelpCollectionPageProps) {
-  const { collection: collectionSlug } = await params;
+  const { collection: collectionSlug } = params;
   const collection = getHelpCollection(collectionSlug);
   if (!collection) {
     notFound();

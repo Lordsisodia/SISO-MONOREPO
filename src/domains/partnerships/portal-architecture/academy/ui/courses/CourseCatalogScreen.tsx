@@ -9,6 +9,15 @@ import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture
 import { CustomDropdown } from "@/domains/partnerships/portal-architecture/settings/general/ui/CustomDropdown";
 import { courses, type CourseCategory } from "./data";
 import { cn } from "@/domains/shared/utils/cn";
+import dynamic from "next/dynamic";
+
+const FallingPattern = dynamic(
+  () =>
+    import("@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern").then(
+      (m) => m.FallingPattern,
+    ),
+  { ssr: false, loading: () => null },
+);
 
 const levels = ["all", "beginner", "intermediate", "advanced"] as const;
 const statuses = ["all", "not-started", "in-progress", "completed"] as const;
@@ -295,51 +304,58 @@ export function CourseCatalogScreen() {
     .filter((c) => c.moduleOf === "siso-essentials-program")
     .sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
 
-  const rails: { key: CourseCategory; title: string; subtitle: string; courses: DerivedCourse[] }[] =
-    [
-      {
-        key: "siso-essentials",
-        title: "SISO Essentials",
-        subtitle: "Guided steps to learn the app fast.",
-        courses: essentialsProgram ? [essentialsProgram] : [],
-      },
-      {
-        key: "sales-foundations",
-        title: "Sales Foundations",
-        subtitle: "Core enterprise/SaaS selling plays.",
-        courses: filteredCourses
-          .filter((c) => c.category === "sales-foundations")
-          .sort((a, b) => (a.order ?? 99) - (b.order ?? 99)),
-      },
-      {
-        key: "lead-gen",
-        title: "Lead Gen & Pipeline",
-        subtitle: "Prospecting, messaging, cadences, pipeline health.",
-        courses: filteredCourses
-          .filter((c) => c.category === "lead-gen")
-          .sort((a, b) => (a.order ?? 99) - (b.order ?? 99)),
-      },
-      {
-        key: "recruit-partners",
-        title: "Recruit Partners",
-        subtitle: "Source, vet, and activate new partners.",
-        courses: filteredCourses
-          .filter((c) => c.category === "recruit-partners")
-          .sort((a, b) => (a.order ?? 99) - (b.order ?? 99)),
-      },
-      {
-        key: "new-trending",
-        title: "New & Trending",
-        subtitle: "Most-started picks this week.",
-        courses: filteredCourses
-          .filter((c) => c.trending)
-          .sort((a, b) => (a.order ?? 99) - (b.order ?? 99)),
-      },
-    ];
+  const rails: { key: CourseCategory; title: string; subtitle: string; courses: DerivedCourse[]; icon: React.ReactNode }[] = [
+    {
+      key: "siso-essentials",
+      title: "SISO Essentials",
+      subtitle: "Guided steps to learn the app fast.",
+      courses: essentialsProgram ? [essentialsProgram] : [],
+      icon: <Sparkles className="h-4 w-4" />,
+    },
+    {
+      key: "sales-foundations",
+      title: "Sales Foundations",
+      subtitle: "Core enterprise/SaaS selling plays.",
+      courses: filteredCourses
+        .filter((c) => c.category === "sales-foundations")
+        .sort((a, b) => (a.order ?? 99) - (b.order ?? 99)),
+      icon: <Play className="h-4 w-4" />,
+    },
+    {
+      key: "lead-gen",
+      title: "Lead Gen & Pipeline",
+      subtitle: "Prospecting, messaging, cadences, pipeline health.",
+      courses: filteredCourses
+        .filter((c) => c.category === "lead-gen")
+        .sort((a, b) => (a.order ?? 99) - (b.order ?? 99)),
+      icon: <ArrowRight className="h-4 w-4" />,
+    },
+    {
+      key: "recruit-partners",
+      title: "Recruit Partners",
+      subtitle: "Source, vet, and activate new partners.",
+      courses: filteredCourses
+        .filter((c) => c.category === "recruit-partners")
+        .sort((a, b) => (a.order ?? 99) - (b.order ?? 99)),
+      icon: <Bookmark className="h-4 w-4" />,
+    },
+    {
+      key: "new-trending",
+      title: "New & Trending",
+      subtitle: "Most-started picks this week.",
+      courses: filteredCourses
+        .filter((c) => c.trending)
+        .sort((a, b) => (a.order ?? 99) - (b.order ?? 99)),
+      icon: <Sparkles className="h-4 w-4" />,
+    },
+  ];
 
   return (
-    <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen overflow-x-hidden">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
+    <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen overflow-x-hidden relative">
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <FallingPattern className="h-full opacity-60 [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
+      </div>
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
         <HighlightCard
           color="orange"
           title="Courses"
@@ -397,20 +413,13 @@ export function CourseCatalogScreen() {
         <div className="space-y-8">
           {rails.map((rail) =>
             rail.courses.length ? (
-              <section key={rail.key} className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.3em] text-siso-text-muted">{rail.title}</p>
-                    <p className="text-sm text-siso-text-muted">{rail.subtitle}</p>
-                  </div>
-                  <Link
-                    href="/partners/academy/courses"
-                    className="text-xs text-siso-orange hover:underline"
-                    aria-label={`View all ${rail.title} courses`}
-                  >
-                    View all
-                  </Link>
-                </div>
+              <SettingsGroupCallout
+                key={rail.key}
+                icon={rail.icon}
+                title={rail.title}
+                subtitle={rail.subtitle}
+                showChevron={false}
+              >
                 {rail.key === "siso-essentials" && essentialsProgram ? (
                   <EssentialsProgramCard
                     program={essentialsProgram}
@@ -432,7 +441,7 @@ export function CourseCatalogScreen() {
                     ))}
                   </div>
                 )}
-              </section>
+              </SettingsGroupCallout>
             ) : null,
           )}
         </div>
@@ -466,19 +475,7 @@ export function CourseCatalogScreen() {
               </Button>
             </div>
           </div>
-        ) : (
-          <div className="space-y-6">
-            {filteredCourses.map((course) => (
-              <CourseCard
-                key={course.id}
-                course={course}
-                saved={!!savedMap[course.id]}
-                onToggleSave={() => handleToggleSave(course.id)}
-                onCopyLink={() => handleCopyLink(course.id)}
-              />
-            ))}
-          </div>
-        )}
+        ) : null}
       </div>
     </main>
   );

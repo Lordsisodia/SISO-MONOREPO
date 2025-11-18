@@ -6,6 +6,15 @@ import { Button } from "@/components/ui/button";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+
+const FallingPattern = dynamic(
+  () =>
+    import("@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern").then(
+      (m) => m.FallingPattern,
+    ),
+  { ssr: false, loading: () => null },
+);
 
 const spotlight = {
   title: "SISO Induction",
@@ -40,8 +49,11 @@ export function TrainingSpotlightScreen() {
   const router = useRouter();
 
   return (
-    <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen">
-      <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
+    <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <FallingPattern className="h-full opacity-60 [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
+      </div>
+      <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
         <HighlightCard
           color="orange"
           title="Training spotlight"
@@ -63,24 +75,28 @@ export function TrainingSpotlightScreen() {
           subtitle="Jump to the next required step"
           showChevron={false}
         >
-          <div className="space-y-3 text-sm text-siso-text-muted">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="text-white text-base font-semibold">{spotlight.title}</p>
-              <p className="text-xs">You’re {spotlight.progress}% through this requirement.</p>
-              <Button variant="secondary" size="sm" onClick={() => router.push(spotlight.lessonPath)}>
-                Go to course
-              </Button>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-3">
-              <div className="flex items-center justify-between text-xs text-siso-text-muted">
-                <span>Progress</span>
-                <span className="text-white font-semibold">{spotlight.progress}%</span>
+          <div className="rounded-3xl border border-white/10 bg-siso-bg-secondary p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)]">
+            <div className="space-y-3 text-sm text-siso-text-muted">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-white text-base font-semibold">{spotlight.title}</p>
+                  <p className="text-xs">You’re {spotlight.progress}% through this requirement.</p>
+                </div>
+                <Button variant="secondary" size="sm" onClick={() => router.push(spotlight.lessonPath)}>
+                  Go to course
+                </Button>
               </div>
-              <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/10">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-orange-400 to-orange-500"
-                  style={{ width: `${spotlight.progress}%` }}
-                />
+              <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-3">
+                <div className="flex items-center justify-between text-xs text-siso-text-muted">
+                  <span>Progress</span>
+                  <span className="text-white font-semibold">{spotlight.progress}%</span>
+                </div>
+                <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/10">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-orange-400 to-orange-500"
+                    style={{ width: `${spotlight.progress}%` }}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -92,7 +108,7 @@ export function TrainingSpotlightScreen() {
           subtitle="Tying the lesson to today’s priorities"
           showChevron={false}
         >
-          <div className="space-y-3">
+          <div className="rounded-3xl border border-white/10 bg-siso-bg-secondary p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)] space-y-3">
             <p className="text-sm font-semibold text-white">{spotlight.title}</p>
             <p className="text-xs text-siso-text-muted">{spotlight.summary}</p>
             <p className="text-[11px] uppercase tracking-[0.3em] text-siso-orange">Current priority</p>
@@ -121,14 +137,14 @@ export function TrainingSpotlightScreen() {
           subtitle="Pre-reqs + related proof"
           showChevron={false}
         >
-          <div className="space-y-2 text-[11px]">
+          <div className="rounded-3xl border border-white/10 bg-siso-bg-secondary p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)] space-y-2 text-[11px]">
             <p className="font-semibold text-white">Prerequisites</p>
             <ul className="list-inside list-disc text-siso-text-muted">
               {spotlight.prerequisites.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
-            <p className="font-semibold text-white">Post-lesson proof to send</p>
+            <p className="pt-2 font-semibold text-white">Post-lesson proof to send</p>
             <div className="flex flex-wrap gap-2">
               {proofAssets.map((related) => (
                 <Link
@@ -150,26 +166,28 @@ export function TrainingSpotlightScreen() {
           subtitle="Preview the lesson plan"
           showChevron={false}
         >
-          <div className="flex items-center justify-between">
-            <p className="text-xs uppercase tracking-[0.35em] text-siso-text-muted">Stay on track</p>
-            <Button variant="link" size="sm" className="text-siso-orange" onClick={() => router.push(spotlight.lessonPath)}>
-              Open lesson
-            </Button>
+          <div className="rounded-3xl border border-white/10 bg-siso-bg-secondary p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)]">
+            <div className="flex items-center justify-between">
+              <p className="text-xs uppercase tracking-[0.35em] text-siso-text-muted">Stay on track</p>
+              <Button variant="link" size="sm" className="text-siso-orange" onClick={() => router.push(spotlight.lessonPath)}>
+                Open lesson
+              </Button>
+            </div>
+            <ol className="mt-3 space-y-3 text-sm text-siso-text-muted">
+              {[
+                "Review the discovery script pre-read",
+                "Walk through the 5 sample questions",
+                "Practice the follow-up template and save to Saved Docs",
+              ].map((step) => (
+                <li key={step} className="flex items-start gap-2">
+                  <span className="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/10 text-[12px] text-white">
+                    •
+                  </span>
+                  {step}
+                </li>
+              ))}
+            </ol>
           </div>
-          <ol className="mt-3 space-y-3 text-sm text-siso-text-muted">
-            {[
-              "Review the discovery script pre-read",
-              "Walk through the 5 sample questions",
-              "Practice the follow-up template and save to Saved Docs",
-            ].map((step) => (
-              <li key={step} className="flex items-start gap-2">
-                <span className="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/10 text-[12px] text-white">
-                  •
-                </span>
-                {step}
-              </li>
-            ))}
-          </ol>
         </SettingsGroupCallout>
       </div>
     </main>

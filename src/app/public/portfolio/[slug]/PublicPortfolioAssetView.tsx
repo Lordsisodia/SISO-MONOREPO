@@ -23,7 +23,7 @@ export function PublicPortfolioAssetView({ client }: { client: PortfolioClient }
           </Link>
         </header>
 
-        <section className="rounded-3xl border border-white/10 bg-white/[0.04] p-4 sm:p-6">
+        <section className="rounded-3xl border border-white/10 bg-[#262626] p-4 sm:p-6">
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-siso-text-muted">
               <Sparkles className="h-4 w-4 text-siso-orange" />
@@ -40,7 +40,7 @@ export function PublicPortfolioAssetView({ client }: { client: PortfolioClient }
           </div>
 
           {hero ? (
-            <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-black/30">
+            <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-[#262626]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={hero} alt={client.name} className="w-full object-cover" />
             </div>
@@ -86,7 +86,7 @@ export function PublicPortfolioAssetView({ client }: { client: PortfolioClient }
           </div>
         </section>
 
-        <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
+        <section className="rounded-3xl border border-white/10 bg-[#262626] p-4">
           <div className="flex items-center justify-between text-sm text-siso-text-muted">
             <span>Browse more proofs</span>
             <Link href="/partners/academy/portfolio" className="inline-flex items-center gap-1 text-siso-orange">

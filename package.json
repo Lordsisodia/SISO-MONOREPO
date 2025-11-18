@@ -4,7 +4,6 @@
   "private": true,
   "description": "Unified SISO platform - client-base & partnerships",
   "scripts": {
-    "predev": "rm -rf .next",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

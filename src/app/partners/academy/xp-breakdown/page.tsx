@@ -1,10 +1,19 @@
 "use client";
 
-import { Clock3, ListFilter, Sparkles } from "lucide-react";
+import { ArrowLeft, Clock3, ListFilter, Sparkles } from "lucide-react";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { Button } from "@/components/ui/button";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+
+const FallingPattern = dynamic(
+  () =>
+    import("@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern").then(
+      (m) => m.FallingPattern,
+    ),
+  { ssr: false, loading: () => null },
+);
 
 type XPType = "Course" | "Engagement" | "Assessment" | "Onboarding";
 
@@ -28,9 +37,21 @@ export default function XPBreakdownPage() {
   const router = useRouter();
 
   return (
-    <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
-        <div className="relative">
+    <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <FallingPattern className="h-full opacity-60 [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
+      </div>
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
+        <div className="relative min-h-[128px]">
+          <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
+            <button
+              onClick={() => router.back()}
+              aria-label="Back"
+              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+          </div>
           <HighlightCard
             color="orange"
             title="XP Activity"
@@ -38,20 +59,13 @@ export default function XPBreakdownPage() {
             metricValue={`${xpFeed.reduce((sum, item) => sum + item.xp, 0)} XP`}
             metricLabel="last 7 days"
             icon={<Sparkles className="h-5 w-5 text-siso-orange" />}
+            className="w-full pl-12"
             hideDivider
             hideFooter
             showCornerIcon={false}
             titleClassName="uppercase tracking-[0.35em] text-white"
             descriptionClassName="text-sm"
           />
-          <Button
-            variant="ghost"
-            size="sm"
-            className="absolute left-3 top-3 text-white"
-            onClick={() => router.back()}
-          >
-            ←
-          </Button>
         </div>
 
         <SettingsGroupCallout

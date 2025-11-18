@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { ArrowRight, DownloadCloud, Filter, Layers, Link as LinkIcon, Share2, Sparkles } from "lucide-react";
 import { HighlightCard } from "@/components/ui/card-5-static";
@@ -8,6 +9,14 @@ import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture
 import { cn } from "@/domains/shared/utils/cn";
 import { useRouter } from "next/navigation";
 import { assetTypes, pitchAssets } from "./data";
+
+const FallingPattern = dynamic(
+  () =>
+    import("@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern").then(
+      (m) => m.FallingPattern,
+    ),
+  { ssr: false, loading: () => null },
+);
 
 const guideSteps = [
   "Pick the asset type that matches your prospect",
@@ -86,8 +95,11 @@ export function PitchKitScreen() {
   };
 
   return (
-    <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
+    <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <FallingPattern className="h-full opacity-60 [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
+      </div>
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
         <HighlightCard
           color="orange"
           title="Pitch kit"
@@ -104,18 +116,20 @@ export function PitchKitScreen() {
           subtitle="Three steps to send a winning pitch."
           showChevron={false}
         >
-          <ol className="space-y-2 text-xs text-siso-text-muted">
-            {guideSteps.map((step, index) => (
-              <li key={step} className="flex items-start gap-2">
-                <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/20 text-[11px] font-semibold text-white">
-                  {index + 1}
-                </span>
-                <span>{step}</span>
-              </li>
-            ))}
-          </ol>
-          <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-emerald-300/40 bg-emerald-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-emerald-200">
-            Updated weekly
+          <div className="rounded-[18px] bg-white/5 p-4 space-y-3">
+            <ol className="space-y-2 text-xs text-siso-text-muted">
+              {guideSteps.map((step, index) => (
+                <li key={step} className="flex items-start gap-2">
+                  <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/20 text-[11px] font-semibold text-white">
+                    {index + 1}
+                  </span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/40 bg-emerald-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-emerald-200">
+              Updated weekly
+            </div>
           </div>
         </SettingsGroupCallout>
 
@@ -125,19 +139,21 @@ export function PitchKitScreen() {
           subtitle="Find the industry you're trying to approach."
           showChevron={false}
         >
-          <div className="space-y-3">
-            <label className="relative block">
-              <span className="sr-only">Search pitch kits</span>
-              <input
-                type="search"
-                placeholder="Search by industry, audience, or outcome"
-                className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-2 text-sm text-white placeholder:text-siso-text-muted focus:border-siso-orange focus:outline-none"
-              />
-              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-siso-text-muted">
-                <LinkIcon className="h-4 w-4" />
-              </span>
-            </label>
-            <p className="text-xs text-siso-text-muted">Showing all pitch kits (search to narrow later).</p>
+          <div className="rounded-[18px] bg-white/5 p-4 space-y-3">
+            <div className="rounded-3xl bg-[rgba(19,13,7,0.65)] p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)] space-y-3 ring-1 ring-white/10">
+              <label className="relative block">
+                <span className="sr-only">Search pitch kits</span>
+                <input
+                  type="search"
+                  placeholder="Search by industry, audience, or outcome"
+                  className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-2 text-sm text-white placeholder:text-siso-text-muted focus:border-siso-orange focus:outline-none"
+                />
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-siso-text-muted">
+                  <LinkIcon className="h-4 w-4" />
+                </span>
+              </label>
+              <p className="text-xs text-siso-text-muted">Showing all pitch kits (search to narrow later).</p>
+            </div>
           </div>
         </SettingsGroupCallout>
 
@@ -147,7 +163,7 @@ export function PitchKitScreen() {
           subtitle="Copy, open, or share without leaving the page."
           showChevron={false}
         >
-          <div className="space-y-4">
+          <div className="rounded-[18px] bg-white/5 p-4 space-y-4">
             {pitchAssets.map((asset) => (
               <AssetCard key={asset.id} asset={asset} onCopy={handleCopy} />
             ))}
@@ -160,11 +176,13 @@ export function PitchKitScreen() {
           subtitle="Jump to portfolio to pair your pitch with proof."
           showChevron={false}
         >
-          <div className="flex items-center justify-between">
-            <p className="text-xs text-siso-text-muted">Browse portfolio case studies and attach to your pitch.</p>
-            <Button variant="secondary" size="sm" onClick={() => router.push("/partners/academy/portfolio")}>
-              View portfolio
-            </Button>
+          <div className="rounded-[18px] bg-white/5 p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-siso-text-muted">Browse portfolio case studies and attach to your pitch.</p>
+              <Button variant="secondary" size="sm" onClick={() => router.push("/partners/academy/portfolio")}> 
+                View portfolio
+              </Button>
+            </div>
           </div>
         </SettingsGroupCallout>
       </div>

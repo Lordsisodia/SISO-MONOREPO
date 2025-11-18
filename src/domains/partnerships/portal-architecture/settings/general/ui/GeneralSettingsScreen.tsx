@@ -12,8 +12,8 @@ import { useLanguageSettings } from "../sections/language/application/useLanguag
 import { LanguageDropdown } from "./LanguageDropdown";
 import { TimezoneDropdown } from "./TimezoneDropdown";
 import { CustomDropdown } from "./CustomDropdown";
-import Switch from "@/components/ui/sky-toggle";
-import SkySwitch from "@/components/ui/sky-toggle";
+import dynamic from "next/dynamic";
+const SkySwitch = dynamic(() => import("@/components/ui/sky-toggle"), { ssr: false });
 
 const quickSettingsCards = [
   {

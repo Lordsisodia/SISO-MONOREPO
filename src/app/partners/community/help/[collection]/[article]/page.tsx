@@ -21,13 +21,13 @@ export function generateStaticParams() {
 }
 
 type PartnersCommunityHelpArticlePageProps = {
-  params: Promise<{ collection: string; article: string }>;
+  params: { collection: string; article: string };
 };
 
 export default async function PartnersCommunityHelpArticlePage({
   params,
 }: PartnersCommunityHelpArticlePageProps) {
-  const { collection, article } = await params;
+  const { collection, article } = params;
   const result = getHelpArticle(collection, article);
   if (!result || !result.collection || !result.article) {
     notFound();
