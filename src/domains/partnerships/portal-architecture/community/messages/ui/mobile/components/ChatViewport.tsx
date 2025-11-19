@@ -13,6 +13,9 @@ type ChatViewportProps = {
   onToggleThreadInfo?: () => void;
   isThreadInfoOpen?: boolean;
   onOpenAppDrawer?: () => void;
+  maxWidthClassName?: string;
+  showDirectoryToggle?: boolean;
+  showAppDrawerButton?: boolean;
   children: ReactNode;
 };
 
@@ -26,6 +29,9 @@ export function ChatViewport({
   onToggleThreadInfo,
   isThreadInfoOpen,
   onOpenAppDrawer,
+  maxWidthClassName = "max-w-md",
+  showDirectoryToggle = true,
+  showAppDrawerButton = true,
   children,
 }: ChatViewportProps) {
   const headerRef = useRef<HTMLDivElement | null>(null);
@@ -55,19 +61,22 @@ export function ChatViewport({
       <header
         ref={headerRef}
         className={cn(
-          "fixed left-1/2 top-0 z-[84] mb-1 flex w-full max-w-md -translate-x-1/2 items-center gap-3 rounded-b-2xl border border-white/10 bg-siso-bg-tertiary/90 px-3 py-1.5 backdrop-blur transition-opacity",
+          "fixed left-1/2 top-0 z-[84] mb-1 flex w-full -translate-x-1/2 items-center gap-3 rounded-b-2xl border border-white/10 bg-siso-bg-tertiary/90 px-3 py-1.5 backdrop-blur transition-opacity",
+          maxWidthClassName,
           isDirectoryOpen && "pointer-events-none",
         )}
         style={{ boxShadow: "0 12px 30px rgba(0,0,0,0.45), inset 0 -1px 0 rgba(255,255,255,0.18)" }}
       >
-        <button
-          type="button"
-          onClick={onOpenDirectory}
-          className="inline-flex items-center text-siso-text-primary transition hover:text-siso-orange"
-          aria-label="Open message directory"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
+        {showDirectoryToggle ? (
+          <button
+            type="button"
+            onClick={onOpenDirectory}
+            className="inline-flex items-center text-siso-text-primary transition hover:text-siso-orange"
+            aria-label="Open message directory"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+        ) : null}
         <button
           type="button"
           onClick={() => onToggleThreadInfo?.()}
@@ -91,15 +100,17 @@ export function ChatViewport({
             </span>
           </div>
         </button>
-        <button
-          type="button"
-          className="ml-auto inline-flex items-center text-siso-text-muted transition hover:text-siso-orange"
-          aria-label="Open campus drawer"
-          onClick={onOpenAppDrawer}
-          disabled={!onOpenAppDrawer}
-        >
-          <Menu className="h-5 w-5" />
-        </button>
+        {showAppDrawerButton ? (
+          <button
+            type="button"
+            className="ml-auto inline-flex items-center text-siso-text-muted transition hover:text-siso-orange"
+            aria-label="Open campus drawer"
+            onClick={onOpenAppDrawer}
+            disabled={!onOpenAppDrawer}
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+        ) : null}
       </header>
 
       <div style={{ height: headerHeight }} aria-hidden />

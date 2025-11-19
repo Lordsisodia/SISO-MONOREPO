@@ -1,75 +1,252 @@
 "use client";
 
-import { useMemo, useRef, useState, useTransition, type ReactNode } from "react";
+import { useEffect, useRef, useState, useTransition, type ReactNode } from "react";
+import Image from "next/image";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import { Timeline, type TimelineItem } from "@/components/ui/timeline";
 import { submitClient } from "@/domains/partnerships/portal-architecture/pipeline-ops/application/pipelineOpsService";
-import { SubmitClientForm } from "@/domains/partnerships/portal-architecture/pipeline-ops/ui/SubmitClientForm";
 import { cn } from "@/lib/utils";
-import { HighlightCard as GradientHighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
+import { ComposerBar } from "@/domains/partnerships/portal-architecture/community/messages/ui/mobile/components/ComposerBar";
 import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
+import { useMobileNavigation } from "@/domains/partnerships/mobile/application/navigation-store";
+import { ChatViewport } from "@/domains/partnerships/portal-architecture/community/messages/ui/mobile/components/ChatViewport";
 import {
-  ArrowRight,
-  CheckCircle2,
-  Clock,
-  BookOpen,
-  FileText,
-  PenLine,
-  ShieldCheck,
-  Sparkles,
-  Tag,
-  Users,
-  Upload,
-  Zap,
-} from "lucide-react";
+  DirectoryOverlay,
+  type ThreadOverview,
+} from "@/domains/partnerships/portal-architecture/community/messages/ui/mobile/components/DirectoryOverlay";
+import { FallingPattern } from "@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern";
+import { FileText, Sparkles, Upload } from "lucide-react";
 
-const steps = [
-  { id: "profile", label: "Client Profile" },
-  { id: "context", label: "Project Context" },
-  { id: "scope", label: "Solution Scope" },
-  { id: "commercials", label: "Commercials" },
-  { id: "review", label: "Review & Submit" },
-] as const;
-
-const industryOptions = ["SaaS", "E-commerce", "Healthcare", "Finance", "Consumer", "Industrial", "Public Sector", "Other"];
-const partnershipTypes = [
-  "Direct Partnership",
-  "Revenue Sharing",
-  "Referral",
-  "Technology Partnership",
-  "Strategic Alliance",
-  "Joint Venture",
-];
 const budgetRanges = ["<$5k", "$5k-$10k", "$10k-$25k", "$25k-$50k", "$50k+", "Unknown"];
 const serviceOptions = ["Website", "Web App", "SEO", "Automation", "AI Builder", "Integrations"];
-const probabilityBuckets = ["0-25%", "25-50%", "50-75%", "75%+" ];
 
-const reviewerTeam = [
-  { name: "Avery Chen", role: "Technical Review", focus: "AI Systems" },
-  { name: "Jordan Miles", role: "Business Review", focus: "Revenue Ops" },
-  { name: "Priya Kapoor", role: "Executive Approval", focus: "Strategic Alliances" },
+const timeFormatter = new Intl.DateTimeFormat("en-US", {
+  hour: "numeric",
+  minute: "2-digit",
+  hour12: true,
+});
+
+const formatNow = () => timeFormatter.format(new Date());
+
+const onboardingThreads: ThreadOverview[] = [
+  {
+    id: "submit-client",
+    name: "Submit Client Intake",
+    preview: "Intake assistant for new opportunities",
+    unreadCount: 0,
+    badge: "Bot",
+    category: "Pinned",
+  },
+  {
+    id: "workspace-onboarding",
+    name: "Workspace Setup",
+    preview: "Docs + automation hand-off",
+    unreadCount: 2,
+    category: "Recent",
+  },
+  {
+    id: "rapid-intake",
+    name: "Rapid Intake",
+    preview: "60-second form replacement",
+    unreadCount: 0,
+    category: "Recent",
+  },
 ];
 
-const submissionTips = [
-  "Attach at least one reference asset or spec to speed up validation.",
-  "Share budget + timeline to auto-route to the correct SISO pod.",
-  "Use the toggle to surface notes to Partner Success for additional context.",
+const outgoingRequests = [
+  { id: "req-1", name: "Supply Pod Invite", note: "Pending approval" },
+  { id: "req-2", name: "Community Captain", note: "Waiting for response" },
 ];
 
-const noteTemplates = ["Quick Notes", "Meeting Notes", "Sales Script", "Industry Research"];
+const blockedContacts = [{ id: "blocked-1", name: "Spam Account" }];
 
+type WizardPrompt = {
+  id: string;
+  type: "text" | "textarea" | "chips" | "multi-select" | "upload" | "summary";
+  field?: keyof FormState;
+  prompt: string;
+  helper?: string;
+  required?: boolean;
+  placeholder?: string;
+  options?: string[];
+  quickReplies?: string[];
+};
+
+type ChatMessage = {
+  id: string;
+  role: "assistant" | "user";
+  content: string;
+  helper?: string;
+  author?: string;
+  timestamp?: string;
+};
+
+const wizardPrompts: WizardPrompt[] = [
+  {
+    id: "companyName",
+    field: "companyName",
+    type: "text",
+    prompt: "What’s the company or project called?",
+    helper: "If it's a solo creator, just drop their name.",
+    required: true,
+    placeholder: "Brookstone Labs",
+  },
+  {
+    id: "companySize",
+    field: "companySize",
+    type: "text",
+    prompt: "Rough team size? (Optional)",
+    helper: "Estimate or type NA.",
+    placeholder: "10-50",
+    quickReplies: ["Solo", "2-10", "50+", "NA"],
+  },
+  {
+    id: "contactName",
+    field: "contactName",
+    type: "text",
+    prompt: "Who’s your primary contact?",
+    required: true,
+    placeholder: "Jenna Ruiz",
+  },
+  {
+    id: "contactEmail",
+    field: "contactEmail",
+    type: "text",
+    prompt: "Email (optional).",
+    helper: "We’ll DM on WhatsApp, but email helps with docs.",
+    placeholder: "jenna@acme.com",
+    quickReplies: ["NA"],
+  },
+  {
+    id: "contactPhone",
+    field: "contactPhone",
+    type: "text",
+    prompt: "What’s the WhatsApp or phone number?",
+    helper: "We’ll confirm receipt here.",
+    required: true,
+    placeholder: "+1 555 123 1234",
+  },
+  {
+    id: "website",
+    field: "website",
+    type: "text",
+    prompt: "Drop a website or landing page link (optional).",
+    helper: "Type NA if they don’t have one.",
+    placeholder: "https://",
+    quickReplies: ["NA", "Instagram link", "LinkedIn"],
+  },
+  {
+    id: "socialLink",
+    field: "socialLink",
+    type: "text",
+    prompt: "Any social handle we should skim?",
+    helper: "Instagram, LinkedIn, TikTok—whatever shows their brand.",
+    placeholder: "https://instagram.com/...",
+    quickReplies: ["NA"],
+  },
+  {
+    id: "clientGoals",
+    field: "clientGoals",
+    type: "textarea",
+    prompt: "What are they trying to build or fix?",
+    helper: "Short paragraph about their goals or pain.",
+    required: true,
+    placeholder: "E.g. Launch a membership portal...",
+  },
+  {
+    id: "servicesRequested",
+    field: "servicesRequested",
+    type: "multi-select",
+    prompt: "Pick the services they need.",
+    helper: "Tap all that apply.",
+    required: true,
+    options: serviceOptions,
+  },
+  {
+    id: "timeline",
+    field: "timeline",
+    type: "text",
+    prompt: "Timeline or launch target? (Optional)",
+    helper: "Rough month is fine.",
+    placeholder: "Need build by February",
+    quickReplies: ["ASAP", "This quarter", "NA"],
+  },
+  {
+    id: "expectedValue",
+    field: "expectedValue",
+    type: "text",
+    prompt: "Estimated deal value? (optional)",
+    helper: "Rough USD amount helps routing.",
+    placeholder: "50000",
+    quickReplies: ["25000", "50000", "100000", "Unknown"],
+  },
+  {
+    id: "budgetRange",
+    field: "budgetRange",
+    type: "chips",
+    prompt: "Any sense of budget?",
+    helper: "Select Unknown if you’re not sure.",
+    options: [...budgetRanges, "Unknown"],
+  },
+  {
+    id: "specialRequirements",
+    field: "specialRequirements",
+    type: "textarea",
+    prompt: "Any compliance or special requirements?",
+    helper: "HIPAA, integrations, branding kits, languages…",
+    placeholder: "Need HIPAA + bilingual support",
+  },
+  {
+    id: "documents",
+    field: "documents",
+    type: "upload",
+    prompt: "Upload any docs, specs, or decks (optional).",
+    helper: "No sensitive IDs/PHI; PDFs preferred.",
+  },
+  {
+    id: "commercialNotes",
+    field: "commercialNotes",
+    type: "textarea",
+    prompt: "Any commercial notes?",
+    helper: "Payments, commission, decision path.",
+    placeholder: "Client needs NET 30 + revenue share...",
+  },
+  {
+    id: "contextNotes",
+    field: "contextNotes",
+    type: "textarea",
+    prompt: "Anything else we should know?",
+    helper: "Share blockers, decision makers, or notes.",
+    placeholder: "They already bought ads...",
+  },
+  {
+    id: "shareWithSiso",
+    field: "shareWithSiso",
+    type: "chips",
+    prompt: "Share notes with SISO Partner Success?",
+    helper: "Gives the pod visibility.",
+    options: ["Share with SISO", "Keep private"],
+  },
+  {
+    id: "summary",
+    type: "summary",
+    prompt: "All set. Review the summary and submit when ready.",
+  },
+];
+
+const initialAssistantMessage =
+  "Hey—I'm the SISO intake assistant. Answer a few quick questions and type NA or Skip anytime if you don't have the info.";
+
+const createPromptMessage = (prompt: WizardPrompt): ChatMessage => ({
+  id: `prompt-${prompt.id}-${Date.now()}`,
+  role: "assistant",
+  content: prompt.prompt,
+  helper: prompt.helper,
+  author: "Intake Assistant",
+  timestamp: formatNow(),
+});
 type FormState = {
   companyName: string;
   legalName: string;
@@ -141,65 +318,10 @@ export default function PartnersPipelineOpsSubmitClientPage() {
 }
 
 function SubmitClientExperience() {
-  const wizardRef = useRef<HTMLDivElement>(null);
-  const [activeTab, setActiveTab] = useState<(typeof steps)[number]["id"]>(steps[0].id);
   const [formState, setFormState] = useState<FormState>(initialFormState);
   const [resultMessage, setResultMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
-
-  const softFields: (keyof FormState)[] = ["companyName", "contactName", "contactEmail", "contactPhone", "businessDescription", "servicesRequested", "socialLink", "budgetRange", "expectedValue", "specialRequirements"];
-
-  const completion = useMemo(() => {
-    const total = softFields.length || 1;
-    const filled = softFields.filter((field) => {
-      if (field === "servicesRequested") return formState.servicesRequested.length > 0;
-      const value = formState[field];
-      return typeof value === "string" ? value.trim().length > 0 : Boolean(value);
-    });
-    return Math.round((filled.length / total) * 100);
-  }, [formState]);
-
-  const validationScore = useMemo(() => {
-    const base = completion;
-    const docsBonus = formState.documents.length ? 10 : 0;
-    const servicesBonus = Math.min(15, formState.servicesRequested.length * 3);
-    return Math.min(100, base + docsBonus + servicesBonus);
-  }, [completion, formState.documents.length, formState.servicesRequested.length]);
-
-  const autoApprovalChance = useMemo(() => {
-    const score = Math.round(validationScore * 0.8 + (formState.shareWithSiso ? 5 : 0));
-    return Math.min(99, Math.max(36, score));
-  }, [validationScore, formState.shareWithSiso]);
-
-  const timelineItems = useMemo<TimelineItem[]>(() => {
-    return [
-      {
-        id: "draft",
-        title: "Draft Submission",
-        description: completion >= 80 ? "Ready for validation" : "Complete remaining required fields",
-        status: completion >= 80 ? "completed" : "active",
-      },
-      {
-        id: "validation",
-        title: "Validation",
-        description: `${validationScore}% quality score` ,
-        status: validationScore >= 75 ? "completed" : "pending",
-      },
-      {
-        id: "review",
-        title: "Reviewer Assignment",
-        description: "Technical + business reviewers auto-selected",
-        status: completion >= 90 ? "active" : "pending",
-      },
-      {
-        id: "sla",
-        title: "SLA",
-        description: resultMessage ? "SLA confirmed" : "8h SLA once submitted",
-        status: resultMessage ? "completed" : "pending",
-      },
-    ];
-  }, [completion, validationScore, resultMessage]);
 
   const handleFieldChange = <K extends keyof FormState>(field: K, value: FormState[K]) => {
     setFormState((prev) => ({ ...prev, [field]: value }));
@@ -223,8 +345,7 @@ function SubmitClientExperience() {
     );
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = () => {
     setResultMessage(null);
     setErrorMessage(null);
     startTransition(async () => {
@@ -248,400 +369,448 @@ function SubmitClientExperience() {
           vertical: formState.industry || "General",
         });
         setResultMessage(`Intake ${response.intakeId} received • Instant review`);
-        setActiveTab("review");
       } catch (error) {
         setErrorMessage(error instanceof Error ? error.message : "Something went wrong");
       }
     });
   };
 
-  const quickStats = [
-    { label: "Completion", value: `${completion}%`, helper: "Optional fields filled" },
-    { label: "Validation", value: `${validationScore}%`, helper: "Quality score" },
-    { label: "Auto-Approval", value: `${autoApprovalChance}%`, helper: "Prediction" },
-  ];
-
-  const scrollToWizard = () => wizardRef.current?.scrollIntoView({ behavior: "smooth" });
-
   return (
-    <main className="min-h-screen bg-[#03040A] text-white">
-      <div className="mx-auto w-full max-w-6xl px-4 py-10 lg:px-8">
-        <GradientHighlightCard
-          color="orange"
-          title="Submit Client"
-          description="Structured intake, reviewer automation, and SLA tracking for every opportunity."
-          metricValue={`${completion}%`}
-          metricLabel="Completion"
-          buttonText="Start submission"
-          onButtonClick={scrollToWizard}
-          icon={<Sparkles className="h-4 w-4" />}
-          hideDivider
-          hideFooter
-          className="w-full"
-        >
-          <div className="mt-4 grid gap-4 sm:grid-cols-3">
-            {quickStats.map((stat) => (
-              <div key={stat.label} className="rounded-2xl border border-white/20 bg-white/10 px-3 py-2">
-                <p className="text-[11px] uppercase tracking-[0.3em] text-white/70">{stat.label}</p>
-                <p className="text-2xl font-semibold text-white">{stat.value}</p>
-                <p className="text-xs text-white/70">{stat.helper}</p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <Button variant="outline" className="rounded-2xl border-white/40 text-white" onClick={() => { setActiveTab("review"); scrollToWizard(); }}>
-              <ArrowRight className="mr-2 h-4 w-4" />
-              Jump to review
-            </Button>
-          </div>
-        </GradientHighlightCard>
-
-        <div className="mt-6">
-          <SettingsGroupCallout
-            icon={<Clock className="h-4 w-4 text-siso-orange" />}
-            title="Submission readiness"
-            subtitle="Live SLA and approval odds"
-            showChevron={false}
-          >
-            <div className="grid gap-3 rounded-[22px] border border-white/10 bg-white/5 p-4 sm:grid-cols-2">
-              <MetricTile title="Review SLA" metric="8 hours" description="Average pipeline response window" />
-              <MetricTile title="Auto-approval odds" metric={`${autoApprovalChance}%`} description="Based on validation score and sharing" />
-            </div>
-          </SettingsGroupCallout>
-        </div>
-
-        <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px]">
-          <SettingsGroupCallout
-            icon={<PenLine className="h-4 w-4 text-siso-orange" />}
-            title="Submission wizard"
-            subtitle="Complete each stage and validation gate"
-            showChevron={false}
-          >
-            <div ref={wizardRef} id="submit-client-wizard" className="rounded-[22px] border border-white/10 bg-white/5 p-4">
-              <form onSubmit={handleSubmit} className="space-y-6 text-white">
-                <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as (typeof steps)[number]["id"])} className="space-y-6">
-                  <TabsList className="flex flex-wrap gap-2 bg-white/10 p-1 text-white/70">
-                  {steps.map((step) => (
-                    <TabsTrigger
-                      key={step.id}
-                      value={step.id}
-                      className="rounded-full px-4 py-1 text-xs uppercase tracking-[0.2em] text-white data-[state=active]:bg-white data-[state=active]:text-black"
-                    >
-                      {step.label}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-
-                <TabsContent value="profile" className="space-y-4">
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                    <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">Client profile</p>
-                    <p className="text-xs text-white/70">Share whatever you have now; you can edit later.</p>
-                    <div className="mt-4 space-y-6">
-                      <div className="grid gap-4 md:grid-cols-2">
-                        <Field label="Company name">
-                          <Input value={formState.companyName} onChange={(e) => handleFieldChange("companyName", e.target.value)} placeholder="Brookstone Labs" />
-                        </Field>
-                        <Field label="Company size">
-                          <Input value={formState.companySize} onChange={(e) => handleFieldChange("companySize", e.target.value)} placeholder="e.g., 10-50" />
-                        </Field>
-                        <Field label="Contact name">
-                          <Input value={formState.contactName} onChange={(e) => handleFieldChange("contactName", e.target.value)} placeholder="Jenna Ruiz" />
-                        </Field>
-                        <Field label="Contact email">
-                          <Input type="email" value={formState.contactEmail} onChange={(e) => handleFieldChange("contactEmail", e.target.value)} placeholder="jenna@brookstone.io" />
-                        </Field>
-                        <Field label="WhatsApp / phone">
-                          <Input value={formState.contactPhone} onChange={(e) => handleFieldChange("contactPhone", e.target.value)} placeholder="+1 555..." />
-                        </Field>
-                        <Field label="Website">
-                          <Input value={formState.website} onChange={(e) => handleFieldChange("website", e.target.value)} placeholder="https://" />
-                        </Field>
-                        <Field label="Social / profile link">
-                          <Input value={formState.socialLink} onChange={(e) => handleFieldChange("socialLink", e.target.value)} placeholder="Instagram, LinkedIn, TikTok, site" />
-                        </Field>
-                      </div>
-                    </div>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="context" className="space-y-4">
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                    <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">Project context</p>
-                    <p className="text-xs text-white/70">Briefly describe the business and what they want.</p>
-                    <div className="mt-4 space-y-6">
-                      <Field label="Business description">
-                        <Textarea value={formState.clientGoals} onChange={(e) => handleFieldChange("clientGoals", e.target.value)} rows={4} placeholder="What they do, current problem, desired outcome" />
-                      </Field>
-                      <Field label="Additional notes (optional)">
-                        <Textarea value={formState.contextNotes} onChange={(e) => handleFieldChange("contextNotes", e.target.value)} rows={3} placeholder="Anything else we should know" />
-                      </Field>
-                    </div>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="scope" className="space-y-4">
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                    <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">Solution scope</p>
-                    <p className="text-xs text-white/70">Pick the services they’re interested in and add any requirements.</p>
-                    <div className="mt-4 space-y-6">
-                      <div className="space-y-2">
-                        <Label>Services Requested</Label>
-                        <div className="flex flex-wrap gap-2">
-                          {serviceOptions.map((service) => {
-                            const selected = formState.servicesRequested.includes(service);
-                            return (
-                              <button
-                                type="button"
-                                key={service}
-                                onClick={() => toggleService(service)}
-                                className={cn(
-                                  "rounded-full border px-4 py-1 text-sm transition",
-                                  selected ? "border-siso-orange bg-siso-orange/10 text-white" : "border-white/10 text-white/60 hover:text-white",
-                                )}
-                              >
-                                {service}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                      <Field label="Special requirements (optional)">
-                        <Textarea
-                          value={formState.specialRequirements}
-                          onChange={(e) => handleFieldChange("specialRequirements", e.target.value)}
-                          rows={3}
-                          placeholder="HIPAA, integrations, branding kits, languages..."
-                        />
-                      </Field>
-                      <div>
-                        <Label className="mb-2 block">Supporting documents</Label>
-                        <label className="flex items-center gap-2 rounded-2xl border border-dashed border-white/20 bg-white/5 px-4 py-3 text-sm text-white/70">
-                          <Upload className="h-4 w-4" />
-                          <span>Upload docs / decks</span>
-                          <input type="file" multiple className="hidden" onChange={handleDocumentUpload} />
-                        </label>
-                        {formState.documents.length > 0 && (
-                          <ul className="mt-3 space-y-2 text-sm text-white/80">
-                            {formState.documents.map((doc) => (
-                              <li key={doc} className="flex items-center gap-2">
-                                <FileText className="h-4 w-4 text-siso-orange" />
-                                {doc}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="commercials" className="space-y-4">
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                    <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">Commercials</p>
-                    <p className="text-xs text-white/70">Optional signals only—share what you know.</p>
-                    <div className="mt-4 space-y-6">
-                      <div className="grid gap-4 md:grid-cols-2">
-                        <Field label="Expected value (optional)">
-                          <Input type="number" value={formState.expectedValue} onChange={(e) => handleFieldChange("expectedValue", e.target.value)} placeholder="e.g., 50000" />
-                        </Field>
-                        <Field label="Budget range (optional)">
-                          <Select value={formState.budgetRange} onValueChange={(value) => handleFieldChange("budgetRange", value)}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select range or Unknown" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {budgetRanges.map((option) => (
-                                <SelectItem key={option} value={option}>
-                                  {option}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </Field>
-                      </div>
-                      <Field label="Special requirements (optional)">
-                        <Textarea value={formState.specialRequirements} onChange={(e) => handleFieldChange("specialRequirements", e.target.value)} rows={3} placeholder="Compliance, integrations, languages..." />
-                      </Field>
-                      <Field label="Commercial notes (optional)">
-                        <Textarea value={formState.commercialNotes} onChange={(e) => handleFieldChange("commercialNotes", e.target.value)} rows={3} placeholder="Anything about budget, payments, or commission" />
-                      </Field>
-                      <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm">
-                        <div>
-                          <p className="font-semibold text-white">Share notes with SISO</p>
-                          <p className="text-white/70">Give Partner Success visibility into client conversations.</p>
-                        </div>
-                        <Switch checked={formState.shareWithSiso} onCheckedChange={(value) => handleFieldChange("shareWithSiso", value)} />
-                      </div>
-                    </div>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="review" className="space-y-4">
-                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                      <div>
-                        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/60">Submission summary</p>
-                        <p className="text-xs text-white/70">Double-check before routing to SISO.</p>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-white/80">
-                        <ShieldCheck className="h-4 w-4 text-siso-orange" />
-                        Instant review · optional fields
-                      </div>
-                    </div>
-                    <div className="mt-5 space-y-5">
-                      <SummaryRow label="Company" value={formState.companyName || "–"} helper={formState.companySize || ""} />
-                      <SummaryRow label="Primary contact" value={formState.contactName || "–"} helper={formState.contactEmail || formState.contactPhone || ""} />
-                      <SummaryRow label="Services" value={formState.servicesRequested.join(", ") || "Select services"} helper={formState.website || ""} />
-                      <SummaryRow label="Value" value={formState.expectedValue ? `$${Number(formState.expectedValue).toLocaleString()}` : "Unknown"} helper={formState.budgetRange ? `Budget ${formState.budgetRange}` : "Budget Unknown"} />
-                      <SummaryRow label="Notes" value={formState.contextNotes || formState.commercialNotes || "No additional notes"} />
-                      {resultMessage && (
-                        <Alert className="border-emerald-500/60 bg-emerald-500/10 text-emerald-100">
-                          <AlertDescription>{resultMessage}</AlertDescription>
-                        </Alert>
-                      )}
-                      {errorMessage && (
-                        <Alert className="border-rose-500/60 bg-rose-500/10 text-rose-100">
-                          <AlertDescription>{errorMessage}</AlertDescription>
-                        </Alert>
-                      )}
-                    </div>
-                    <div className="mt-4 flex flex-col gap-3 border-t border-white/10 pt-4 md:flex-row md:items-center md:justify-between">
-                      <p className="text-sm text-white/70">Submitting routes to Client Pipeline and updates My Prospects immediately.</p>
-                      <div className="flex flex-wrap gap-3">
-                        <Button type="submit" disabled={isPending} className="rounded-2xl bg-siso-orange px-6 py-3 text-black hover:bg-orange-400">
-                          {isPending ? "Submitting…" : "Submit to SISO"}
-                        </Button>
-                        <Button type="button" variant="outline" className="rounded-2xl border-white/30 text-white" onClick={() => setActiveTab("profile")}>Edit info</Button>
-                      </div>
-                    </div>
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </form>
-          </div>
-          </SettingsGroupCallout>
-
-          <div className="space-y-6 lg:sticky lg:top-8">
-            <SettingsGroupCallout
-              icon={<ShieldCheck className="h-4 w-4 text-siso-orange" />}
-              title="Submission health"
-              subtitle="Live scoring as you fill the intake"
-              showChevron={false}
-            >
-              <div className="space-y-4 rounded-[22px] border border-white/10 bg-white/5 p-4">
-                <div>
-                  <div className="flex items-center justify-between text-sm text-white/70">
-                    <span>Completion</span>
-                    <span className="font-semibold text-white">{completion}%</span>
-                  </div>
-                  <Progress value={completion} className="mt-2" />
-                </div>
-                <div>
-                  <div className="flex items-center justify-between text-sm text-white/70">
-                    <span>Validation Score</span>
-                    <span className="font-semibold text-white">{validationScore}%</span>
-                  </div>
-                  <Progress value={validationScore} className="mt-2 bg-white/10" />
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <p className="text-xs uppercase tracking-[0.3em] text-white/60">Auto-approval odds</p>
-                  <p className="mt-2 text-2xl font-semibold">{autoApprovalChance}%</p>
-                  <p className="text-sm text-white/70">Complete context + docs to stay above 80%.</p>
-                </div>
-              </div>
-            </SettingsGroupCallout>
-
-            <SettingsGroupCallout
-              icon={<Users className="h-4 w-4 text-siso-orange" />}
-              title="Reviewer assignment"
-              subtitle="Auto-matched experts"
-              showChevron={false}
-            >
-              <div className="space-y-4 rounded-[22px] border border-white/10 bg-white/5 p-4">
-                {reviewerTeam.map((reviewer) => (
-                  <div key={reviewer.name} className="flex items-center gap-3 rounded-xl border border-white/15 bg-black/20 px-3 py-2">
-                    <Avatar className="h-10 w-10 border border-white/10">
-                      <AvatarFallback>{reviewer.name.slice(0, 2).toUpperCase()}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 text-sm">
-                      <p className="font-medium text-white">{reviewer.name}</p>
-                      <p className="text-white/70">{reviewer.role}</p>
-                      <p className="text-xs text-white/60">Focus: {reviewer.focus}</p>
-                    </div>
-                    <Badge variant="outline" className="border-emerald-400/40 text-emerald-200">
-                      <CheckCircle2 className="mr-1 h-3 w-3" /> Active
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            </SettingsGroupCallout>
-
-            <SettingsGroupCallout
-              icon={<Clock className="h-4 w-4 text-siso-orange" />}
-              title="Timeline & SLA"
-              subtitle="What happens after submission"
-              showChevron={false}
-            >
-              <div className="rounded-[22px] border border-white/10 bg-white/5 p-4 text-sm">
-                <Timeline items={timelineItems} className="text-white" showTimestamps={false} />
-              </div>
-            </SettingsGroupCallout>
-
-            <SettingsGroupCallout
-              icon={<BookOpen className="h-4 w-4 text-siso-orange" />}
-              title="Guidance"
-              subtitle="Improve approval odds"
-              showChevron={false}
-            >
-              <div className="space-y-3 rounded-[22px] border border-white/10 bg-white/5 p-4 text-sm text-white/80">
-                {submissionTips.map((tip) => (
-                  <div key={tip} className="flex items-start gap-2">
-                    <ShieldCheck className="mt-0.5 h-4 w-4 text-siso-orange" />
-                    <span>{tip}</span>
-                  </div>
-                ))}
-                <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-white/60">Templates</p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {noteTemplates.map((tpl) => (
-                      <Button key={tpl} type="button" variant="ghost" className="border border-white/20 bg-black/20 px-3 py-1 text-xs text-white">
-                        <Tag className="mr-1 h-3 w-3" />
-                        {tpl}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </SettingsGroupCallout>
-
-            <SettingsGroupCallout
-              icon={<Zap className="h-4 w-4 text-siso-orange" />}
-              title="Need a 60-second intake?"
-              subtitle="Quick Action version for fast leads"
-              showChevron={false}
-            >
-              <div className="rounded-[22px] border border-white/10 bg-white/5 p-4">
-                <ScrollArea className="h-[420px] pr-2">
-                  <SubmitClientForm />
-                </ScrollArea>
-              </div>
-            </SettingsGroupCallout>
-          </div>
-        </div>
+    <main className="relative min-h-screen overflow-x-hidden bg-siso-bg-primary text-siso-text-primary">
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{ filter: "blur(5px)", opacity: 0.7 }}
+      >
+        <FallingPattern className="h-full w-full [mask-image:radial-gradient(circle_at_top,#ffffff40,#000000)]" />
+      </div>
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl flex-col px-2 pb-24 pt-4">
+        <SubmitClientChat
+          formState={formState}
+          onFieldChange={handleFieldChange}
+          toggleService={toggleService}
+          onDocumentUpload={handleDocumentUpload}
+          onSubmit={handleSubmit}
+          isPending={isPending}
+          resultMessage={resultMessage}
+          errorMessage={errorMessage}
+        />
       </div>
     </main>
-
   );
 }
 
-function Field({ label, required, children }: { label: string; required?: boolean; children: ReactNode }) {
+type SubmitClientChatProps = {
+  formState: FormState;
+  onFieldChange: <K extends keyof FormState>(field: K, value: FormState[K]) => void;
+  toggleService: (service: string) => void;
+  onDocumentUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: () => void;
+  isPending: boolean;
+  resultMessage: string | null;
+  errorMessage: string | null;
+};
+
+function SubmitClientChat({
+  formState,
+  onFieldChange,
+  toggleService,
+  onDocumentUpload,
+  onSubmit,
+  isPending,
+  resultMessage,
+  errorMessage,
+}: SubmitClientChatProps) {
+  const transcriptRef = useRef<HTMLDivElement>(null);
+  const { openDrawer } = useMobileNavigation();
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [
+    { id: "intro", role: "assistant", content: initialAssistantMessage, author: "Intake Assistant", timestamp: formatNow() },
+    createPromptMessage(wizardPrompts[0]),
+  ]);
+  const [currentPromptIndex, setCurrentPromptIndex] = useState(0);
+  const [inputValue, setInputValue] = useState("");
+  const [isDirectoryOpen, setDirectoryOpen] = useState(false);
+  const [composerHeight, setComposerHeight] = useState(0);
+  const [activeThreadId, setActiveThreadId] = useState("submit-client");
+
+  useEffect(() => {
+    if (!transcriptRef.current) return;
+    transcriptRef.current.scrollTop = transcriptRef.current.scrollHeight;
+  }, [messages]);
+
+  const currentPrompt = wizardPrompts[currentPromptIndex];
+  const quickReplies = currentPrompt?.quickReplies ?? [];
+
+  const pushMessage = (message: ChatMessage) => {
+    setMessages((prev) => [...prev, message]);
+  };
+
+  const goToNextPrompt = () => {
+    if (currentPromptIndex >= wizardPrompts.length - 1) return;
+    const nextIndex = currentPromptIndex + 1;
+    setCurrentPromptIndex(nextIndex);
+    pushMessage(createPromptMessage(wizardPrompts[nextIndex]));
+  };
+
+  const persistPromptValue = (prompt: WizardPrompt, value: string) => {
+    if (!prompt.field) return;
+    if (prompt.field === "servicesRequested" || prompt.field === "documents") return;
+    if (prompt.field === "shareWithSiso") {
+      onFieldChange("shareWithSiso", value !== "Keep private");
+      return;
+    }
+    onFieldChange(prompt.field, value as FormState[typeof prompt.field]);
+  };
+
+  const completePrompt = (value: string, { skip = false, display }: { skip?: boolean; display?: string } = {}) => {
+    const prompt = wizardPrompts[currentPromptIndex];
+    if (!prompt) return;
+    const trimmed = value.trim();
+    const isSkippableType = prompt.type === "multi-select" || prompt.type === "upload";
+    if (!skip && prompt.required && !trimmed && !isSkippableType) {
+      return;
+    }
+    const content = display ?? (skip ? "Skip for now" : trimmed || "Not sure");
+    pushMessage({ id: `user-${prompt.id}-${Date.now()}`, role: "user", content, author: "You", timestamp: formatNow() });
+    if (!skip && !isSkippableType) {
+      persistPromptValue(prompt, trimmed);
+    } else if (skip && prompt.field && prompt.field !== "servicesRequested" && prompt.field !== "documents") {
+      persistPromptValue(prompt, "");
+    }
+    setInputValue("");
+    goToNextPrompt();
+  };
+
+  const handleMultiSelectConfirm = () => {
+    const hasSelection = formState.servicesRequested.length > 0;
+    completePrompt(formState.servicesRequested.join(", "), {
+      skip: !hasSelection,
+      display: hasSelection ? `Selected: ${formState.servicesRequested.join(", ")}` : "Skip for now",
+    });
+  };
+
+  const handleUploadContinue = () => {
+    const hasDocs = formState.documents.length > 0;
+    completePrompt(hasDocs ? `${formState.documents.length} docs uploaded` : "No docs", {
+      skip: !hasDocs,
+      display: hasDocs ? `${formState.documents.length} docs uploaded` : "Skip for now",
+    });
+  };
+
+  const handleQuickReply = (reply: string) => {
+    completePrompt(reply, { display: reply });
+  };
+
+  const isTextPrompt = currentPrompt?.type === "text" || currentPrompt?.type === "textarea";
+  const composerInputDisabled = !currentPrompt || !isTextPrompt;
+  const composerPlaceholder = currentPrompt?.placeholder ?? currentPrompt?.prompt ?? "Type an update";
+
+  const handleComposerSend = () => {
+    if (composerInputDisabled || !currentPrompt || inputValue.trim().length === 0) {
+      return;
+    }
+    completePrompt(inputValue);
+  };
+
+  const renderPromptPanel = () => {
+    if (!currentPrompt) return null;
+
+    const quickReplies = currentPrompt.quickReplies ?? [];
+
+    const wrap = (node: ReactNode) => (
+      <div className="mx-auto mt-4 w-full max-w-5xl px-4">
+        <div className="space-y-3 rounded-[24px] border border-white/10 bg-white/5 p-4 text-sm text-white/85">{node}</div>
+      </div>
+    );
+
+    if (currentPrompt.type === "summary") {
+      return wrap(
+        <>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/80">{currentPrompt.prompt}</p>
+          <p className="text-xs text-white/60">Review the intake before submitting.</p>
+          <div className="space-y-3 rounded-2xl border border-white/10 bg-black/20 p-3">
+            <SummaryRow label="Company" value={formState.companyName || "—"} helper={formState.companySize || "Size unknown"} />
+            <SummaryRow label="Primary contact" value={formState.contactName || "—"} helper={formState.contactEmail || formState.contactPhone || ""} />
+            <SummaryRow label="Services" value={formState.servicesRequested.join(", ") || "No services selected"} helper={formState.website || formState.socialLink || ""} />
+            <SummaryRow label="Value" value={formState.expectedValue ? `$${Number(formState.expectedValue).toLocaleString()}` : "Unknown"} helper={formState.budgetRange ? `Budget ${formState.budgetRange}` : "Budget Unknown"} />
+            <SummaryRow label="Notes" value={formState.contextNotes || formState.clientGoals || "No additional notes"} />
+          </div>
+          <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white">
+            <div>
+              <p className="font-semibold">Share notes with SISO</p>
+              <p className="text-white/70">Gives Partner Success visibility.</p>
+            </div>
+            <Switch checked={formState.shareWithSiso} onCheckedChange={(value) => onFieldChange("shareWithSiso", value)} />
+          </div>
+          {formState.documents.length > 0 && (
+            <div className="space-y-2 rounded-2xl border border-white/10 bg-white/5 p-3">
+              <p className="text-xs uppercase tracking-[0.35em] text-white/60">Docs</p>
+              {formState.documents.map((doc) => (
+                <div key={doc} className="flex items-center gap-2 text-sm text-white/80">
+                  <FileText className="h-4 w-4 text-siso-orange" />
+                  {doc}
+                </div>
+              ))}
+            </div>
+          )}
+          {resultMessage && (
+            <Alert className="border-emerald-500/60 bg-emerald-500/10 text-emerald-100">
+              <AlertDescription>{resultMessage}</AlertDescription>
+            </Alert>
+          )}
+          {errorMessage && (
+            <Alert className="border-rose-500/60 bg-rose-500/10 text-rose-100">
+              <AlertDescription>{errorMessage}</AlertDescription>
+            </Alert>
+          )}
+          <Button type="button" disabled={isPending} className="w-full rounded-2xl bg-siso-orange py-3 text-black hover:bg-orange-400" onClick={onSubmit}>
+            {isPending ? "Submitting…" : "Submit to SISO"}
+          </Button>
+        </>
+      );
+    }
+
+    if (currentPrompt.type === "multi-select") {
+      const hasSelection = formState.servicesRequested.length > 0;
+      return wrap(
+        <>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/80">{currentPrompt.prompt}</p>
+          <p className="text-xs text-white/60">{currentPrompt.helper}</p>
+          <div className="flex flex-wrap gap-2">
+            {serviceOptions.map((service) => {
+              const selected = formState.servicesRequested.includes(service);
+              return (
+                <button
+                  type="button"
+                  key={service}
+                  onClick={() => toggleService(service)}
+                  className={cn(
+                    "rounded-full border px-4 py-1 text-sm transition",
+                    selected ? "border-siso-orange bg-siso-orange/10 text-white" : "border-white/15 text-white/70 hover:text-white",
+                  )}
+                >
+                  {service}
+                </button>
+              );
+            })}
+          </div>
+          <Button type="button" disabled={!hasSelection && currentPrompt.required} onClick={handleMultiSelectConfirm}>
+            {hasSelection ? "Confirm selection" : "Skip"}
+          </Button>
+        </>
+      );
+    }
+
+    if (currentPrompt.type === "chips") {
+      return wrap(
+        <>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/80">{currentPrompt.prompt}</p>
+          <p className="text-xs text-white/60">{currentPrompt.helper}</p>
+          <div className="flex flex-wrap gap-2">
+            {(currentPrompt.options ?? []).map((option) => (
+              <button
+                type="button"
+                key={option}
+                onClick={() => completePrompt(option, { display: option })}
+                className="rounded-full border border-white/15 px-4 py-1 text-sm text-white/80 hover:border-white hover:text-white"
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+          {!currentPrompt.required && (
+            <Button type="button" variant="ghost" className="text-white/70" onClick={() => completePrompt("", { skip: true })}>
+              Skip
+            </Button>
+          )}
+        </>
+      );
+    }
+
+    if (currentPrompt.type === "upload") {
+      const hasDocs = formState.documents.length > 0;
+      return wrap(
+        <>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/80">{currentPrompt.prompt}</p>
+          <p className="text-xs text-white/60">{currentPrompt.helper}</p>
+          <label className="flex cursor-pointer items-center gap-2 rounded-2xl border border-dashed border-white/20 bg-white/5 px-4 py-3 text-sm text-white/80">
+            <Upload className="h-4 w-4" />
+            <span>Upload docs / decks</span>
+            <input type="file" multiple className="hidden" onChange={onDocumentUpload} />
+          </label>
+          {hasDocs ? (
+            <ul className="space-y-2 text-sm text-white/80">
+              {formState.documents.map((doc) => (
+                <li key={doc} className="flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-siso-orange" />
+                  {doc}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-xs text-white/60">{currentPrompt.helper}</p>
+          )}
+          <div className="flex gap-2">
+            <Button type="button" onClick={handleUploadContinue}>
+              Continue
+            </Button>
+            {!hasDocs && (
+              <Button type="button" variant="ghost" className="text-white/70" onClick={() => completePrompt("", { skip: true })}>
+                Skip
+              </Button>
+            )}
+          </div>
+        </>
+      );
+    }
+
+    if (quickReplies.length > 0 && isTextPrompt) {
+      return wrap(
+        <div className="flex flex-wrap gap-2">
+          {quickReplies.map((reply) => (
+            <button
+              key={reply}
+              type="button"
+              onClick={() => completePrompt(reply, { display: reply })}
+              className="rounded-full border border-white/15 px-4 py-1 text-sm text-white/80 hover:border-white hover:text-white"
+            >
+              {reply}
+            </button>
+          ))}
+        </div>
+      );
+    }
+
+    return null;
+  };
+
+  const totalStages = Math.max(wizardPrompts.length - 1, 1);
+  const progressStages = Math.min(currentPromptIndex, totalStages);
+  const progressPercent = Math.min(100, Math.round((progressStages / totalStages) * 100));
+
+  const renderProgressBar = () => (
+    <div className="mx-auto mt-4 w-full max-w-5xl px-4">
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-white">
+        <div className="flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.35em] text-white/70">
+          <span>Completion</span>
+          <span>{progressPercent}%</span>
+        </div>
+        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/15">
+          <div className="h-full rounded-full bg-gradient-to-r from-siso-orange to-orange-300" style={{ width: `${progressPercent}%` }} />
+        </div>
+      </div>
+    </div>
+  );
+
+  const threadStatus = resultMessage ? "Submitted · Instant review" : "Instant review SLA";
+
   return (
-    <div className="space-y-2">
-      <Label className="text-sm text-white/80">
-        {label}
-        {required && <span className="ml-1 text-siso-orange">*</span>}
-      </Label>
-      {children}
+    <>
+      <DirectoryOverlay
+        isOpen={isDirectoryOpen}
+        threads={onboardingThreads}
+        activeThreadId={activeThreadId}
+        onClose={() => setDirectoryOpen(false)}
+        onSelectThread={(threadId) => {
+          setActiveThreadId(threadId);
+          setDirectoryOpen(false);
+        }}
+        outgoingRequests={outgoingRequests}
+        blockedUsers={blockedContacts}
+      />
+      <section className="relative flex min-h-screen flex-col bg-transparent">
+        <ChatViewport
+          isDirectoryOpen={isDirectoryOpen}
+          onOpenDirectory={() => setDirectoryOpen(true)}
+          threadName="Submit Client"
+          threadStatus={threadStatus}
+          avatarLabel="SC"
+          contentOffset={composerHeight + 32}
+          maxWidthClassName="max-w-5xl w-full px-4"
+          showAppDrawerButton={false}
+          showDirectoryToggle={false}
+        >
+          <div className="space-y-5">
+            <SettingsGroupCallout
+              icon={<Sparkles className="h-4 w-4 text-siso-orange" />}
+              title="Submit Client Intake"
+              subtitle="Chat-first submission with Instant review SLA"
+              showChevron={false}
+            >
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-3 text-left text-xs text-white/70">
+                Share whatever you know—company name, WhatsApp, needs, and optional budget. We'll keep score as you go.
+              </div>
+            </SettingsGroupCallout>
+            <div ref={transcriptRef} className="space-y-3 pb-4">
+              {messages.map((message) => (
+                <ChatBubble key={message.id} message={message} />
+              ))}
+            </div>
+          </div>
+        </ChatViewport>
+
+        {renderPromptPanel()}
+        <ComposerBar
+          onHeightChange={setComposerHeight}
+          bottomOffset={0}
+          maxWidthClassName="max-w-5xl w-full px-4"
+          showAttachmentButton={false}
+          showEmojiButton={false}
+          inputPlaceholder={composerPlaceholder}
+          inputValue={inputValue}
+          onInputChange={setInputValue}
+          onSend={handleComposerSend}
+          sendDisabled={composerInputDisabled || (currentPrompt?.required && inputValue.trim().length === 0)}
+          inputDisabled={composerInputDisabled}
+          rightSlot={
+            currentPrompt && !composerInputDisabled && !currentPrompt.required ? (
+              <button
+                type="button"
+                className="rounded-full border border-white/30 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white transition hover:border-white/60"
+                onClick={() => completePrompt("", { skip: true })}
+              >
+                Skip
+              </button>
+            ) : null
+          }
+        />
+      </section>
+    </>
+  );
+}
+
+function ChatBubble({ message }: { message: ChatMessage }) {
+  const isUser = message.role === "user";
+  return (
+    <div className={cn("flex items-start gap-2", isUser ? "justify-end" : "justify-start")}>
+      <div
+        className={cn(
+          "mt-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border",
+          isUser ? "order-2 border-siso-orange/40 bg-siso-orange/20" : "order-1 border-siso-orange/20 bg-siso-orange/15",
+        )}
+      >
+        {isUser ? (
+          <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-siso-text-primary">YOU</span>
+        ) : (
+          <Image src="/branding/siso-logo.svg" alt="SISO" width={20} height={20} className="h-5 w-5" priority={false} />
+        )}
+      </div>
+      <div className={cn("flex max-w-[80%] flex-col gap-1", isUser ? "order-1 items-end text-right" : "order-2 items-start text-left")}>
+        <div className="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/60">
+          <span className="text-white">{message.author ?? (isUser ? "You" : "Intake Assistant")}</span>
+          {message.timestamp ? <span>{message.timestamp}</span> : null}
+        </div>
+        <div
+          className={cn(
+            "rounded-3xl px-4 py-2 text-sm shadow-[0_6px_20px_rgba(0,0,0,0.35)]",
+            isUser
+              ? "rounded-br border border-siso-orange/40 bg-siso-orange text-[#120600]"
+              : "rounded-bl border border-white/12 bg-siso-bg-tertiary text-white",
+          )}
+        >
+          {message.content}
+        </div>
+        {!isUser && message.helper ? <p className="text-xs text-white/60">{message.helper}</p> : null}
+      </div>
     </div>
   );
 }
@@ -652,16 +821,6 @@ function SummaryRow({ label, value, helper }: { label: string; value: string; he
       <span className="text-xs uppercase tracking-[0.3em] text-white/60">{label}</span>
       <span className="text-base font-semibold text-white">{value}</span>
       {helper && <span className="text-sm text-white/70">{helper}</span>}
-    </div>
-  );
-}
-
-function MetricTile({ title, metric, description }: { title: string; metric: string; description: string }) {
-  return (
-    <div className="rounded-2xl border border-white/15 bg-black/20 px-4 py-3">
-      <p className="text-xs uppercase tracking-[0.35em] text-white/60">{title}</p>
-      <p className="text-2xl font-semibold text-white">{metric}</p>
-      <p className="text-sm text-white/70">{description}</p>
     </div>
   );
 }

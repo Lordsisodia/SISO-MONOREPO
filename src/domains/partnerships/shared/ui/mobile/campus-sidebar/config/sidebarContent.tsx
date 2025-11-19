@@ -148,7 +148,6 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
     const key = `${sectionId}:${subId}`;
     const demo: Record<string, number | 'dot'> = {
       'pipeline:my-prospects': 3,
-      'pipeline:active-deals': 1,
       'recruitment:prospects': 2,
       'recruitment:team': 1,
       'recruitment:performance': 'dot',
@@ -175,7 +174,6 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
         return <FileTextIcon size={16} className="text-neutral-50" />;
       case 'pipeline':
         if (id.includes('prospect')) return <KanbanIcon size={16} className="text-neutral-50" />;
-        if (id.includes('active-deals') || id.includes('active')) return <BriefcaseIcon size={16} className="text-neutral-50" />;
         if (id.includes('submit')) return <FilePlusIcon size={16} className="text-neutral-50" />;
         if (id.includes('recruit')) return <UserPlusIcon size={16} className="text-neutral-50" />;
         if (id.includes('team')) return <UsersIcon size={16} className="text-neutral-50" />;

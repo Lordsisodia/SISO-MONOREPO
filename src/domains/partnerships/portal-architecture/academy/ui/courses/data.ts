@@ -39,7 +39,7 @@ export type Course = {
 export const courses: Course[] = [
   {
     id: "siso-essentials-program",
-    title: "SISO Essentials Program",
+    title: "Essentials Program",
     overview: "Guided steps to learn the app fast: navigation, pipeline, recruitment, earnings, community, workspace, settings.",
     longDescription: "Your full orientation to the Partner Hub. Watch the intro, then drill into Academy, Pipeline, Recruitment, Earnings, Community, Workspace, and Settings.",
     level: "beginner",

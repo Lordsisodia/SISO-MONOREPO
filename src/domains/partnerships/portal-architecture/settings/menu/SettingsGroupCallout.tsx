@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type SettingsGroupCalloutProps = {
   icon: ReactNode;
@@ -11,13 +12,28 @@ type SettingsGroupCalloutProps = {
   endBadge?: ReactNode;
   children?: ReactNode;
   showChevron?: boolean;
+  tone?: "default" | "ghost";
 };
 
-export function SettingsGroupCallout({ icon, title, subtitle, afterTitle, endBadge, children, showChevron = true }: SettingsGroupCalloutProps) {
+export function SettingsGroupCallout({
+  icon,
+  title,
+  subtitle,
+  afterTitle,
+  endBadge,
+  children,
+  showChevron = true,
+  tone = "default",
+}: SettingsGroupCalloutProps) {
+  const containerClasses = cn(
+    "w-full rounded-[26px] border shadow-[0_12px_30px_rgba(0,0,0,0.35)]",
+    tone === "ghost" ? "border-white/20 bg-transparent backdrop-blur-lg" : "border-white/10 bg-siso-bg-secondary",
+  );
+
   return (
     <section>
       {/* Outer darker callout wrapper (matches General) */}
-      <div className="rounded-[26px] border border-white/10 bg-siso-bg-secondary shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
+      <div className={containerClasses}>
         {/* Header row inside the outer callout */}
         <div className="flex items-start justify-between gap-3 px-4 py-4">
           <div className="flex items-start gap-3">

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { ArrowRight, Download, ExternalLink, Link as LinkIcon, Share2, Sparkles, Check } from "lucide-react";
+import { notFound, useRouter } from "next/navigation";
+import { ArrowLeft, ArrowRight, Download, ExternalLink, Link as LinkIcon, Share2, Sparkles, Check } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
@@ -19,6 +19,7 @@ export default function PitchKitDetailPage({ params }: { params: { type: string;
 
   const shareUrl = kit.link;
   const [copied, setCopied] = useState(false);
+  const router = useRouter();
 
   const handleCopy = async () => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
@@ -46,25 +47,37 @@ export default function PitchKitDetailPage({ params }: { params: { type: string;
         />
       </div>
       <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
-        <HighlightCard
-          color="orange"
-          title={kit.title}
-          description={kit.summary}
-          icon={<Sparkles className="h-5 w-5 text-siso-orange" />}
-          hideDivider
-          titleClassName="uppercase tracking-[0.25em] text-white"
-          descriptionClassName="text-sm"
-          footerContent={
-            <div className="flex flex-wrap items-center gap-3 text-xs text-siso-text-muted">
-              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-300/40 bg-emerald-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-emerald-200">
-                Public
-              </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-amber-200/30 bg-amber-200/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-amber-100">
-                Updated weekly
-              </span>
-            </div>
-          }
-        />
+        <div className="relative min-h-[128px]">
+          <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
+            <button
+              onClick={() => router.push("/partners/academy/pitch-kit")}
+              aria-label="Back to pitch kit hub"
+              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+          </div>
+          <HighlightCard
+            color="orange"
+            title={kit.title}
+            description={kit.summary}
+            icon={<Sparkles className="h-5 w-5 text-siso-orange" />}
+            hideDivider
+            className="w-full pl-12"
+            titleClassName="uppercase tracking-[0.25em] text-white"
+            descriptionClassName="text-sm"
+            footerContent={
+              <div className="flex flex-wrap items-center gap-3 text-xs text-siso-text-muted">
+                <span className="inline-flex items-center gap-2 rounded-full border border-emerald-300/40 bg-emerald-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-emerald-200">
+                  Public
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-amber-200/30 bg-amber-200/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-amber-100">
+                  Updated weekly
+                </span>
+              </div>
+            }
+          />
+        </div>
 
         <section className="grid gap-3 sm:grid-cols-2">
           <Button variant="secondary" size="lg" onClick={handleCopy} className="flex items-center justify-center gap-2">

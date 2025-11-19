@@ -103,12 +103,6 @@
                 "description": "Board of every client you logged"
               },
               {
-                "id": "active-deals-shortcut",
-                "label": "Active Deals",
-                "path": "/partners/pipeline-ops/active-deals",
-                "description": "Deals currently in motion"
-              },
-              {
                 "id": "todays-tasks-shortcut",
                 "label": "Today's Tasks",
                 "path": "/partners/workspace/tasks?filter=today",
@@ -310,15 +304,6 @@
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Airtable-style view of all logged clients",
-          "group": "Manage Pipeline"
-        },
-        {
-          "id": "active-deals",
-          "label": "Active Deals",
-          "path": "/partners/pipeline-ops/active-deals",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Deals in progress with SISO team",
           "group": "Manage Pipeline"
         },
         {

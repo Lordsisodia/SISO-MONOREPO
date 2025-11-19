@@ -16,9 +16,9 @@ const colorThemes = {
 export interface HighlightCardProps {
   title: string;
   description: string;
-  metricValue: string;
-  metricLabel: string;
-  buttonText: string;
+  metricValue?: string;
+  metricLabel?: string;
+  buttonText?: string;
   buttonHref?: string;
   onButtonClick?: () => void;
   icon: React.ReactNode;
@@ -54,6 +54,11 @@ export const HighlightCard = forwardRef<HTMLDivElement, HighlightCardProps>(
   ) => {
     const theme = colorThemes[color] ?? colorThemes.default;
 
+    const shouldShowMetric = Boolean(metricValue || metricLabel);
+    const shouldShowButton = Boolean(buttonText && (buttonHref || onButtonClick));
+    const buttonLabel = buttonText ?? "";
+    const shouldShowFooter = !hideFooter && (shouldShowMetric || shouldShowButton);
+
     return (
       <div
         ref={ref}
@@ -85,28 +90,32 @@ export const HighlightCard = forwardRef<HTMLDivElement, HighlightCardProps>(
 
           {!hideDivider && <div className="my-4 h-px w-full bg-white/20" />}
 
-          {!hideFooter && (
+          {shouldShowFooter && (
             <div className="flex items-end justify-between">
-              <div>
-                <p className="text-4xl font-bold tracking-tighter">{metricValue}</p>
-                <p className="text-sm opacity-90">{metricLabel}</p>
-              </div>
-              {buttonHref ? (
-                <Link
-                  href={buttonHref}
-                  className="rounded-full bg-white/30 px-4 py-2 text-sm font-semibold backdrop-blur-sm transition-colors hover:bg-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
-                  aria-label={buttonText}
-                >
-                  {buttonText}
-                </Link>
-              ) : onButtonClick ? (
-                <button
-                  onClick={onButtonClick}
-                  className="rounded-full bg-white/30 px-4 py-2 text-sm font-semibold backdrop-blur-sm transition-colors hover:bg-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
-                  aria-label={buttonText}
-                >
-                  {buttonText}
-                </button>
+              {shouldShowMetric && (
+                <div>
+                  {metricValue ? <p className="text-4xl font-bold tracking-tighter">{metricValue}</p> : null}
+                  {metricLabel ? <p className="text-sm opacity-90">{metricLabel}</p> : null}
+                </div>
+              )}
+              {shouldShowButton ? (
+                buttonHref ? (
+                  <Link
+                    href={buttonHref}
+                    className="rounded-full bg-white/30 px-4 py-2 text-sm font-semibold backdrop-blur-sm transition-colors hover:bg-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                    aria-label={buttonLabel}
+                  >
+                    {buttonLabel}
+                  </Link>
+                ) : (
+                  <button
+                    onClick={onButtonClick}
+                    className="rounded-full bg-white/30 px-4 py-2 text-sm font-semibold backdrop-blur-sm transition-colors hover:bg-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                    aria-label={buttonLabel}
+                  >
+                    {buttonLabel}
+                  </button>
+                )
               ) : null}
             </div>
           )}

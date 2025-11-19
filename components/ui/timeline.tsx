@@ -109,16 +109,21 @@ function getStatusIcon(status: TimelineItem["status"]) {
   }
 }
 
+const TIMELINE_TIMESTAMP_FORMATTER = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  hour: "numeric",
+  minute: "2-digit",
+  hour12: true,
+  timeZone: "UTC",
+  timeZoneName: "short",
+});
+
 function formatTimestamp(timestamp: string | Date): string {
   if (!timestamp) return "";
   const date = typeof timestamp === "string" ? new Date(timestamp) : timestamp;
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return TIMELINE_TIMESTAMP_FORMATTER.format(date);
 }
 
 export function Timeline({

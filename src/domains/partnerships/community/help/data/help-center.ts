@@ -135,17 +135,6 @@ export const helpCollections: HelpCollection[] = [
         ],
       },
       {
-        slug: "active-deals",
-        title: "How do I advance active deals?",
-        summary: "Stages, notes, and blockers.",
-        lastUpdated: formatDate("2025-11-17"),
-        sections: [
-          { body: ["Move stages when meetings, quotes, or proposals are logged; stages control pipeline reporting."] },
-          { body: ["Attach notes and assets so everyone can see the latest context before calls."] },
-          { body: ["Mark a deal blocked with a reason to alert Ops; escalations show in the dashboard."] },
-        ],
-      },
-      {
         slug: "app-plan-generator",
         title: "How do I use the App Plan Generator?",
         summary: "Inputs, edits, and sharing.",
