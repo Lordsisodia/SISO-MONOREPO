@@ -7,14 +7,14 @@ import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture
 
 export function ProspectCardGrid({ prospects }: { prospects: ProspectSummary[] }) {
   return (
-    <section className="mt-6">
+    <section className="mt-4">
       <SettingsGroupCallout
         icon={<Sparkles className="h-4 w-4 text-siso-orange" />}
-        title="ProspectList"
+        title="Prospect List"
         subtitle="Tap into each prospect card for next steps and owner context."
         showChevron={false}
       >
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-3 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {prospects.length ? (
             prospects.map((prospect) => <ProspectCard key={prospect.id} prospect={prospect} />)
           ) : (

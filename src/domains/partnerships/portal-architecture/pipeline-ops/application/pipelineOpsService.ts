@@ -18,6 +18,11 @@ export async function getProspects(): Promise<ProspectSummary[]> {
   return overview.prospects;
 }
 
+export async function getProspectById(id: string): Promise<ProspectSummary | null> {
+  const prospects = await getProspects();
+  return prospects.find((prospect) => prospect.id === id) ?? null;
+}
+
 export async function getActiveDeals(): Promise<DealSummary[]> {
   const overview = await getPipelineOpsOverview();
   return overview.activeDeals;

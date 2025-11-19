@@ -15,6 +15,7 @@ type ComposerBarProps = {
   sendDisabled?: boolean;
   rightSlot?: React.ReactNode;
   inputDisabled?: boolean;
+  topSlot?: React.ReactNode;
 };
 
 export function ComposerBar({
@@ -30,6 +31,7 @@ export function ComposerBar({
   sendDisabled,
   rightSlot,
   inputDisabled = false,
+  topSlot,
 }: ComposerBarProps) {
   const barRef = useRef<HTMLDivElement | null>(null);
 
@@ -56,12 +58,18 @@ export function ComposerBar({
         boxShadow: "0 -18px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.22)",
       }}
     >
-      <div className={cn("mx-auto flex w-full items-center gap-3 px-3.5 pt-2.5 pb-[calc(env(safe-area-inset-bottom,0px)+8px)]", maxWidthClassName)}>
-        {showAttachmentButton ? (
-          <button
-            type="button"
-            className="flex h-7 w-7 items-center justify-center rounded-full bg-siso-bg-tertiary text-siso-text-primary"
-            aria-label="Add attachment"
+      <div className={cn("relative mx-auto w-full", maxWidthClassName)}>
+        {topSlot ? (
+          <div className="pointer-events-none absolute inset-x-0 -top-[64px] px-3.5">
+            <div className="mb-3">{topSlot}</div>
+          </div>
+        ) : null}
+        <div className="flex w-full items-center gap-3 px-3.5 pt-2.5 pb-[calc(env(safe-area-inset-bottom,0px)+8px)]">
+          {showAttachmentButton ? (
+            <button
+              type="button"
+              className="flex h-7 w-7 items-center justify-center rounded-full bg-siso-bg-tertiary text-siso-text-primary"
+              aria-label="Add attachment"
           >
             +
           </button>
@@ -110,6 +118,7 @@ export function ComposerBar({
             </svg>
           </button>
         ) : null}
+        </div>
       </div>
     </footer>
   );

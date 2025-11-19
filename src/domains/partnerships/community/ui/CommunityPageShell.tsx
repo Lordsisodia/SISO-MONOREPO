@@ -22,15 +22,17 @@ const defaultNavState: Partial<NavigationState> = {
 export function PartnersPageShell({
   children,
   initialState,
+  showFloatingNavButton,
 }: {
   children: ReactNode;
   initialState?: Partial<NavigationState>;
+  showFloatingNavButton?: boolean;
 }) {
   const mergedState = useMemo(() => ({ ...defaultNavState, ...initialState }), [initialState]);
 
   return (
     <MobileNavigationProvider initialState={mergedState}>
-      <PartnersNavLayer>{children}</PartnersNavLayer>
+      <PartnersNavLayer showFloatingNavButton={showFloatingNavButton}>{children}</PartnersNavLayer>
     </MobileNavigationProvider>
   );
 }

@@ -6,36 +6,36 @@ import { PartnerProfile, Deal } from '../../types/pipeline-types';
 import { PartnerEvent } from '../../types/gamification-types';
 
 describe('TierService', () => {
-    it('should calculate Trailblazer tier correctly', () => {
+    it('should calculate Starter tier correctly', () => {
         const metrics = { dealsClosed: 0, revenueGenerated: 0 };
-        expect(TierService.calculateTier(metrics)).toBe('Trailblazer');
+        expect(TierService.calculateTier(metrics)).toBe('Starter');
     });
 
-    it('should calculate Vanguard tier correctly', () => {
-        const metrics = { dealsClosed: 3, revenueGenerated: 3000 }; // Meets Vanguard (3 deals, $3k)
-        expect(TierService.calculateTier(metrics)).toBe('Vanguard');
+    it('should calculate Active tier correctly', () => {
+        const metrics = { dealsClosed: 3, revenueGenerated: 15000 }; // Meets Active (3 deals, $10k)
+        expect(TierService.calculateTier(metrics)).toBe('Active');
     });
 
     it('should require BOTH deals and revenue for next tier', () => {
-        const metrics = { dealsClosed: 3, revenueGenerated: 1000 }; // Has deals for Vanguard but not revenue
-        expect(TierService.calculateTier(metrics)).toBe('Builder');
+        const metrics = { dealsClosed: 3, revenueGenerated: 5000 }; // Has deals but not revenue for Active
+        expect(TierService.calculateTier(metrics)).toBe('Starter');
     });
 
-    it('should calculate Sovereign tier correctly', () => {
-        const metrics = { dealsClosed: 25, revenueGenerated: 25000 }; // Meets Sovereign (25 deals, $25k)
-        expect(TierService.calculateTier(metrics)).toBe('Sovereign');
+    it('should calculate Elite tier correctly', () => {
+        const metrics = { dealsClosed: 25, revenueGenerated: 200000 }; // Meets Elite (20 deals, $100k)
+        expect(TierService.calculateTier(metrics)).toBe('Elite');
     });
 
     it('should calculate progress to next tier', () => {
-        const metrics = { dealsClosed: 0, revenueGenerated: 500 };
-        // Trailblazer -> Builder requirements: 1 deal, $1000
-        // Deals progress: 0/1 = 0%
-        // Revenue progress: 500/1000 = 50%
-        // Overall progress (min): 0%
+        const metrics = { dealsClosed: 1, revenueGenerated: 5000 };
+        // Starter -> Active requirements: 3 deals, $10k
+        // Deals progress: 1/3 = 33%
+        // Revenue progress: 5k/10k = 50%
+        // Overall progress (min): 33%
         const progress = TierService.getProgress(metrics);
-        expect(progress.currentTier).toBe('Trailblazer');
-        expect(progress.nextTier).toBe('Builder');
-        expect(progress.progressPercentage).toBe(0);
+        expect(progress.currentTier).toBe('Starter');
+        expect(progress.nextTier).toBe('Active');
+        expect(progress.progressPercentage).toBe(33);
     });
 });
 
@@ -44,7 +44,7 @@ describe('GamificationEngine', () => {
         id: 'p1',
         name: 'Test Partner',
         email: 'test@example.com',
-        tier: 'Trailblazer',
+        tier: 'Starter',
         joinedAt: new Date(),
         metrics: {
             dealsClosed: 1,
@@ -102,22 +102,22 @@ describe('CommissionService', () => {
         updatedAt: new Date(),
     };
 
-    it('should calculate commission for Trailblazer tier', () => {
-        // Trailblazer rate is 0.10
-        const commission = CommissionService.calculateCommission(mockDeal, 'Trailblazer');
+    it('should calculate commission for Starter tier', () => {
+        // Starter rate is 0.10
+        const commission = CommissionService.calculateCommission(mockDeal, 'Starter');
         expect(commission).toBe(1000);
     });
 
-    it('should calculate commission for Sovereign tier', () => {
-        // Sovereign rate is 0.25
-        const commission = CommissionService.calculateCommission(mockDeal, 'Sovereign');
-        expect(commission).toBe(2500);
+    it('should calculate commission for Elite tier', () => {
+        // Elite rate is 0.20
+        const commission = CommissionService.calculateCommission(mockDeal, 'Elite');
+        expect(commission).toBe(2000);
     });
 
     it('should calculate potential upside', () => {
-        // Trailblazer (10%) -> Builder (12%)
+        // Starter (10%) -> Active (12%)
         // Upside on 10k deal: 1200 - 1000 = 200
-        const upside = CommissionService.calculatePotentialUpside(mockDeal, 'Trailblazer');
+        const upside = CommissionService.calculatePotentialUpside(mockDeal, 'Starter');
         expect(upside).toBe(200);
     });
 });

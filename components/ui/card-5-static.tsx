@@ -29,6 +29,7 @@ export interface HighlightCardProps {
   titleClassName?: string;
   descriptionClassName?: string;
   showCornerIcon?: boolean;
+  fullWidth?: boolean;
 }
 
 export const HighlightCard = forwardRef<HTMLDivElement, HighlightCardProps>(
@@ -49,6 +50,7 @@ export const HighlightCard = forwardRef<HTMLDivElement, HighlightCardProps>(
       titleClassName,
       descriptionClassName,
       showCornerIcon = true,
+      fullWidth = false,
     },
     ref,
   ) => {
@@ -62,7 +64,7 @@ export const HighlightCard = forwardRef<HTMLDivElement, HighlightCardProps>(
     return (
       <div
         ref={ref}
-        className={cn("relative w-full max-w-md overflow-hidden rounded-2xl p-6 shadow-lg", className)}
+        className={cn("relative w-full overflow-hidden rounded-2xl p-6 shadow-lg", fullWidth ? "" : "max-w-md", className)}
         style={{
           ["--card-from-color" as const]: `hsl(${theme.from})`,
           ["--card-to-color" as const]: `hsl(${theme.to})`,

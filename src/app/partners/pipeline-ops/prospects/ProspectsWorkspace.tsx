@@ -9,10 +9,8 @@ export interface ProspectsWorkspaceProps {
 
 export function ProspectsWorkspace({ initialProspects }: ProspectsWorkspaceProps) {
   return (
-    <main className="min-h-screen text-white">
-      <div className="w-full px-4 py-10 lg:px-8">
-        <ProspectCardGrid prospects={initialProspects} />
-      </div>
-    </main>
+    <section className="w-full text-white">
+      <ProspectCardGrid prospects={initialProspects} />
+    </section>
   );
 }

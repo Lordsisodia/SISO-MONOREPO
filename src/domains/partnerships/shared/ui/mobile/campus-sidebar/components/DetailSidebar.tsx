@@ -34,7 +34,7 @@ function SectionTitle({ title }: { title: string }) {
 export function DetailSidebar({ activeSection, heightClass = "h-[800px]", onNavigate }: DetailSidebarProps) {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [infoItem, setInfoItem] = useState<MenuItem | null>(null);
-  const content = getSidebarContent(activeSection);
+  const content = getSidebarContent(activeSection) ?? { title: "Explore", sections: [] };
 
   const toggleExpanded = (itemKey: string) => {
     setExpandedItems((prev) => {

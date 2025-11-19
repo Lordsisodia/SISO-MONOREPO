@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition, type ReactNode } from "react";
 import Image from "next/image";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -30,28 +30,30 @@ const timeFormatter = new Intl.DateTimeFormat("en-US", {
 
 const formatNow = () => timeFormatter.format(new Date());
 
-const onboardingThreads: ThreadOverview[] = [
+const savedDraftThreads: ThreadOverview[] = [
   {
-    id: "submit-client",
-    name: "Submit Client Intake",
-    preview: "Intake assistant for new opportunities",
-    unreadCount: 0,
-    badge: "Bot",
-    category: "Pinned",
+    id: "brookstone-draft",
+    name: "Brookstone Labs",
+    preview: "Draft saved • 42% complete",
+    category: "Recent",
+    badge: "Draft",
+    lastMessageAt: "7:08 PM",
   },
   {
-    id: "workspace-onboarding",
-    name: "Workspace Setup",
-    preview: "Docs + automation hand-off",
-    unreadCount: 2,
+    id: "northshore-draft",
+    name: "Northshore Brewing",
+    preview: "Waiting on files • 68%",
     category: "Recent",
+    badge: "Needs files",
+    lastMessageAt: "6:21 PM",
   },
   {
-    id: "rapid-intake",
-    name: "Rapid Intake",
-    preview: "60-second form replacement",
-    unreadCount: 0,
+    id: "zenith-proposal",
+    name: "Zenith Retail",
+    preview: "Submitted • Awaiting review",
     category: "Recent",
+    badge: "Submitted",
+    lastMessageAt: "Yesterday",
   },
 ];
 
@@ -311,7 +313,7 @@ const initialFormState: FormState = {
 
 export default function PartnersPipelineOpsSubmitClientPage() {
   return (
-    <PartnersPageShell initialState={{ activeDrawerSection: "pipeline" }}>
+    <PartnersPageShell initialState={{ activeDrawerSection: "pipeline" }} showFloatingNavButton={false}>
       <SubmitClientExperience />
     </PartnersPageShell>
   );
@@ -511,16 +513,112 @@ function SubmitClientChat({
     completePrompt(inputValue);
   };
 
-  const renderPromptPanel = () => {
+  const renderInlineActions = () => {
     if (!currentPrompt) return null;
 
-    const quickReplies = currentPrompt.quickReplies ?? [];
+    const header = (
+      <div className="space-y-1">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/80">{currentPrompt.prompt}</p>
+        {currentPrompt.helper ? <p className="text-xs text-white/60">{currentPrompt.helper}</p> : null}
+      </div>
+    );
+
+    const container = (children: ReactNode) => (
+      <div className="mt-4 space-y-3 rounded-[22px] border border-white/15 bg-black/25 p-4 text-sm text-white/80">{children}</div>
+    );
+
+    if (currentPrompt.type === "multi-select") {
+      const hasSelection = formState.servicesRequested.length > 0;
+      return container(
+        <>
+          {header}
+          <div className="flex flex-wrap gap-2">
+            {serviceOptions.map((service) => {
+              const selected = formState.servicesRequested.includes(service);
+              return (
+                <button
+                  type="button"
+                  key={service}
+                  onClick={() => toggleService(service)}
+                  className={cn(
+                    "rounded-full border px-4 py-1 text-sm transition",
+                    selected ? "border-siso-orange bg-siso-orange/15 text-white" : "border-white/15 text-white/70 hover:text-white",
+                  )}
+                >
+                  {service}
+                </button>
+              );
+            })}
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button type="button" disabled={!hasSelection && currentPrompt.required} onClick={handleMultiSelectConfirm}>
+              {hasSelection ? "Confirm selection" : "Skip"}
+            </Button>
+          </div>
+        </>
+      );
+    }
+
+    if (currentPrompt.type === "chips") {
+      return container(
+        <>
+          {header}
+          <div className="flex flex-wrap gap-2">
+            {(currentPrompt.options ?? []).map((option) => (
+              <button
+                type="button"
+                key={option}
+                onClick={() => completePrompt(option, { display: option })}
+                className="rounded-full border border-white/15 px-4 py-1 text-sm text-white/80 hover:border-white hover:text-white"
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+          {!currentPrompt.required && (
+            <Button type="button" variant="ghost" className="text-white/70" onClick={() => completePrompt("", { skip: true })}>
+              Skip
+            </Button>
+          )}
+        </>
+      );
+    }
+
+    if ((currentPrompt.quickReplies ?? []).length > 0 && isTextPrompt) {
+      return container(
+        <>
+          {header}
+          <div className="flex flex-wrap gap-2">
+            {(currentPrompt.quickReplies ?? []).map((reply) => (
+              <button
+                key={reply}
+                type="button"
+                onClick={() => completePrompt(reply, { display: reply })}
+                className="rounded-full border border-white/15 px-4 py-1 text-sm text-white/80 hover:border-white hover:text-white"
+              >
+                {reply}
+              </button>
+            ))}
+          </div>
+        </>
+      );
+    }
+
+    return null;
+  };
+
+  const renderPromptPanel = () => {
+    if (!currentPrompt) return null;
 
     const wrap = (node: ReactNode) => (
       <div className="mx-auto mt-4 w-full max-w-5xl px-4">
         <div className="space-y-3 rounded-[24px] border border-white/10 bg-white/5 p-4 text-sm text-white/85">{node}</div>
       </div>
     );
+
+    if (currentPrompt.type === "multi-select" || currentPrompt.type === "chips" || ((currentPrompt.quickReplies ?? []).length > 0 && isTextPrompt)) {
+      return null;
+    }
 
     if (currentPrompt.type === "summary") {
       return wrap(
@@ -569,63 +667,6 @@ function SubmitClientChat({
       );
     }
 
-    if (currentPrompt.type === "multi-select") {
-      const hasSelection = formState.servicesRequested.length > 0;
-      return wrap(
-        <>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/80">{currentPrompt.prompt}</p>
-          <p className="text-xs text-white/60">{currentPrompt.helper}</p>
-          <div className="flex flex-wrap gap-2">
-            {serviceOptions.map((service) => {
-              const selected = formState.servicesRequested.includes(service);
-              return (
-                <button
-                  type="button"
-                  key={service}
-                  onClick={() => toggleService(service)}
-                  className={cn(
-                    "rounded-full border px-4 py-1 text-sm transition",
-                    selected ? "border-siso-orange bg-siso-orange/10 text-white" : "border-white/15 text-white/70 hover:text-white",
-                  )}
-                >
-                  {service}
-                </button>
-              );
-            })}
-          </div>
-          <Button type="button" disabled={!hasSelection && currentPrompt.required} onClick={handleMultiSelectConfirm}>
-            {hasSelection ? "Confirm selection" : "Skip"}
-          </Button>
-        </>
-      );
-    }
-
-    if (currentPrompt.type === "chips") {
-      return wrap(
-        <>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/80">{currentPrompt.prompt}</p>
-          <p className="text-xs text-white/60">{currentPrompt.helper}</p>
-          <div className="flex flex-wrap gap-2">
-            {(currentPrompt.options ?? []).map((option) => (
-              <button
-                type="button"
-                key={option}
-                onClick={() => completePrompt(option, { display: option })}
-                className="rounded-full border border-white/15 px-4 py-1 text-sm text-white/80 hover:border-white hover:text-white"
-              >
-                {option}
-              </button>
-            ))}
-          </div>
-          {!currentPrompt.required && (
-            <Button type="button" variant="ghost" className="text-white/70" onClick={() => completePrompt("", { skip: true })}>
-              Skip
-            </Button>
-          )}
-        </>
-      );
-    }
-
     if (currentPrompt.type === "upload") {
       const hasDocs = formState.documents.length > 0;
       return wrap(
@@ -663,23 +704,6 @@ function SubmitClientChat({
       );
     }
 
-    if (quickReplies.length > 0 && isTextPrompt) {
-      return wrap(
-        <div className="flex flex-wrap gap-2">
-          {quickReplies.map((reply) => (
-            <button
-              key={reply}
-              type="button"
-              onClick={() => completePrompt(reply, { display: reply })}
-              className="rounded-full border border-white/15 px-4 py-1 text-sm text-white/80 hover:border-white hover:text-white"
-            >
-              {reply}
-            </button>
-          ))}
-        </div>
-      );
-    }
-
     return null;
   };
 
@@ -687,19 +711,20 @@ function SubmitClientChat({
   const progressStages = Math.min(currentPromptIndex, totalStages);
   const progressPercent = Math.min(100, Math.round((progressStages / totalStages) * 100));
 
-  const renderProgressBar = () => (
-    <div className="mx-auto mt-4 w-full max-w-5xl px-4">
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-white">
-        <div className="flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.35em] text-white/70">
-          <span>Completion</span>
-          <span>{progressPercent}%</span>
-        </div>
-        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/15">
-          <div className="h-full rounded-full bg-gradient-to-r from-siso-orange to-orange-300" style={{ width: `${progressPercent}%` }} />
-        </div>
-      </div>
-    </div>
-  );
+  const threads = useMemo<ThreadOverview[]>(() => {
+    const currentPreview = resultMessage ? "Submitted • Instant review" : `Draft in progress • ${progressPercent}%`;
+    return [
+      {
+        id: "submit-client",
+        name: "Submit Client Intake",
+        preview: currentPreview,
+        unreadCount: 0,
+        badge: "Bot",
+        category: "Pinned",
+      },
+      ...savedDraftThreads,
+    ];
+  }, [progressPercent, resultMessage]);
 
   const threadStatus = resultMessage ? "Submitted · Instant review" : "Instant review SLA";
 
@@ -707,7 +732,7 @@ function SubmitClientChat({
     <>
       <DirectoryOverlay
         isOpen={isDirectoryOpen}
-        threads={onboardingThreads}
+        threads={threads}
         activeThreadId={activeThreadId}
         onClose={() => setDirectoryOpen(false)}
         onSelectThread={(threadId) => {
@@ -726,8 +751,8 @@ function SubmitClientChat({
           avatarLabel="SC"
           contentOffset={composerHeight + 32}
           maxWidthClassName="max-w-5xl w-full px-4"
-          showAppDrawerButton={false}
-          showDirectoryToggle={false}
+          showAppDrawerButton
+          onOpenAppDrawer={openDrawer}
         >
           <div className="space-y-5">
             <SettingsGroupCallout
@@ -745,6 +770,7 @@ function SubmitClientChat({
                 <ChatBubble key={message.id} message={message} />
               ))}
             </div>
+            {renderInlineActions()}
           </div>
         </ChatViewport>
 
@@ -761,8 +787,21 @@ function SubmitClientChat({
           onSend={handleComposerSend}
           sendDisabled={composerInputDisabled || (currentPrompt?.required && inputValue.trim().length === 0)}
           inputDisabled={composerInputDisabled}
-          rightSlot={
-            currentPrompt && !composerInputDisabled && !currentPrompt.required ? (
+          topSlot={(
+            <div className="space-y-2 rounded-2xl border border-white/10 bg-white/5 p-3 text-xs text-white/70">
+              <div className="flex items-center justify-between uppercase tracking-[0.35em]">
+                <span>Completion</span>
+                <span>{progressPercent}%</span>
+              </div>
+              <div className="h-2 w-full rounded-full bg-white/15">
+                <div className="h-full rounded-full bg-gradient-to-r from-siso-orange to-orange-300" style={{ width: `${progressPercent}%` }} />
+              </div>
+            </div>
+          )}
+          rightSlot={(() => {
+            const showSkipButton = Boolean(currentPrompt && !currentPrompt.required && quickReplies.length === 0 && !composerInputDisabled);
+            if (!showSkipButton) return null;
+            return (
               <button
                 type="button"
                 className="rounded-full border border-white/30 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white transition hover:border-white/60"
@@ -770,8 +809,8 @@ function SubmitClientChat({
               >
                 Skip
               </button>
-            ) : null
-          }
+            );
+          })()}
         />
       </section>
     </>

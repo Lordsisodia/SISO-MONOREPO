@@ -14,8 +14,8 @@ export default async function PartnerProspectsPage() {
         <div className="pointer-events-none absolute inset-0 z-0" style={{ filter: "blur(5px)", opacity: 0.4 }}>
           <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="transparent" pointerSize={0.25} />
         </div>
-        <div className="relative z-10 space-y-6 p-4 pt-8 lg:p-8">
-          <div className="mx-auto max-w-4xl">
+        <div className="relative z-10 w-full px-4 pt-8 pb-12 lg:px-8">
+          <div className="mx-auto w-full max-w-6xl space-y-6">
             <HighlightCard
               color="orange"
               title="My Prospects"
@@ -23,14 +23,15 @@ export default async function PartnerProspectsPage() {
               icon={<span className="text-xl">📋</span>}
               hideDivider
               showCornerIcon={false}
+              fullWidth
+              className="w-full max-w-none"
               titleClassName="text-lg font-semibold uppercase tracking-[0.32em] text-white sm:text-xl"
               descriptionClassName="text-sm"
             />
+            <Suspense fallback={<div className="p-10 text-white">Loading prospects…</div>}>
+              <ProspectsWorkspace initialProspects={prospects} />
+            </Suspense>
           </div>
-
-          <Suspense fallback={<div className="p-10 text-white">Loading prospects…</div>}>
-            <ProspectsWorkspace initialProspects={prospects} />
-          </Suspense>
         </div>
       </div>
     </PartnersPageShell>

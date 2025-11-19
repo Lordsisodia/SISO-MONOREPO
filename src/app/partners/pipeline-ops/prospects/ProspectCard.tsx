@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react";
 
 export function ProspectCard({ prospect }: { prospect: ProspectSummary }) {
   return (
-    <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/10 p-5 text-white shadow-[0_18px_40px_rgba(0,0,0,0.35)] backdrop-blur-sm">
+    <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/10 p-6 text-white shadow-[0_18px_40px_rgba(0,0,0,0.35)] backdrop-blur-sm">
       <div className="space-y-1">
         <p className="text-sm uppercase tracking-[0.3em] text-white/60">Company</p>
         <h3 className="text-2xl font-semibold">{prospect.company}</h3>

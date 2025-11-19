@@ -791,6 +791,7 @@ export function getSidebarContent(activeSection: string): SidebarContent {
     if (configDriven) {
       return configDriven;
     }
+    return contentMap.home;
   }
   return contentMap[activeSection] ?? contentMap.home;
 }

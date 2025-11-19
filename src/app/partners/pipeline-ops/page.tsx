@@ -5,7 +5,7 @@ import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture
 import { Button } from "@/components/ui/button";
 import { Waves } from "@/components/ui/wave-background";
 import Link from "next/link";
-import { ArrowUpRight, LifeBuoy, Send, Users2, CheckCircle2, Circle } from "lucide-react";
+import { ArrowUpRight, LifeBuoy, Send, Users2, CheckCircle2, Circle, Sparkles } from "lucide-react";
 
 const submitClientStats = {
   currentDraft: {
@@ -229,6 +229,31 @@ export default function PipelineOpsDashboardPage() {
               </SettingsGroupCallout>
             );
           })}
+
+          <SettingsGroupCallout
+            icon={<Sparkles className="h-4 w-4" />}
+            title="App Plan Generator"
+            subtitle="Draft custom scopes and pitches automatically."
+            showChevron={false}
+          >
+            <article className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-5 text-sm text-white">
+              <div className="flex items-center justify-between">
+                <p className="text-[11px] uppercase tracking-[0.3em] text-white/60">Coming soon</p>
+                <span className="rounded-full border border-white/15 px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-white/70">
+                  Q1 launch
+                </span>
+              </div>
+              <p className="text-xs text-white/70">
+                Answer a few prompts—goals, timeline, budget—and we’ll return a pitch-ready plan with recommended
+                features, timelines, and next steps you can drop into prospects.
+              </p>
+              <div className="flex flex-wrap gap-2 text-xs text-white/70">
+                <span className="rounded-full border border-white/15 px-3 py-1">Auto-scoped features</span>
+                <span className="rounded-full border border-white/15 px-3 py-1">Shareable plan links</span>
+                <span className="rounded-full border border-white/15 px-3 py-1">Workspace sync</span>
+              </div>
+            </article>
+          </SettingsGroupCallout>
 
           <Link
             href="/partners/community/help"
