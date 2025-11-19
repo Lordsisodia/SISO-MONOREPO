@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Share2, Bookmark, Play, MessageCircle, Layers } from "lucide-react";
+import { ArrowRight, ArrowLeft, Share2, Bookmark, Play, MessageCircle, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { courses } from "./data";
 import { useRouter } from "next/navigation";
+import { Waves } from "@/components/ui/wave-background";
 
 export function CourseLessonScreen({ courseId, lessonId }: { courseId: string; lessonId: string }) {
   const course = courses.find((item) => item.id === courseId);
@@ -23,8 +24,29 @@ export function CourseLessonScreen({ courseId, lessonId }: { courseId: string; l
   const nextLesson = course.lessons[lessonIndex + 1];
 
   return (
-    <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen">
-      <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
+    <main className="relative bg-siso-bg-primary text-siso-text-primary min-h-screen">
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{ filter: "blur(6px)", opacity: 0.9 }}
+      >
+        <Waves
+          className="h-full w-full"
+          strokeColor="#f8a75c"
+          backgroundColor="#0b0b0f"
+          pointerSize={0.35}
+        />
+      </div>
+      <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
+        <div className="relative min-h-[80px]">
+          <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
+            <Link
+              href={`/partners/academy/courses/modules/${course.id}`}
+              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+              aria-label="Back to chapter"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+          </div>
         <SettingsGroupCallout
           icon={<Play className="h-4 w-4" />}
           title={lesson.title}
@@ -79,14 +101,14 @@ export function CourseLessonScreen({ courseId, lessonId }: { courseId: string; l
         <nav className="flex flex-wrap gap-2 text-[11px] uppercase tracking-[0.3em] text-siso-text-muted">
           {prevLesson ? (
             <Button asChild variant="outline" size="sm" className="border border-white/10">
-              <Link href={`/partners/academy/courses/${course.id}/${prevLesson.id}`}>
+              <Link href={`/partners/academy/courses/modules/${course.id}/${prevLesson.id}`}>
                 Prev: {prevLesson.title}
               </Link>
             </Button>
           ) : null}
           {nextLesson ? (
             <Button asChild variant="secondary" size="sm" className="border border-white/10">
-              <Link href={`/partners/academy/courses/${course.id}/${nextLesson.id}`}>
+              <Link href={`/partners/academy/courses/modules/${course.id}/${nextLesson.id}`}>
                 Next: {nextLesson.title}
               </Link>
             </Button>

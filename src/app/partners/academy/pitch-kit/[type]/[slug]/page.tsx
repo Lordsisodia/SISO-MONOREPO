@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { pitchKitDetails } from "@/domains/partnerships/portal-architecture/academy/ui/pitch-kit/data";
+import { Waves } from "@/components/ui/wave-background";
 
 export default function PitchKitDetailPage({ params }: { params: { type: string; slug: string } }) {
   const key = `${params.type}/${params.slug}`;
@@ -32,8 +33,19 @@ export default function PitchKitDetailPage({ params }: { params: { type: string;
   };
 
   return (
-    <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen">
-      <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
+    <main className="relative bg-siso-bg-primary text-siso-text-primary min-h-screen overflow-hidden">
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{ filter: "blur(6px)", opacity: 0.9 }}
+      >
+        <Waves
+          className="h-full w-full"
+          strokeColor="#f8a75c"
+          backgroundColor="#0b0b0f"
+          pointerSize={0.35}
+        />
+      </div>
+      <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
         <HighlightCard
           color="orange"
           title={kit.title}
@@ -92,14 +104,16 @@ export default function PitchKitDetailPage({ params }: { params: { type: string;
         ) : null}
 
         <SettingsGroupCallout icon={<Sparkles className="h-4 w-4" />} title="Talk track" subtitle="Use as your default narrative." showChevron={false} id="talk-track">
-          <p className="text-sm text-siso-text-muted">{kit.talkTrack}</p>
-          <div className="mt-4 space-y-2 text-sm">
-            {kit.followUps.map((q) => (
-              <p key={q} className="flex items-start gap-2 text-siso-text-muted">
-                <ArrowRight className="mt-1 h-3 w-3 text-siso-orange" />
-                {q}
-              </p>
-            ))}
+          <div className="rounded-[18px] border border-white/10 bg-white/5 p-4 space-y-3">
+            <p className="text-sm text-siso-text-muted">{kit.talkTrack}</p>
+            <div className="space-y-2 text-sm">
+              {kit.followUps.map((q) => (
+                <p key={q} className="flex items-start gap-2 text-siso-text-muted">
+                  <ArrowRight className="mt-1 h-3 w-3 text-siso-orange" />
+                  {q}
+                </p>
+              ))}
+            </div>
           </div>
         </SettingsGroupCallout>
 
@@ -125,42 +139,46 @@ export default function PitchKitDetailPage({ params }: { params: { type: string;
         ) : null}
 
         <SettingsGroupCallout icon={<ArrowRight className="h-4 w-4" />} title="Social proof & portfolio" subtitle="Attach 1–2 items when you send the deck." showChevron={false}>
-          <div className="flex flex-wrap gap-2">
-            {kit.relatedProofs.map((proof) => (
-              <Link
-                key={proof.href}
-                href={proof.href}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1 text-sm text-siso-orange"
-              >
-                <ArrowRight className="h-3 w-3" />
-                {proof.label}
-              </Link>
-            ))}
-          </div>
-          <div className="mt-4 flex justify-center">
-            <Button variant="secondary" size="sm" asChild>
-              <Link href="/partners/academy/portfolio">
-                <Sparkles className="mr-2 h-4 w-4" />
-                View portfolio
-              </Link>
-            </Button>
+          <div className="rounded-[18px] border border-white/10 bg-white/5 p-4 space-y-3">
+            <div className="flex flex-wrap gap-2">
+              {kit.relatedProofs.map((proof) => (
+                <Link
+                  key={proof.href}
+                  href={proof.href}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1 text-sm text-siso-orange"
+                >
+                  <ArrowRight className="h-3 w-3" />
+                  {proof.label}
+                </Link>
+              ))}
+            </div>
+            <div className="flex justify-center">
+              <Button variant="secondary" size="sm" asChild>
+                <Link href="/partners/academy/portfolio">
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  View portfolio
+                </Link>
+              </Button>
+            </div>
           </div>
         </SettingsGroupCallout>
 
         <SettingsGroupCallout icon={<ExternalLink className="h-4 w-4" />} title="Industry research snapshot" subtitle="Use these in intros and follow-ups." showChevron={false}>
-          <ul className="list-disc space-y-2 pl-5 text-sm text-siso-text-muted">
-            {kit.researchBullets.map((b) => (
-              <li key={b}>{b}</li>
-            ))}
-          </ul>
-          {kit.researchLink ? (
-            <div className="mt-3">
-              <Link href={kit.researchLink} className="inline-flex items-center gap-2 text-sm text-siso-orange">
-                <ExternalLink className="h-4 w-4" />
-                View deep-dive notes
-              </Link>
-            </div>
-          ) : null}
+          <div className="rounded-[18px] border border-white/10 bg-white/5 p-4 space-y-3">
+            <ul className="list-disc space-y-2 pl-5 text-sm text-siso-text-muted">
+              {kit.researchBullets.map((b) => (
+                <li key={b}>{b}</li>
+              ))}
+            </ul>
+            {kit.researchLink ? (
+              <div className="pt-1">
+                <Link href={kit.researchLink} className="inline-flex items-center gap-2 text-sm text-siso-orange">
+                  <ExternalLink className="h-4 w-4" />
+                  View deep-dive notes
+                </Link>
+              </div>
+            ) : null}
+          </div>
         </SettingsGroupCallout>
       </div>
     </main>

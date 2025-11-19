@@ -18,7 +18,7 @@ const guideSteps = [
 
 function AssetCard({ asset, onCopy }: { asset: PitchAsset; onCopy: (value: string) => void }) {
   return (
-    <article className="rounded-3xl border border-white/8 bg-[#1F1F1F] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+    <article className="rounded-3xl border border-white/0 bg-[#181818] p-4 shadow-[0_18px_48px_rgba(0,0,0,0.32)]">
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.35em] text-siso-text-muted">{asset.type.replace("-", " ")}</p>
@@ -43,19 +43,32 @@ function AssetCard({ asset, onCopy }: { asset: PitchAsset; onCopy: (value: strin
         ))}
       </div>
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        <Button asChild variant="secondary" size="sm">
+        <Button
+          asChild
+          size="sm"
+          className="h-9 px-3 rounded-2xl border border-white/10 bg-white/5 text-white/90"
+        >
           <Link href={asset.link} className="flex items-center gap-1">
             <DownloadCloud className="h-4 w-4" />
-            <span>Open / download</span>
+            <span>Open</span>
           </Link>
         </Button>
-        <Button variant="outline" size="sm" onClick={() => onCopy(asset.link)}>
-          <LinkIcon className="h-3 w-3" />
-          <span className="ml-1">Copy link</span>
+        <Button
+          size="icon"
+          variant="ghost"
+          className="h-9 w-9 border border-white/10"
+          onClick={() => onCopy(asset.link)}
+          aria-label="Copy link"
+        >
+          <LinkIcon className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="sm" className="border border-white/10">
-          <Share2 className="h-3 w-3" />
-          <span className="ml-1">Save & share</span>
+        <Button
+          size="icon"
+          variant="ghost"
+          className="h-9 w-9 border border-white/10"
+          aria-label="Save & share"
+        >
+          <Share2 className="h-4 w-4" />
         </Button>
       </div>
       <div className="mt-4 space-y-2 rounded-2xl border border-white/10 bg-white/[0.04] p-3 text-xs">
@@ -95,15 +108,27 @@ export function PitchKitScreen() {
         <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="#0b0b0f" pointerSize={0.35} />
       </div>
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
-        <HighlightCard
-          color="orange"
-          title="Pitch kit"
-          description="Ready-to-share sales materials aligned with your tier."
-          icon={<Sparkles className="h-5 w-5 text-siso-orange" />}
-          hideDivider
-          titleClassName="uppercase tracking-[0.3em] text-white"
-          descriptionClassName="text-sm"
-        />
+        <div className="relative min-h-[128px]">
+          <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
+            <button
+              onClick={() => router.back()}
+              aria-label="Back"
+              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+          </div>
+          <HighlightCard
+            color="orange"
+            title="Pitch kit"
+            description="Ready-to-share sales materials aligned with your tier."
+            icon={<Sparkles className="h-5 w-5 text-siso-orange" />}
+            className="w-full pl-12"
+            hideDivider
+            titleClassName="uppercase tracking-[0.3em] text-white"
+            descriptionClassName="text-sm"
+          />
+        </div>
 
         <SettingsGroupCallout
           icon={<Layers className="h-4 w-4" />}

@@ -197,15 +197,15 @@
       "icon": "GraduationCap",
       "order": 2,
       "subsections": [
-    {
-      "id": "my-progress",
-      "label": "My Progress",
-      "path": "/partners/academy/my-progress",
-      "tierRequired": "starter",
-      "hasHashtag": false,
-      "description": "Onboarding content and SISO process overview",
-      "group": "Learning Flow"
-    },
+        {
+          "id": "my-progress",
+          "label": "My Progress",
+          "path": "/partners/academy/my-progress",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Onboarding content and SISO process overview",
+          "group": "Learning Flow"
+        },
         {
           "id": "courses",
           "label": "Courses",

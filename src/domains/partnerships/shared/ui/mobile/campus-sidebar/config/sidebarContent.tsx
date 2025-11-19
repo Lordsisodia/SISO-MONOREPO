@@ -124,7 +124,7 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
   if (!top) return null;
   const titleOverride: Record<string, string> = { pipeline: "Client Pipeline", growth: "Earnings", academy: "Academy" };
   const dashboardCallouts: Record<string, { targetId: string; title: string; subtitle: string }> = {
-    academy: { targetId: "my-progress", title: "Dashboard", subtitle: "Kick off onboarding and courses." },
+    academy: { targetId: "academy-root", title: "Dashboard", subtitle: "Kick off onboarding and courses." },
     pipeline: { targetId: "dashboard", title: "Dashboard", subtitle: "Track deals, submissions, and reviews." },
     recruitment: { targetId: "dashboard", title: "Dashboard", subtitle: "Invite and track sales members you recruit." },
     growth: { targetId: "dashboard", title: "Dashboard", subtitle: "See payouts, tiers, and recognition." },
@@ -269,7 +269,15 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
   let calloutItem: MenuItem | undefined;
   const items: MenuItem[] = mappedItems;
   const visibleItems = items.filter((item) => !item.hidden);
-  if (calloutPreset && mappedItems.length > 0) {
+
+  if (calloutPreset && top.id === "academy") {
+    calloutItem = {
+      icon: <Dashboard size={16} className="text-neutral-50" />,
+      label: calloutPreset.title,
+      href: "/partners/academy",
+      isActive: false,
+    } as MenuItem;
+  } else if (calloutPreset && mappedItems.length > 0) {
     const normalizedTarget = calloutPreset.targetId.toLowerCase();
     let targetIndex = mappedItems.findIndex((item) => ((item.id || item.label || "").toLowerCase()) === normalizedTarget);
     if (targetIndex === -1 && calloutPreset.targetId === "__first__" && mappedItems.length > 0) {
@@ -389,6 +397,10 @@ function buildSidebarFromConfig(topId: string): SidebarContent | null {
 
   if (top.id === "academy") {
     const learningSections = groupedSections ?? [{ title: "Learning Flow", items: visibleItems }];
+    // Remove any entry whose path is the dashboard root; the dashboard is accessed via the callout
+    learningSections.forEach((section) => {
+      section.items = section.items.filter((item) => item.href !== "/partners/academy");
+    });
     return composeSections(learningSections);
   }
 

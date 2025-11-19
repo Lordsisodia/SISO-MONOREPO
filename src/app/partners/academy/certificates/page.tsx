@@ -1,13 +1,13 @@
 "use client";
 
-import { Sparkles, Award, ArrowLeft } from "lucide-react";
+import { Sparkles, Award, ArrowLeft, Info } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { Awards } from "@/components/ui/award";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Waves } from "@/components/ui/wave-background";
-import { Waves } from "@/components/ui/wave-background";
+import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 
 const certificates = [
   { id: "cert-sales", title: "Sales Foundations", issued: "Jan 2025", status: "In progress" },
@@ -52,31 +52,63 @@ export default function CertificatesPage() {
           />
         </div>
 
-        <section className="space-y-4">
-          {certificates.map((cert) => (
-            <div key={cert.id} className="flex justify-center">
-              <Awards
-                variant="certificate"
-                title={cert.title}
-                logoSrc="/branding/siso-logo.svg"
-                subtitle={`This is to certify that you have ${cert.status.toLowerCase() === "in progress" ? "started" : "successfully completed"} the mastery of design.`}
-                recipient="You"
-                date={cert.issued}
-                className="w-full max-w-md"
-              />
-            </div>
-          ))}
-          <div className="flex justify-center">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="border border-white/10 mt-1 w-full max-w-xs"
-              onClick={() => router.push("/partners/academy/xp-breakdown")}
-            >
-              See how to earn more
-            </Button>
+        <SettingsGroupCallout
+          icon={<Award className="h-4 w-4" />}
+          title="Earned certificates"
+          subtitle="Issued and in-progress"
+          showChevron={false}
+        >
+          <div className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-4 shadow-inner">
+            {certificates.map((cert) => (
+              <div key={cert.id} className="flex justify-center">
+                <Awards
+                  variant="certificate"
+                  title={cert.title}
+                  logoSrc="/branding/siso-logo.svg"
+                  subtitle={`This cert is ${cert.status.toLowerCase()}. Keep progressing to move it to issued.`}
+                  recipient="You"
+                  date={cert.issued}
+                  className="w-full max-w-md"
+                />
+              </div>
+            ))}
           </div>
-        </section>
+        </SettingsGroupCallout>
+
+        <SettingsGroupCallout
+          icon={<Sparkles className="h-4 w-4 text-siso-orange" />}
+          title="How to earn more certificates"
+          subtitle="Actions that unlock new creds"
+          showChevron={false}
+        >
+          <div className="rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-4 shadow-inner space-y-3 text-sm text-siso-text-muted">
+            <div className="flex gap-2 text-white">
+              <Info className="h-4 w-4 text-siso-orange" />
+              <p className="text-sm text-white">
+                Certificates unlock when you finish programs, advance tiers, and ship real outcomes with clients.
+              </p>
+            </div>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Complete core and advanced courses.</li>
+              <li>Advance to higher tiers to unlock premium certificates.</li>
+              <li>Close client wins and submit proof for eligible creds.</li>
+              <li>Bring in qualified recruits to satisfy certain program requirements.</li>
+            </ul>
+            <div className="flex flex-wrap gap-2">
+              <Button size="sm" className="rounded-2xl px-4" onClick={() => router.push("/partners/academy/courses")}>
+                Browse courses
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="border border-white/15 rounded-2xl px-4"
+                onClick={() => router.push("/partners/earnings/tier-progression")}
+              >
+                View tier paths
+              </Button>
+            </div>
+          </div>
+        </SettingsGroupCallout>
       </div>
     </main>
   );

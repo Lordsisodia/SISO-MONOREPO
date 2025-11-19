@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Bookmark, Share2, Sparkles, CheckCircle2, AlertTriangle, Play } from "lucide-react";
+import { ArrowRight, ArrowLeft, Bookmark, Share2, Sparkles, CheckCircle2, AlertTriangle, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { courses } from "./data";
 import { useRouter } from "next/navigation";
+import { Waves } from "@/components/ui/wave-background";
 
 export function CourseDetailScreen({ courseId }: { courseId: string }) {
   const course = courses.find((item) => item.id === courseId);
+  const parent = courses.find((item) => item.id === course?.moduleOf);
   const router = useRouter();
   const lessons = course?.lessons ?? [];
   const relatedAssets = course?.relatedAssets ?? [];
@@ -22,14 +24,35 @@ export function CourseDetailScreen({ courseId }: { courseId: string }) {
   }
 
   return (
-    <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen">
-      <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
-        {/* Hero */}
-        <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-5 shadow-[0_20px_45px_rgba(0,0,0,0.3)] space-y-4">
-          <div className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-siso-text-muted">
-            <span className="rounded-full bg-siso-orange/15 px-2 py-[2px] text-[10px] font-semibold uppercase tracking-[0.25em] text-siso-orange">
-              {course.level}
-            </span>
+    <main className="relative bg-siso-bg-primary text-siso-text-primary min-h-screen">
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{ filter: "blur(6px)", opacity: 0.9 }}
+      >
+        <Waves
+          className="h-full w-full"
+          strokeColor="#f8a75c"
+          backgroundColor="#0b0b0f"
+          pointerSize={0.35}
+        />
+      </div>
+      <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
+        <div className="relative min-h-[100px]">
+          <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
+            <Link
+              href={parent ? `/partners/academy/courses/${parent.id}` : "/partners/academy/courses"}
+              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+              aria-label="Back"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+          </div>
+          {/* Hero */}
+          <div className="rounded-3xl border border-white/0 bg-[#181818] p-5 shadow-[0_20px_45px_rgba(0,0,0,0.3)] space-y-4 pl-12">
+            <div className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-siso-text-muted">
+              <span className="rounded-full bg-siso-orange/15 px-2 py-[2px] text-[10px] font-semibold uppercase tracking-[0.25em] text-siso-orange">
+                {course.level}
+              </span>
             <span className="rounded-full border border-white/15 px-2 py-[2px]">{course.industry}</span>
             <span className="rounded-full border border-white/15 px-2 py-[2px]">{course.legend}</span>
             {course.comingSoon ? (
@@ -50,19 +73,19 @@ export function CourseDetailScreen({ courseId }: { courseId: string }) {
             <span className="rounded-full border border-white/10 px-3 py-1">Focus: {course.focus}</span>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <Button
-              variant="secondary"
-              size="sm"
-              className="border border-white/10 px-3"
-              disabled={!lessons.length || course.comingSoon}
-              onClick={() =>
-                lessons.length
-                  ? router.push(`/partners/academy/courses/${course.id}/lessons/${lessons[0].id}`)
-                  : undefined
-              }
-            >
-              <Play className="mr-1 h-3.5 w-3.5" />
-              {course.comingSoon ? "Coming soon" : "Start"}
+          <Button
+            variant="secondary"
+            size="sm"
+            className="border border-white/10 px-3"
+            disabled={!lessons.length || course.comingSoon}
+            onClick={() =>
+              lessons.length
+                ? router.push(`/partners/academy/courses/modules/${course.id}/${lessons[0].id}`)
+                : undefined
+            }
+          >
+            <Play className="mr-1 h-3.5 w-3.5" />
+            {course.comingSoon ? "Coming soon" : "Start"}
             </Button>
             <Button variant="ghost" size="icon" className="border border-white/10 h-9 w-9">
               <Bookmark className="h-4 w-4" />
@@ -74,7 +97,7 @@ export function CourseDetailScreen({ courseId }: { courseId: string }) {
         </div>
 
         {/* Video + info callouts */}
-        <section className="rounded-3xl border border-white/10 bg-white/[0.02] p-5 shadow-[0_20px_45px_rgba(0,0,0,0.3)] space-y-4">
+        <section className="rounded-3xl border border-white/0 bg-[#181818] p-5 shadow-[0_20px_45px_rgba(0,0,0,0.3)] space-y-4">
           <div className="aspect-video w-full overflow-hidden rounded-2xl border border-white/10 bg-black/40">
             <iframe
               src={course.videoUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ"}
@@ -85,13 +108,13 @@ export function CourseDetailScreen({ courseId }: { courseId: string }) {
             />
           </div>
           <div className="grid gap-3 md:grid-cols-2">
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+            <div className="rounded-2xl border border-white/5 bg-black/25 p-4">
               <p className="text-xs uppercase tracking-[0.2em] text-siso-text-muted">Summary</p>
               <p className="mt-2 text-sm leading-relaxed text-white/90">
                 {course.longDescription || course.overview}
               </p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 space-y-2">
+            <div className="rounded-2xl border border-white/5 bg-black/25 p-4 space-y-2">
               <p className="text-xs uppercase tracking-[0.2em] text-siso-text-muted">Details</p>
               <p className="text-sm text-white/90">Level: {course.level}</p>
               <p className="text-sm text-white/90">Duration: {course.duration}</p>
@@ -117,9 +140,9 @@ export function CourseDetailScreen({ courseId }: { courseId: string }) {
             <div className="space-y-3">
               {lessons.map((lesson) => (
                 <Link
-                  href={`/partners/academy/courses/${course.id}/${lesson.id}`}
+                  href={`/partners/academy/courses/modules/${course.id}/${lesson.id}`}
                   key={lesson.id}
-                  className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-siso-text-muted hover:border-white/30"
+                  className="flex items-center justify-between rounded-2xl border border-white/5 bg-[#181818] px-4 py-3 text-sm text-siso-text-muted hover:border-white/20"
                 >
                   <div>
                     <p className="font-semibold text-white">{lesson.title}</p>
@@ -130,7 +153,7 @@ export function CourseDetailScreen({ courseId }: { courseId: string }) {
               ))}
             </div>
           ) : (
-            <div className="flex items-center gap-2 rounded-2xl border border-dashed border-white/15 bg-white/[0.02] px-4 py-3 text-sm text-siso-text-muted">
+            <div className="flex items-center gap-2 rounded-2xl border border-dashed border-white/15 bg-[#181818] px-4 py-3 text-sm text-siso-text-muted">
               <AlertTriangle className="h-4 w-4 text-siso-orange" />
               Syllabus coming soon.
             </div>
@@ -164,7 +187,7 @@ export function CourseDetailScreen({ courseId }: { courseId: string }) {
           showChevron={false}
         >
           <div className="space-y-3">
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-3">
+            <div className="rounded-2xl border border-white/5 bg-[#181818] p-3">
               <p className="text-xs text-siso-text-muted">Commenting will be available soon.</p>
             </div>
             <div className="space-y-2 text-xs text-siso-text-muted">
@@ -175,7 +198,7 @@ export function CourseDetailScreen({ courseId }: { courseId: string }) {
               ]).map((comment, idx) => (
                 <div
                   key={idx}
-                  className="rounded-2xl border border-white/10 bg-white/[0.02] p-3 text-siso-text-muted"
+                  className="rounded-2xl border border-white/5 bg-[#181818] p-3 text-siso-text-muted"
                 >
                   <p className="text-white">
                     {comment.author}

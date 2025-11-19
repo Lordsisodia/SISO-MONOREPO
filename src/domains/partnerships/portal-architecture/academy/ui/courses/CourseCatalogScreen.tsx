@@ -158,13 +158,11 @@ function CourseCard({
 
 function EssentialsProgramCard({
   program,
-  modules,
   saved,
   onToggleSave,
   onCopyLink,
 }: {
   program: DerivedCourse;
-  modules: DerivedCourse[];
   saved: boolean;
   onToggleSave: () => void;
   onCopyLink: () => void;
@@ -218,20 +216,17 @@ function EssentialsProgramCard({
         </Button>
       </div>
 
-      <div className="mt-6 space-y-3">
-        {modules.map((module) => (
-          <Link
-            key={module.id}
-            href={`/partners/academy/courses/${module.id}`}
-            className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3 text-sm text-siso-text-muted hover:border-white/30"
-          >
-            <div className="min-w-0">
-              <p className="font-semibold text-white">{module.title}</p>
-              <p className="text-[11px] text-siso-text-muted">{module.duration} • {module.overview}</p>
-            </div>
-            <ArrowRight className="h-4 w-4 text-siso-text-muted" />
-          </Link>
-        ))}
+      <div className="mt-6 flex flex-wrap gap-3">
+        <Link
+          href={`/partners/academy/courses/${program.id}`}
+          className="inline-flex items-center gap-2 rounded-2xl border border-white/12 bg-white/8 px-4 py-2 text-sm text-white hover:border-siso-orange"
+        >
+          View chapters
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+        <span className="text-xs text-siso-text-muted">
+          Walkthrough of the entire app—ideal first step.
+        </span>
       </div>
     </article>
   );
@@ -263,7 +258,8 @@ export function CourseCatalogScreen() {
   const [isLoading] = useState(false); // placeholder until wired to API loading
 
   const filteredCourses = useMemo(() => {
-    return derivedCourses
+    const catalogCourses = derivedCourses.filter((course) => !course.moduleOf);
+    return catalogCourses
       .filter((course) => {
         const matchesSearch =
           course.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -292,10 +288,6 @@ export function CourseCatalogScreen() {
   };
 
   const essentialsProgram = filteredCourses.find((c) => c.id === "siso-essentials-program");
-  const essentialsModules = filteredCourses
-    .filter((c) => c.moduleOf === "siso-essentials-program")
-    .sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
-
   const rails: { key: CourseCategory; title: string; subtitle: string; courses: DerivedCourse[]; icon: React.ReactNode }[] = [
     {
       key: "siso-essentials",
@@ -351,15 +343,27 @@ export function CourseCatalogScreen() {
         <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="#0b0b0f" pointerSize={0.35} />
       </div>
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
-        <HighlightCard
-          color="orange"
-          title="Courses"
-          description="Structured learning, tracked progress, and the assets you need to close faster."
-          icon={<Sparkles className="h-5 w-5 text-siso-orange" />}
-          hideDivider
-          titleClassName="uppercase tracking-[0.35em] text-white"
-          descriptionClassName="text-sm"
-        />
+        <div className="relative min-h-[128px]">
+          <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
+            <button
+              onClick={() => router.back()}
+              aria-label="Back"
+              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+          </div>
+          <HighlightCard
+            color="orange"
+            title="Courses"
+            description="Structured learning, tracked progress, and the assets you need to close faster."
+            icon={<Sparkles className="h-5 w-5 text-siso-orange" />}
+            className="w-full pl-12"
+            hideDivider
+            titleClassName="uppercase tracking-[0.35em] text-white"
+            descriptionClassName="text-sm"
+          />
+        </div>
 
         <SettingsGroupCallout
           icon={<Sparkles className="h-4 w-4" />}
@@ -418,7 +422,6 @@ export function CourseCatalogScreen() {
                 {rail.key === "siso-essentials" && essentialsProgram ? (
                   <EssentialsProgramCard
                     program={essentialsProgram}
-                    modules={essentialsModules}
                     saved={!!savedMap[essentialsProgram.id]}
                     onToggleSave={() => handleToggleSave(essentialsProgram.id)}
                     onCopyLink={() => handleCopyLink(essentialsProgram.id)}

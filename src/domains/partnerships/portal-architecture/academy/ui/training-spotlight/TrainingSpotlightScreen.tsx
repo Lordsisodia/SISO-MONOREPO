@@ -49,20 +49,32 @@ export function TrainingSpotlightScreen() {
         <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="#0b0b0f" pointerSize={0.35} />
       </div>
       <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
-        <HighlightCard
-          color="orange"
-          title="Training spotlight"
-          description="Next up in your flow: finish the required induction course."
-          metricValue=""
-          metricLabel=""
-          buttonText=""
-          onButtonClick={() => {}}
-          icon={<Sparkles className="h-5 w-5 text-siso-orange" />}
-          hideDivider
-          hideFooter
-          titleClassName="uppercase tracking-[0.35em] text-white"
-          descriptionClassName="text-sm"
-        />
+        <div className="relative min-h-[128px]">
+          <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
+            <button
+              onClick={() => router.back()}
+              aria-label="Back"
+              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+          </div>
+          <HighlightCard
+            color="orange"
+            title="Training spotlight"
+            description="Next up in your flow: finish the required induction course."
+            metricValue=""
+            metricLabel=""
+            buttonText=""
+            onButtonClick={() => {}}
+            icon={<Sparkles className="h-5 w-5 text-siso-orange" />}
+            className="w-full pl-12"
+            hideDivider
+            hideFooter
+            titleClassName="uppercase tracking-[0.35em] text-white"
+            descriptionClassName="text-sm"
+          />
+        </div>
 
         <SettingsGroupCallout
           icon={<ArrowRight className="h-4 w-4" />}

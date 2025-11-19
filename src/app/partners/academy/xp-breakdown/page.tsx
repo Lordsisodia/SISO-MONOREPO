@@ -9,14 +9,14 @@ import { Waves } from "@/components/ui/wave-background";
 
 type XPType = "Course" | "Engagement" | "Assessment" | "Onboarding";
 
-type XPItem = { title: string; source: XPType; xp: number; when: string; dateLabel: string };
+type XPItem = { title: string; source: XPType; xp: number; when: string };
 
 const xpFeed: XPItem[] = [
-  { title: "Finished Discovery Basics", source: "Course", xp: 120, when: "2h ago", dateLabel: "Today" },
-  { title: "Shared portfolio link", source: "Engagement", xp: 40, when: "4h ago", dateLabel: "Today" },
-  { title: "Completed quiz: Discovery Basics", source: "Assessment", xp: 60, when: "2d ago", dateLabel: "Nov 16" },
-  { title: "Watched welcome intro", source: "Onboarding", xp: 25, when: "3d ago", dateLabel: "Nov 15" },
-  { title: "Saved pitch kit", source: "Engagement", xp: 15, when: "6d ago", dateLabel: "Nov 12" },
+  { title: "Finished Discovery Basics", source: "Course", xp: 120, when: "2h ago" },
+  { title: "Shared portfolio link", source: "Engagement", xp: 40, when: "4h ago" },
+  { title: "Completed quiz: Discovery Basics", source: "Assessment", xp: 60, when: "2d ago" },
+  { title: "Watched welcome intro", source: "Onboarding", xp: 25, when: "3d ago" },
+  { title: "Saved pitch kit", source: "Engagement", xp: 15, when: "6d ago" },
 ];
 
 const levelProgress = {
@@ -84,31 +84,20 @@ export default function XPBreakdownPage() {
           </div>
 
           <div className="rounded-[20px] border border-white/10 bg-white/5 divide-y divide-white/10">
-            {xpFeed.map((item, idx) => {
-              const prevDate = idx > 0 ? xpFeed[idx - 1].dateLabel : null;
-              const showDate = item.dateLabel !== prevDate;
-              return (
-                <div key={`${item.title}-${item.when}`}>
-                  {showDate ? (
-                    <div className="px-3 pt-3 pb-1 text-[11px] font-medium uppercase tracking-[0.18em] text-siso-text-muted">
-                      {item.dateLabel}
-                    </div>
-                  ) : null}
-                  <div className="flex items-center justify-between px-3 py-3">
-                    <div className="space-y-1">
-                      <p className="font-semibold text-white">{item.title}</p>
-                      <div className="flex items-center gap-2 text-[12px] text-siso-text-muted">
-                        <span className="rounded-full bg-white/[0.07] px-2 py-[2px] uppercase tracking-[0.08em]">
-                          {item.source}
-                        </span>
-                        <span>{item.when}</span>
-                      </div>
-                    </div>
-                    <span className="text-sm font-bold text-siso-orange">+{item.xp} XP</span>
+            {xpFeed.map((item) => (
+              <div key={`${item.title}-${item.when}`} className="flex items-center justify-between px-3 py-3">
+                <div className="space-y-1">
+                  <p className="font-semibold text-white">{item.title}</p>
+                  <div className="flex items-center gap-2 text-[12px] text-siso-text-muted">
+                    <span className="rounded-full bg-white/[0.07] px-2 py-[2px] uppercase tracking-[0.08em]">
+                      {item.source}
+                    </span>
+                    <span>{item.when}</span>
                   </div>
                 </div>
-              );
-            })}
+                <span className="text-sm font-bold text-siso-orange">+{item.xp} XP</span>
+              </div>
+            ))}
           </div>
 
           <div className="mt-5 space-y-1 rounded-2xl border border-white/10 bg-white/[0.02] p-3">

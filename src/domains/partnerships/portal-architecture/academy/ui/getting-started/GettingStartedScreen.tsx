@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkles, Users, ShieldCheck, Info } from "lucide-react";
+import { Sparkles, Users, ShieldCheck, Info, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Awards } from "@/components/ui/award";
@@ -58,29 +58,41 @@ export function GettingStartedScreen() {
         />
       </div>
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
-        <HighlightCard
-          color="orange"
-          title="My Progress"
-          description="Climb tiers to unlock higher earnings and perks."
-          metricValue={`Tier • Level ${levelData.currentLevel}`}
-          metricLabel={`${levelData.currentPoints} pts • ${levelData.pointsToNextLevel} to Level ${levelData.nextLevel}`}
-          buttonText="View tier details"
-          onButtonClick={() => router.push("/partners/academy/my-progress/tiers-and-perks")}
-          icon={
-            <Awards
-              variant="badge"
-              title="Tier"
-              subtitle={`L${levelData.currentLevel}`}
-              level="gold"
-              showIcon
-            />
-          }
-          hideDivider
-          hideFooter
-          showCornerIcon={false}
-          titleClassName="uppercase tracking-[0.35em] text-white"
-          descriptionClassName="text-sm"
-        />
+        <div className="relative min-h-[128px]">
+          <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
+            <button
+              onClick={() => router.back()}
+              aria-label="Back"
+              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+          </div>
+          <HighlightCard
+            color="orange"
+            title="My Progress"
+            description="Climb tiers to unlock higher earnings and perks."
+            metricValue={`Tier • Level ${levelData.currentLevel}`}
+            metricLabel={`${levelData.currentPoints} pts • ${levelData.pointsToNextLevel} to Level ${levelData.nextLevel}`}
+            buttonText="View tier details"
+            onButtonClick={() => router.push("/partners/academy/my-progress/tiers-and-perks")}
+            icon={
+              <Awards
+                variant="badge"
+                title="Tier"
+                subtitle={`L${levelData.currentLevel}`}
+                level="gold"
+                showIcon
+              />
+            }
+            className="w-full pl-12"
+            hideDivider
+            hideFooter
+            showCornerIcon={false}
+            titleClassName="uppercase tracking-[0.35em] text-white"
+            descriptionClassName="text-sm"
+          />
+        </div>
 
         <SettingsGroupCallout
           icon={<Sparkles className="h-4 w-4" />}

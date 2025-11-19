@@ -3,11 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ArrowRight, Folder, Sparkles } from "lucide-react";
+import { ArrowRight, Folder, Sparkles, ArrowLeft } from "lucide-react";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { Button } from "@/components/ui/button";
 import { usePortfolioData } from "@/domains/partnerships/portfolio/hooks/use-portfolio-data";
+import { useRouter } from "next/navigation";
 import type { PortfolioClient } from "@/domains/partnerships/portfolio/types";
 import { IndustrySelect } from "@/domains/partnerships/portfolio/ui/IndustrySelect";
 import { Waves } from "@/components/ui/wave-background";
@@ -24,6 +25,7 @@ function getCover(client: PortfolioClient) {
 export function PortfolioMobileScreen() {
   const { clients, featured, stats } = usePortfolioData();
   const [activeIndustry, setActiveIndustry] = useState<string>("all");
+  const router = useRouter();
 
   const filtered = useMemo(() => {
     if (activeIndustry === "all") return clients;
@@ -39,23 +41,35 @@ export function PortfolioMobileScreen() {
         <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="#0b0b0f" pointerSize={0.35} />
       </div>
       <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
-        <HighlightCard
-          color="orange"
-          title="Portfolio"
-          description="Proof you can share now—mobile ready."
-          metricValue={`${stats.totalProjects ?? featured.length} projects`}
-          metricLabel="live library"
-          buttonText="Open portfolio hub"
-          onButtonClick={() => {
-            const slug = featured[0]?.id ?? filtered[0]?.id ?? "";
-            if (slug) window.location.href = `/public/portfolio/${slug}`;
-          }}
-          icon={<Sparkles className="h-5 w-5 text-siso-orange" />}
-          hideDivider
-          hideFooter
-          titleClassName="uppercase tracking-[0.35em] text-white"
-          descriptionClassName="text-sm"
-        />
+        <div className="relative min-h-[128px]">
+          <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
+            <button
+              onClick={() => router.back()}
+              aria-label="Back"
+              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+          </div>
+          <HighlightCard
+            color="orange"
+            title="Portfolio"
+            description="Proof you can share now—mobile ready."
+            metricValue={`${stats.totalProjects ?? featured.length} projects`}
+            metricLabel="live library"
+            buttonText="Open portfolio hub"
+            onButtonClick={() => {
+              const slug = featured[0]?.id ?? filtered[0]?.id ?? "";
+              if (slug) window.location.href = `/public/portfolio/${slug}`;
+            }}
+            icon={<Sparkles className="h-5 w-5 text-siso-orange" />}
+            className="w-full pl-12"
+            hideDivider
+            hideFooter
+            titleClassName="uppercase tracking-[0.35em] text-white"
+            descriptionClassName="text-sm"
+          />
+        </div>
 
         <SettingsGroupCallout
           icon={<Folder className="h-4 w-4" />}

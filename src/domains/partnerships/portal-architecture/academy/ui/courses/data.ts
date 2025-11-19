@@ -72,6 +72,10 @@ export const courses: Course[] = [
     order: 1,
     videoUrl: "https://www.youtube.com/embed/-Zjn76sMXs8",
     moduleOf: "siso-essentials-program",
+    lessons: [
+      { id: "intro-1", title: "Workspace tour", duration: "6m", summary: "Navigation, search, notifications, and where everything lives.", relatedAssets: [] },
+      { id: "intro-2", title: "Finding support", duration: "5m", summary: "Help center, live support, and community guidelines.", relatedAssets: [] },
+    ],
   },
   {
     id: "siso-academy",
@@ -89,6 +93,10 @@ export const courses: Course[] = [
     order: 2,
     videoUrl: "https://www.youtube.com/embed/-Zjn76sMXs8",
     moduleOf: "siso-essentials-program",
+    lessons: [
+      { id: "academy-1", title: "Progress & tiers", duration: "7m", summary: "How XP, tiers, badges, and certificates are tracked.", relatedAssets: [] },
+      { id: "academy-2", title: "Resuming courses", duration: "6m", summary: "Jump back into lessons and download certificates.", relatedAssets: [] },
+    ],
   },
   {
     id: "siso-client-pipeline",
@@ -106,6 +114,11 @@ export const courses: Course[] = [
     order: 3,
     videoUrl: "https://www.youtube.com/embed/-Zjn76sMXs8",
     moduleOf: "siso-essentials-program",
+    lessons: [
+      { id: "pipeline-1", title: "Add a lead", duration: "5m", summary: "Create leads, owners, and next steps.", relatedAssets: [] },
+      { id: "pipeline-2", title: "Stage updates", duration: "7m", summary: "Move deals, add notes, and notify stakeholders.", relatedAssets: [] },
+      { id: "pipeline-3", title: "Posting updates", duration: "6m", summary: "Share updates that sync to reporting and payouts.", relatedAssets: [] },
+    ],
   },
   {
     id: "siso-recruitment",
@@ -123,6 +136,10 @@ export const courses: Course[] = [
     order: 4,
     videoUrl: "https://www.youtube.com/embed/-Zjn76sMXs8",
     moduleOf: "siso-essentials-program",
+    lessons: [
+      { id: "recruit-1", title: "Add candidates", duration: "6m", summary: "Capture candidate details and assign owners.", relatedAssets: [] },
+      { id: "recruit-2", title: "Move stages", duration: "7m", summary: "Advance candidates and trigger enablement tasks.", relatedAssets: [] },
+    ],
   },
   {
     id: "siso-earnings",
@@ -140,6 +157,10 @@ export const courses: Course[] = [
     order: 5,
     videoUrl: "https://www.youtube.com/embed/-Zjn76sMXs8",
     moduleOf: "siso-essentials-program",
+    lessons: [
+      { id: "earnings-1", title: "Payout timelines", duration: "6m", summary: "See payout schedule and thresholds.", relatedAssets: [] },
+      { id: "earnings-2", title: "Boosting commissions", duration: "6m", summary: "What raises your percentage and how to track it.", relatedAssets: [] },
+    ],
   },
   {
     id: "siso-community",
@@ -157,6 +178,10 @@ export const courses: Course[] = [
     order: 6,
     videoUrl: "https://www.youtube.com/embed/-Zjn76sMXs8",
     moduleOf: "siso-essentials-program",
+    lessons: [
+      { id: "community-1", title: "Posting wins", duration: "5m", summary: "Share wins, react, and drive visibility.", relatedAssets: [] },
+      { id: "community-2", title: "Joining spotlights", duration: "6m", summary: "Attend live spotlights and etiquette.", relatedAssets: [] },
+    ],
   },
   {
     id: "siso-workspace",
@@ -174,6 +199,10 @@ export const courses: Course[] = [
     order: 7,
     videoUrl: "https://www.youtube.com/embed/-Zjn76sMXs8",
     moduleOf: "siso-essentials-program",
+    lessons: [
+      { id: "workspace-1", title: "Organize assets", duration: "6m", summary: "Folders, pins, and shared docs.", relatedAssets: [] },
+      { id: "workspace-2", title: "Share pitch assets", duration: "6m", summary: "Keep decks, proof, and links synced.", relatedAssets: [] },
+    ],
   },
   {
     id: "siso-settings",
@@ -191,6 +220,10 @@ export const courses: Course[] = [
     order: 8,
     videoUrl: "https://www.youtube.com/embed/-Zjn76sMXs8",
     moduleOf: "siso-essentials-program",
+    lessons: [
+      { id: "settings-1", title: "Profile & notifications", duration: "5m", summary: "Set profile, notifications, and devices.", relatedAssets: [] },
+      { id: "settings-2", title: "Security basics", duration: "5m", summary: "MFA, sessions, and data preferences.", relatedAssets: [] },
+    ],
   },
   {
     id: "sales-foundations-coming-soon",
