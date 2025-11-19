@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { MessageSquare, X } from "lucide-react";
 import { DirectoryHeader } from "./directory/DirectoryHeader";
 import { DirectorySearchBar } from "./directory/DirectorySearchBar";
 import { DirectorySections } from "./directory/DirectorySections";
@@ -14,8 +13,9 @@ export type ThreadOverview = {
   unreadCount?: number;
   badge?: string;
   lastMessageAt?: string;
-  category?: "Pinned" | "Recent";
+  category?: string;
   presence?: "online" | "idle" | "offline";
+  status?: "active" | "draft" | "submitted" | "needs-info";
 };
 
 type DirectoryItem = {
@@ -23,6 +23,9 @@ type DirectoryItem = {
   name: string;
   note?: string;
 };
+
+type DirectoryFilter = "all" | "unread" | "bots" | "leaders" | "drafts" | "submitted" | "needs-info";
+type DirectoryVariant = "messages" | "client-submissions";
 
 type DirectoryOverlayProps = {
   isOpen: boolean;
@@ -32,6 +35,7 @@ type DirectoryOverlayProps = {
   onSelectThread: (threadId: string) => void;
   outgoingRequests: DirectoryItem[];
   blockedUsers: DirectoryItem[];
+  variant?: DirectoryVariant;
 };
 
 export function DirectoryOverlay({
@@ -42,13 +46,14 @@ export function DirectoryOverlay({
   onSelectThread,
   outgoingRequests,
   blockedUsers,
+  variant = "messages",
 }: DirectoryOverlayProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activePanel, setActivePanel] = useState<DirectoryPanel>(null);
   const [search, setSearch] = useState("");
   const [panelSearch, setPanelSearch] = useState("");
   const [isFilterTrayOpen, setIsFilterTrayOpen] = useState(false);
-  const [activeFilter, setActiveFilter] = useState<"all" | "unread" | "bots" | "leaders">("all");
+  const [activeFilter, setActiveFilter] = useState<DirectoryFilter>("all");
 
   useEffect(() => {
     if (!isOpen) {
@@ -62,6 +67,19 @@ export function DirectoryOverlay({
   }, [isOpen]);
 
   const matchesFilter = (thread: ThreadOverview) => {
+    if (variant === "client-submissions") {
+      switch (activeFilter) {
+        case "drafts":
+          return thread.status === "draft";
+        case "submitted":
+          return thread.status === "submitted";
+        case "needs-info":
+          return thread.status === "needs-info";
+        default:
+          return true;
+      }
+    }
+
     switch (activeFilter) {
       case "unread":
         return Boolean(thread.unreadCount);
@@ -87,19 +105,35 @@ export function DirectoryOverlay({
     });
   }, [threads, normalizedSearch, activeFilter, activePanel]);
 
+  const sectionOrder = useMemo(
+    () =>
+      variant === "client-submissions"
+        ? ["Active Intake", "Saved Drafts", "Needs Attention", "Submitted"]
+        : ["Pinned", "Recent"],
+    [variant],
+  );
+
   const threadSections = useMemo(() => {
     if (activePanel) return [];
     const grouped = new Map<string, ThreadOverview[]>();
-    const order = ["Pinned", "Recent"];
     filteredThreads.forEach((thread) => {
-      const key = thread.category ?? "Recent";
+      const fallbackCategory = variant === "client-submissions" ? "Saved Drafts" : "Recent";
+      const key = thread.category ?? fallbackCategory;
       if (!grouped.has(key)) grouped.set(key, []);
       grouped.get(key)!.push(thread);
     });
-    return order
-      .filter((label) => grouped.has(label))
-      .map((label) => ({ label, entries: grouped.get(label)! }));
-  }, [filteredThreads, activePanel]);
+    const ordered: Array<{ label: string; entries: ThreadOverview[] }> = [];
+    sectionOrder.forEach((label) => {
+      if (grouped.has(label)) {
+        ordered.push({ label, entries: grouped.get(label)! });
+        grouped.delete(label);
+      }
+    });
+    grouped.forEach((entries, label) => {
+      ordered.push({ label, entries });
+    });
+    return ordered;
+  }, [filteredThreads, activePanel, sectionOrder, variant]);
 
   const panelData = useMemo(() => {
     switch (activePanel) {
@@ -132,6 +166,36 @@ export function DirectoryOverlay({
     }
   }, [activePanel, blockedUsers, outgoingRequests, threads]);
 
+  const headerConfig = useMemo(
+    () =>
+      variant === "client-submissions"
+        ? {
+            title: "Client Submissions",
+            description: "",
+            menuOptions: [],
+            searchPlaceholder: "Search submissions",
+            color: "orange" as const,
+          }
+        : {
+            title: "Messages & Friends",
+            description: "",
+            menuOptions: undefined,
+            searchPlaceholder: "Search friends & messages",
+            color: "orange" as const,
+          },
+    [variant],
+  );
+
+  const filterOptions =
+    variant === "client-submissions"
+      ? [
+          { id: "all", label: "All" },
+          { id: "drafts", label: "Drafts" },
+          { id: "submitted", label: "Submitted" },
+          { id: "needs-info", label: "Needs Info" },
+        ]
+      : undefined;
+
   if (!isOpen) {
     return null;
   }
@@ -149,6 +213,10 @@ export function DirectoryOverlay({
                 setActivePanel(panel);
                 setPanelSearch("");
               }}
+              title={headerConfig.title}
+              description={headerConfig.description}
+              menuOptions={headerConfig.menuOptions}
+              color={headerConfig.color}
             />
             <DirectorySearchBar
               search={search}
@@ -157,6 +225,8 @@ export function DirectoryOverlay({
               onFilterChange={(value) => setActiveFilter(value)}
               isFilterTrayOpen={isFilterTrayOpen}
               onToggleFilters={() => setIsFilterTrayOpen((prev) => !prev)}
+              searchPlaceholder={headerConfig.searchPlaceholder}
+              filterOptions={filterOptions}
             />
             {!activePanel && (
               <DirectorySections

@@ -1,3 +1,4 @@
+import type { ThreadOverview } from "../DirectoryOverlay";
 import { cn } from "@/domains/shared/utils/cn";
 
 interface ThreadRowProps {

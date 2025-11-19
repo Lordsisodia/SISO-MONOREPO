@@ -1,4 +1,5 @@
 import { Clock3, Pin } from "lucide-react";
+
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import type { ThreadOverview } from "../DirectoryOverlay";
 import { ThreadRow } from "./ThreadRow";

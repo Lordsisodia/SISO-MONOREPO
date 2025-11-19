@@ -35,25 +35,28 @@ const savedDraftThreads: ThreadOverview[] = [
     id: "brookstone-draft",
     name: "Brookstone Labs",
     preview: "Draft saved • 42% complete",
-    category: "Recent",
+    category: "Saved Drafts",
     badge: "Draft",
     lastMessageAt: "7:08 PM",
+    status: "draft",
   },
   {
     id: "northshore-draft",
     name: "Northshore Brewing",
     preview: "Waiting on files • 68%",
-    category: "Recent",
+    category: "Needs Attention",
     badge: "Needs files",
     lastMessageAt: "6:21 PM",
+    status: "needs-info",
   },
   {
     id: "zenith-proposal",
     name: "Zenith Retail",
     preview: "Submitted • Awaiting review",
-    category: "Recent",
+    category: "Submitted",
     badge: "Submitted",
     lastMessageAt: "Yesterday",
+    status: "submitted",
   },
 ];
 
@@ -719,8 +722,9 @@ function SubmitClientChat({
         name: "Submit Client Intake",
         preview: currentPreview,
         unreadCount: 0,
-        badge: "Bot",
-        category: "Pinned",
+        badge: resultMessage ? "Submitted" : "Active",
+        category: "Active Intake",
+        status: resultMessage ? "submitted" : "active",
       },
       ...savedDraftThreads,
     ];
@@ -731,6 +735,7 @@ function SubmitClientChat({
   return (
     <>
       <DirectoryOverlay
+        variant="client-submissions"
         isOpen={isDirectoryOpen}
         threads={threads}
         activeThreadId={activeThreadId}
@@ -774,44 +779,46 @@ function SubmitClientChat({
           </div>
         </ChatViewport>
 
-        {renderPromptPanel()}
-        <ComposerBar
-          onHeightChange={setComposerHeight}
-          bottomOffset={0}
-          maxWidthClassName="max-w-5xl w-full px-4"
-          showAttachmentButton={false}
-          showEmojiButton={false}
-          inputPlaceholder={composerPlaceholder}
-          inputValue={inputValue}
-          onInputChange={setInputValue}
-          onSend={handleComposerSend}
-          sendDisabled={composerInputDisabled || (currentPrompt?.required && inputValue.trim().length === 0)}
-          inputDisabled={composerInputDisabled}
-          topSlot={(
-            <div className="space-y-2 rounded-2xl border border-white/10 bg-white/5 p-3 text-xs text-white/70">
-              <div className="flex items-center justify-between uppercase tracking-[0.35em]">
-                <span>Completion</span>
-                <span>{progressPercent}%</span>
+        {!isDirectoryOpen ? renderPromptPanel() : null}
+        {!isDirectoryOpen ? (
+          <ComposerBar
+            onHeightChange={setComposerHeight}
+            bottomOffset={0}
+            maxWidthClassName="max-w-5xl w-full px-4"
+            showAttachmentButton={false}
+            showEmojiButton={false}
+            inputPlaceholder={composerPlaceholder}
+            inputValue={inputValue}
+            onInputChange={setInputValue}
+            onSend={handleComposerSend}
+            sendDisabled={composerInputDisabled || (currentPrompt?.required && inputValue.trim().length === 0)}
+            inputDisabled={composerInputDisabled}
+            topSlot={
+              <div className="space-y-2 rounded-2xl border border-white/10 bg-white/5 p-3 text-xs text-white/70">
+                <div className="flex items-center justify-between uppercase tracking-[0.35em]">
+                  <span>Completion</span>
+                  <span>{progressPercent}%</span>
+                </div>
+                <div className="h-2 w-full rounded-full bg-white/15">
+                  <div className="h-full rounded-full bg-gradient-to-r from-siso-orange to-orange-300" style={{ width: `${progressPercent}%` }} />
+                </div>
               </div>
-              <div className="h-2 w-full rounded-full bg-white/15">
-                <div className="h-full rounded-full bg-gradient-to-r from-siso-orange to-orange-300" style={{ width: `${progressPercent}%` }} />
-              </div>
-            </div>
-          )}
-          rightSlot={(() => {
-            const showSkipButton = Boolean(currentPrompt && !currentPrompt.required && quickReplies.length === 0 && !composerInputDisabled);
-            if (!showSkipButton) return null;
-            return (
-              <button
-                type="button"
-                className="rounded-full border border-white/30 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white transition hover:border-white/60"
-                onClick={() => completePrompt("", { skip: true })}
-              >
-                Skip
-              </button>
-            );
-          })()}
-        />
+            }
+            rightSlot={(() => {
+              const showSkipButton = Boolean(currentPrompt && !currentPrompt.required && quickReplies.length === 0 && !composerInputDisabled);
+              if (!showSkipButton) return null;
+              return (
+                <button
+                  type="button"
+                  className="rounded-full border border-white/30 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white transition hover:border-white/60"
+                  onClick={() => completePrompt("", { skip: true })}
+                >
+                  Skip
+                </button>
+              );
+            })()}
+          />
+        ) : null}
       </section>
     </>
   );

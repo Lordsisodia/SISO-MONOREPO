@@ -1,21 +1,26 @@
 import { SlidersHorizontal } from "lucide-react";
+
 import { cn } from "@/domains/shared/utils/cn";
+
+type FilterOption = { id: string; label: string };
 
 type DirectorySearchBarProps = {
   search: string;
   onSearchChange: (value: string) => void;
-  activeFilter: "all" | "unread" | "bots" | "leaders";
-  onFilterChange: (value: "all" | "unread" | "bots" | "leaders") => void;
+  activeFilter: string;
+  onFilterChange: (value: string) => void;
   isFilterTrayOpen: boolean;
   onToggleFilters: () => void;
+  searchPlaceholder?: string;
+  filterOptions?: FilterOption[];
 };
 
-const filters = [
+const defaultFilters: FilterOption[] = [
   { id: "all", label: "All" },
   { id: "unread", label: "Unread" },
   { id: "bots", label: "Bots" },
   { id: "leaders", label: "Leads" },
-] as const;
+];
 
 export function DirectorySearchBar({
   search,
@@ -24,11 +29,15 @@ export function DirectorySearchBar({
   onFilterChange,
   isFilterTrayOpen,
   onToggleFilters,
+  searchPlaceholder = "Search friends & messages",
+  filterOptions = defaultFilters,
 }: DirectorySearchBarProps) {
+  const hasFilters = filterOptions.length > 0;
+
   return (
     <div className="mb-2 space-y-1.5">
       <label className="sr-only" htmlFor="messages-search">
-        Search conversations
+        {searchPlaceholder}
       </label>
       <div className="flex items-center gap-2 rounded-full border border-siso-border bg-siso-bg-tertiary/70 px-3 py-2">
         <svg viewBox="0 0 24 24" className="h-4 w-4 text-siso-text-muted" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -38,26 +47,28 @@ export function DirectorySearchBar({
         <input
           id="messages-search"
           type="text"
-          placeholder="Search friends & messages"
+          placeholder={searchPlaceholder}
           value={search}
           onChange={(event) => onSearchChange(event.target.value)}
           className="w-full border-none bg-transparent text-sm text-siso-text-primary placeholder:text-siso-text-muted focus:outline-none"
         />
-        <button
-          type="button"
-          className={cn(
-            "rounded-full p-1.5 transition",
-            isFilterTrayOpen ? "text-siso-orange" : "text-siso-text-muted hover:text-siso-orange",
-          )}
-          onClick={onToggleFilters}
-          aria-label="Toggle filters"
-        >
-          <SlidersHorizontal className="h-4 w-4" />
-        </button>
+        {hasFilters ? (
+          <button
+            type="button"
+            className={cn(
+              "rounded-full p-1.5 transition",
+              isFilterTrayOpen ? "text-siso-orange" : "text-siso-text-muted hover:text-siso-orange",
+            )}
+            onClick={onToggleFilters}
+            aria-label="Toggle filters"
+          >
+            <SlidersHorizontal className="h-4 w-4" />
+          </button>
+        ) : null}
       </div>
-      {isFilterTrayOpen && (
+      {hasFilters && isFilterTrayOpen && (
         <div className="flex flex-wrap gap-2 text-[11px]">
-          {filters.map((filter) => (
+          {filterOptions.map((filter) => (
             <button
               key={filter.id}
               type="button"
