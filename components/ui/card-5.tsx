@@ -1,6 +1,7 @@
 "use client";
 
 import { forwardRef, useEffect, useState } from "react";
+import type { CSSProperties } from "react";
 import { motion, type Variants, useReducedMotion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
@@ -97,20 +98,22 @@ export const HighlightCard = forwardRef<HTMLDivElement, HighlightCardProps>(
     }, []);
     const shouldAnimate = idle && !prefersReducedMotion;
 
+    const cardStyle: CSSProperties & Record<"--card-from-color" | "--card-to-color" | "--card-foreground-color", string> = {
+      "--card-from-color": `hsl(${theme.from})`,
+      "--card-to-color": `hsl(${theme.to})`,
+      "--card-foreground-color": `hsl(${theme.foreground})`,
+      color: "var(--card-foreground-color)",
+      backgroundImage:
+        "radial-gradient(circle at 1px 1px, hsla(0,0%,100%,0.15) 1px, transparent 0)," +
+        "linear-gradient(to bottom right, var(--card-from-color), var(--card-to-color))",
+      backgroundSize: "0.5rem 0.5rem, 100% 100%",
+    };
+
     return (
       <motion.div
         ref={ref}
         className={cn("relative w-full max-w-md overflow-hidden rounded-2xl p-6 shadow-lg", className)}
-        style={{
-          ["--card-from-color" as const]: `hsl(${theme.from})`,
-          ["--card-to-color" as const]: `hsl(${theme.to})`,
-          ["--card-foreground-color" as const]: `hsl(${theme.foreground})`,
-          color: "var(--card-foreground-color)",
-          backgroundImage:
-            "radial-gradient(circle at 1px 1px, hsla(0,0%,100%,0.15) 1px, transparent 0)," +
-            "linear-gradient(to bottom right, var(--card-from-color), var(--card-to-color))",
-          backgroundSize: "0.5rem 0.5rem, 100% 100%",
-        }}
+        style={cardStyle}
         variants={shouldAnimate ? cardVariants : undefined}
         initial={shouldAnimate ? "hidden" : false}
         animate={shouldAnimate ? "visible" : undefined}

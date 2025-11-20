@@ -101,7 +101,7 @@ export function useGeneralSettings() {
 
         // Temporarily use mock data to test
         console.log('useGeneralSettings - Using mock data...');
-        const mockState = {
+        const mockState: GeneralSettingsState = {
           currentTheme: "system",
           fontSize: "medium",
           reducedMotion: false,

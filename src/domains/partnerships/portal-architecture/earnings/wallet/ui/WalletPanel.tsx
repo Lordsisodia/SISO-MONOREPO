@@ -45,7 +45,7 @@ export function WalletPanel() {
   const { ref, hydrated } = useHydrateOnView<HTMLDivElement>({ rootMargin: "0px 0px -25% 0px" });
 
   return (
-    <SettingsDetailLayout wrapContent={false} compactHeader hideHeader srTitle="Wallet">
+    <SettingsDetailLayout wrapContent={false} compactHeader hideHeader title="Wallet" srTitle="Wallet">
       <div ref={ref} className="w-full">
         {hydrated ? <WalletPanelContent /> : <WalletPanelSkeleton />}
       </div>

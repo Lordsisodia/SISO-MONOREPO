@@ -2,7 +2,7 @@
  * Portfolio Domain - Calculate Portfolio Statistics
  */
 
-import { allClients } from '../data';
+import { allClients } from '../../data';
 import { PortfolioStats } from '../types';
 
 export function calculatePortfolioStats(): PortfolioStats {
@@ -11,9 +11,15 @@ export function calculatePortfolioStats(): PortfolioStats {
   const uniqueIndustries = new Set(visible.map((c) => c.industry));
 
   const avgDelivery =
-    visible.reduce((sum, c) => sum + c.timeline.durationDays, 0) / visible.length;
+    visible.length > 0
+      ? visible.reduce((sum, c) => sum + c.timeline.durationDays, 0) / visible.length
+      : 0;
 
-  const totalValue = visible.reduce((sum, c) => sum + c.pricing.sisoPrice, 0);
+  const totalValue = visible.reduce((sum, c) => {
+    const pricing = c.pricing;
+    const value = pricing.sisoPrice ?? pricing.max ?? pricing.min ?? pricing.marketValue ?? 0;
+    return sum + value;
+  }, 0);
 
   const clientsWithRatings = visible.filter((c) => c.results?.clientSatisfaction);
   const avgSatisfaction =

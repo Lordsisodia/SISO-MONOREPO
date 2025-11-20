@@ -19,7 +19,8 @@ export type HelpCollectionIcon =
   | "sparkles"
   | "shield-check"
   | "bar-chart"
-  | "users";
+  | "users"
+  | "bell";
 
 export type HelpCollection = {
   slug: string;

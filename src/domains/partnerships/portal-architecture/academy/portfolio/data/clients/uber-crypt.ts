@@ -1,4 +1,4 @@
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 
 export const uberCrypt: PortfolioClient = {
   id: 'uber-crypt',

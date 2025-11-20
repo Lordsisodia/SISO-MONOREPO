@@ -8,3 +8,5 @@
 // export * from './TemplateShowcase';
 // export * from './CaseStudyHighlight';
 // export * from './RelatedIndustries';
+
+export {};

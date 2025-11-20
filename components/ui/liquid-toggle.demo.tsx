@@ -44,5 +44,4 @@ export function DangerToggleDemo() {
   );
 }
 
-export { DefaultToggleDemo as Demo, SuccessToggleDemo, WarningToggleDemo, DangerToggleDemo };
-
+export { DefaultToggleDemo as Demo };

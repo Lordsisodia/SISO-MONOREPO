@@ -1,120 +1,64 @@
-"use client";
-
 import Link from "next/link";
-import { ArrowRight, ArrowLeft, Share2, Bookmark, Play, MessageCircle, Layers } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowLeft, Bookmark, Clock, NotebookText } from "lucide-react";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
-import { courses } from "./data";
-import { useRouter } from "next/navigation";
-import { Waves } from "@/components/ui/wave-background";
+import { Button } from "@/components/ui/button";
 
-export function CourseLessonScreen({ courseId, lessonId }: { courseId: string; lessonId: string }) {
-  const course = courses.find((item) => item.id === courseId);
-  const router = useRouter();
+const lesson = {
+  title: "Discovery Basics",
+  duration: "12 min",
+  summary: "Lesson 2 outlines the first five discovery questions with scripts.",
+  steps: [
+    "Watch the framing video",
+    "Practice the five questions",
+    "Send proof asset to your mentor",
+  ],
+  resources: [
+    { label: "Discovery checklist", href: "/partners/academy/tools/discovery-checklist" },
+    { label: "Prospect notes template", href: "/partners/academy/tools/prospect-notes" },
+  ],
+};
 
-  if (!course) {
-    return <p className="text-siso-text-muted">Course not found.</p>;
-  }
-
-  const lessonIndex = course.lessons.findIndex((lesson) => lesson.id === lessonId);
-  if (lessonIndex === -1) return <p className="text-siso-text-muted">Lesson not found.</p>;
-
-  const lesson = course.lessons[lessonIndex];
-  const prevLesson = course.lessons[lessonIndex - 1];
-  const nextLesson = course.lessons[lessonIndex + 1];
-
+export function CourseLessonScreen({ courseId, lessonId }: { courseId?: string; lessonId?: string }) {
   return (
-    <main className="relative bg-siso-bg-primary text-siso-text-primary min-h-screen">
-      <div
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{ filter: "blur(6px)", opacity: 0.9 }}
-      >
-        <Waves
-          className="h-full w-full"
-          strokeColor="#f8a75c"
-          backgroundColor="#0b0b0f"
-          pointerSize={0.35}
-        />
-      </div>
-      <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
-        <div className="relative min-h-[80px]">
-          <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
-            <Link
-              href={`/partners/academy/courses/modules/${course.id}`}
-              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
-              aria-label="Back to chapter"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Link>
+    <main className="min-h-screen bg-siso-bg-primary text-siso-text-primary">
+      <div className="mx-auto flex max-w-4xl flex-col gap-6 px-4 py-10 lg:py-12">
+        <Link href="/partners/academy/courses" className="inline-flex items-center gap-2 text-sm text-white hover:text-white/80">
+          <ArrowLeft className="h-4 w-4" /> Back to courses
+        </Link>
+
+        <header className="space-y-3">
+          <p className="text-xs uppercase tracking-[0.35em] text-siso-text-muted">
+            {courseId ? `Course ${courseId}` : "Lesson"}
+          </p>
+          <h1 className="text-3xl font-semibold text-white">{lesson.title}</h1>
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1 text-xs text-siso-text-muted">
+            <Clock className="h-3.5 w-3.5" /> {lesson.duration}
           </div>
-        </div>
-        <SettingsGroupCallout
-          icon={<Play className="h-4 w-4" />}
-          title={lesson.title}
-          subtitle={lesson.summary}
-          showChevron={false}
-        >
-          <div className="space-y-3">
-            <p className="text-xs uppercase tracking-[0.3em] text-siso-text-muted">{lesson.duration}</p>
-            <div className="flex flex-wrap gap-2">
-              <Button variant="secondary" size="sm" className="border border-white/10">
-                <div className="flex items-center gap-1">
-                  <Play className="h-3 w-3" />
-                  <span>Mark complete</span>
-                </div>
-              </Button>
-              <Button variant="ghost" size="sm" className="border border-white/10">
-                <Bookmark className="h-3 w-3" />
-                <span className="ml-1">Save to Saved Docs</span>
-              </Button>
-              <Button variant="ghost" size="sm" className="border border-white/10">
-                <Share2 className="h-3 w-3" />
-                <span className="ml-1">Copy link</span>
-              </Button>
-            </div>
-            <Button variant="outline" size="sm" className="border border-white/10" onClick={() => router.push("/partners/community/messages?tab=siso")}>
-              <MessageCircle className="h-3 w-3" />
-              <span className="ml-1">Need help?</span>
-            </Button>
-          </div>
+          <p className="text-sm text-siso-text-muted">{lesson.summary}</p>
+        </header>
+
+        <SettingsGroupCallout icon={<NotebookText className="h-4 w-4" />} title="Lesson steps" subtitle="Complete in order" showChevron={false}>
+          <ol className="space-y-3 text-sm text-white">
+            {lesson.steps.map((step, idx) => (
+              <li key={step} className="flex items-start gap-3">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/10 text-xs text-white">
+                  {idx + 1}
+                </span>
+                <span>{step}</span>
+              </li>
+            ))}
+          </ol>
         </SettingsGroupCallout>
 
-        <SettingsGroupCallout
-          icon={<Layers className="h-4 w-4" />}
-          title="Supplemental assets"
-          subtitle="Related proof & pitch materials"
-          showChevron={false}
-        >
-          <div className="flex flex-wrap gap-2 text-[11px]">
-            {lesson.relatedAssets.map((asset) => (
-              <Link
-                key={asset.href}
-                href={asset.href}
-                className="inline-flex items-center gap-1 rounded-full border border-white/10 px-3 py-1 text-siso-orange"
-              >
-                <ArrowRight className="h-3 w-3" />
-                {asset.label}
-              </Link>
+        <SettingsGroupCallout icon={<Bookmark className="h-4 w-4" />} title="Resources" subtitle="Use these while you learn" showChevron={false}>
+          <div className="flex flex-wrap gap-2">
+            {lesson.resources.map((resource) => (
+              <Button key={resource.href} asChild variant="ghost" size="sm" className="border border-white/10">
+                <Link href={resource.href}>{resource.label}</Link>
+              </Button>
             ))}
           </div>
         </SettingsGroupCallout>
-
-        <nav className="flex flex-wrap gap-2 text-[11px] uppercase tracking-[0.3em] text-siso-text-muted">
-          {prevLesson ? (
-            <Button asChild variant="outline" size="sm" className="border border-white/10">
-              <Link href={`/partners/academy/courses/modules/${course.id}/${prevLesson.id}`}>
-                Prev: {prevLesson.title}
-              </Link>
-            </Button>
-          ) : null}
-          {nextLesson ? (
-            <Button asChild variant="secondary" size="sm" className="border border-white/10">
-              <Link href={`/partners/academy/courses/modules/${course.id}/${nextLesson.id}`}>
-                Next: {nextLesson.title}
-              </Link>
-            </Button>
-          ) : null}
-        </nav>
       </div>
     </main>
   );

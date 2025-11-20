@@ -2,9 +2,9 @@
  * Portfolio Domain - Portfolio Data Hook
  */
 
-import { useMemo } from 'react';
-import { allClients } from '../data';
-import { calculatePortfolioStats } from '../lib';
+import { useMemo } from "react";
+import { allClients } from "../../data";
+import { calculatePortfolioStats } from "../../domain/lib";
 
 export function usePortfolioData() {
   const clients = useMemo(

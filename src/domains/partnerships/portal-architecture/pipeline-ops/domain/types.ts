@@ -42,6 +42,9 @@ export interface RecruitmentInvite {
 export interface SubmitClientPayload {
   companyName: string;
   contactEmail: string;
+  contactPhone?: string;
+  website?: string;
+  socialLink?: string;
   dealSizeEstimate: number;
   notes?: string;
   vertical: string;

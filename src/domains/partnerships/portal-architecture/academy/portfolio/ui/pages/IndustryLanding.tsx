@@ -24,8 +24,8 @@ import {
   Zap,
   Shield
 } from 'lucide-react';
-import { usePortfolioData } from '../hooks';
-import { getIndustryBySlug } from '../data/industries';
+import { usePortfolioData } from '../../application/hooks/use-portfolio-data';
+import { getIndustryBySlug } from '../../data/industries';
 import { PortfolioCard } from '@/components/portfolio/PortfolioCard';
 import { BreadcrumbNav } from '../components/shared/BreadcrumbNav';
 import { Helmet } from 'react-helmet-async';
@@ -113,7 +113,7 @@ export function IndustryLanding() {
             <BreadcrumbNav
               items={[
                 { label: 'Portfolio', href: '/portfolio' },
-                { label: industry.name, current: true }
+                { label: industry.name, href: `/portfolio/${industry.slug}` }
               ]}
             />
           </div>
@@ -286,7 +286,8 @@ export function IndustryLanding() {
                           images: project.media?.screenshots?.desktop || [],
                           live_url: 'liveUrl' in project ? (project as any).liveUrl : undefined,
                           development_status: project.status,
-                          estimated_value: project.pricing.min,
+                          estimated_value:
+                            project.pricing.min ?? project.pricing.max ?? project.pricing.sisoPrice ?? 0,
                           completion_date: 'completionDate' in project ? (project as any).completionDate : undefined,
                           duration_months: 2,
                           key_features: project.features.key.slice(0, 5),
@@ -319,7 +320,8 @@ export function IndustryLanding() {
                           images: project.media?.screenshots?.desktop || [],
                           live_url: 'liveUrl' in project ? (project as any).liveUrl : undefined,
                           development_status: project.status,
-                          estimated_value: project.pricing.min,
+                        estimated_value:
+                          project.pricing.min ?? project.pricing.max ?? project.pricing.sisoPrice ?? 0,
                           completion_date: 'completionDate' in project ? (project as any).completionDate : undefined,
                           duration_months: 2,
                           key_features: project.features.key.slice(0, 5),

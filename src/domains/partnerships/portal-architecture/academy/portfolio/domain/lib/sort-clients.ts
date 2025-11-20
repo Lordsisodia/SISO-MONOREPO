@@ -14,6 +14,8 @@ export type SortOption =
 
 export function sortClients(clients: PortfolioClient[], sortBy: SortOption): PortfolioClient[] {
   const sorted = [...clients];
+  const getValue = (client: PortfolioClient) =>
+    client.pricing.sisoPrice ?? client.pricing.max ?? client.pricing.min ?? client.pricing.marketValue ?? 0;
 
   switch (sortBy) {
     case 'newest':
@@ -25,9 +27,9 @@ export function sortClients(clients: PortfolioClient[], sortBy: SortOption): Por
         (a, b) => new Date(a.launchDate).getTime() - new Date(b.launchDate).getTime()
       );
     case 'value-high':
-      return sorted.sort((a, b) => b.pricing.sisoPrice - a.pricing.sisoPrice);
+      return sorted.sort((a, b) => getValue(b) - getValue(a));
     case 'value-low':
-      return sorted.sort((a, b) => a.pricing.sisoPrice - b.pricing.sisoPrice);
+      return sorted.sort((a, b) => getValue(a) - getValue(b));
     case 'rating':
       return sorted.sort(
         (a, b) =>

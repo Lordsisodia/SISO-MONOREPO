@@ -1,4 +1,4 @@
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 export const elementary: PortfolioClient = {
   id: 'elementary', name: 'Elementary', industry: 'food-beverage',
   tagline: 'Restaurant website and reservation system',

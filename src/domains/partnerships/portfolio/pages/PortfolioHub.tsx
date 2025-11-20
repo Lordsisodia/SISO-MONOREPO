@@ -139,17 +139,10 @@ export function PortfolioHub() {
 
           {/* Waves Background */}
           <Waves
-            lineColor="rgba(255, 87, 34, 0.2)"
+            strokeColor="rgba(255, 87, 34, 0.2)"
             backgroundColor="transparent"
-            waveSpeedX={0.018}
-            waveSpeedY={0.015}
-            waveAmpX={70}
-            waveAmpY={35}
-            friction={0.92}
-            tension={0.012}
-            maxCursorMove={180}
-            xGap={22}
-            yGap={55}
+            pointerSize={0.35}
+            className="h-full w-full"
           />
         </section>
 
@@ -232,7 +225,7 @@ export function PortfolioHub() {
                         images: project.media?.screenshots?.desktop || [],
                         live_url: 'liveUrl' in project ? (project as any).liveUrl : undefined,
                         development_status: project.status,
-                        estimated_value: project.pricing.min,
+                        estimated_value: project.pricing.min ?? undefined,
                         completion_date: 'completionDate' in project ? (project as any).completionDate : undefined,
                         duration_months: 2,
                         key_features: project.features.key.slice(0, 5),

@@ -1,0 +1,44 @@
+{
+  "capturedAt": "2025-11-20T13:56:28.458Z",
+  "baseUrl": "http://localhost:3003",
+  "routes": [
+    {
+      "name": "academy",
+      "path": "/partners/academy"
+    },
+    {
+      "name": "pipeline-ops",
+      "path": "/partners/pipeline-ops"
+    },
+    {
+      "name": "recruitment",
+      "path": "/partners/recruitment"
+    }
+  ],
+  "metrics": {
+    "academy": {
+      "url": "http://localhost:3003/partners/academy",
+      "domContentLoaded": 3107.199999988079,
+      "loadEventEnd": 3437.800000011921,
+      "firstPaint": 3092,
+      "firstContentfulPaint": 3512,
+      "timestamp": "2025-11-20T13:56:13.000Z"
+    },
+    "pipeline-ops": {
+      "url": "http://localhost:3003/partners/pipeline-ops",
+      "domContentLoaded": 1038.5999999940395,
+      "loadEventEnd": 1325.7000000178814,
+      "firstPaint": 1048,
+      "firstContentfulPaint": 1400,
+      "timestamp": "2025-11-20T13:56:21.220Z"
+    },
+    "recruitment": {
+      "url": "http://localhost:3003/partners/recruitment",
+      "domContentLoaded": 742.2000000178814,
+      "loadEventEnd": 1015.0999999940395,
+      "firstPaint": 756,
+      "firstContentfulPaint": 1088,
+      "timestamp": "2025-11-20T13:56:28.337Z"
+    }
+  }
+}

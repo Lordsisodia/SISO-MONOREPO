@@ -16,9 +16,10 @@ function useShouldShowBackground() {
     const idle = "requestIdleCallback" in window
       ? (window as any).requestIdleCallback
       : (cb: FrameRequestCallback) => window.setTimeout(cb, 250);
+    const supportsIdleCallback = "cancelIdleCallback" in window;
     const handle = idle(() => setReady(media.matches));
     return () => {
-      if ("cancelIdleCallback" in window) {
+      if (supportsIdleCallback) {
         (window as any).cancelIdleCallback?.(handle);
       } else {
         window.clearTimeout(handle as number);

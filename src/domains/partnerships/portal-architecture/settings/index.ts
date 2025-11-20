@@ -20,6 +20,6 @@ export * from "./general";
 
 // Individual feature views (Live routes)
 export * from "./account/ui/AccountSettingsView";
-export * from "./notifications/ui/AccountNotificationsView";
+export * from "./general/sections/notifications/ui/AccountNotificationsView";
 export * from "./profile/ui/ProfileSettingsView";
 export * from "./devices/ui/ConnectedDevicesView";

@@ -32,7 +32,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/domains/shared/utils/cn';
 import {
-  FinancialTools,
+  FinancialTools as FinancialToolsData,
   Budget,
   SavingsGoal,
   ExpenseTracking,
@@ -41,8 +41,8 @@ import {
 } from '../types/enhanced-wallet.types';
 
 interface FinancialToolsProps {
-  tools: FinancialTools;
-  onToolsUpdate: (updates: Partial<FinancialTools>) => void;
+  tools: FinancialToolsData;
+  onToolsUpdate: (updates: Partial<FinancialToolsData>) => void;
   className?: string;
 }
 

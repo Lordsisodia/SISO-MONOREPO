@@ -13,10 +13,10 @@ import {
 } from 'lucide-react';
 
 interface ProjectPricing {
-  min: number;
-  max: number;
-  currency: string;
-  deliveryTime: string;
+  min?: number | null;
+  max?: number | null;
+  currency?: string;
+  deliveryTime?: string;
 }
 
 interface PricingBreakdownProps {
@@ -58,7 +58,7 @@ export function PricingBreakdown({ pricing }: PricingBreakdownProps) {
         <CardContent className="space-y-4">
           <div>
             <div className="text-3xl font-bold bg-gradient-to-r from-siso-red to-siso-orange bg-clip-text text-transparent">
-              {formatCurrency(min, currency)}
+              {isNum(min) ? formatCurrency(min, currency) : '—'}
               {isNum(min) && isNum(max) ? ' - ' : ''}
               {isNum(max) ? formatCurrency(max, currency) : ''}
             </div>

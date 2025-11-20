@@ -4,9 +4,9 @@
 
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
-import { IndustryCategory } from '../../types';
-import { industryColors, industryTextColors } from '../../constants';
-import { getIndustryById } from '../../data';
+import { IndustryCategory } from '../../../domain/types';
+import { industryColors, industryTextColors } from '../../../domain/constants';
+import { getIndustryById } from '../../../data';
 import { cn } from '@/lib/utils';
 
 interface IndustryBadgeProps {

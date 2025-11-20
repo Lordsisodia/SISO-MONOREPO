@@ -11,9 +11,11 @@ export function calculatePortfolioStats(): PortfolioStats {
   const uniqueIndustries = new Set(visible.map((c) => c.industry));
 
   const avgDelivery =
-    visible.reduce((sum, c) => sum + c.timeline.durationDays, 0) / visible.length;
+    visible.length > 0
+      ? visible.reduce((sum, c) => sum + c.timeline.durationDays, 0) / visible.length
+      : 0;
 
-  const totalValue = visible.reduce((sum, c) => sum + c.pricing.sisoPrice, 0);
+  const totalValue = visible.reduce((sum, c) => sum + (c.pricing.sisoPrice ?? 0), 0);
 
   const clientsWithRatings = visible.filter((c) => c.results?.clientSatisfaction);
   const avgSatisfaction =

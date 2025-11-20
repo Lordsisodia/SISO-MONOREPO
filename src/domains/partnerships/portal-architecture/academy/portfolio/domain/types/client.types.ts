@@ -59,9 +59,11 @@ export interface ProjectResults {
 }
 
 export interface Testimonial {
-  quote: string;
+  quote?: string;
+  text?: string;
   author: string;
-  title: string;
+  title?: string;
+  role?: string;
   photo?: string; // Path to photo
 }
 

@@ -29,7 +29,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/domains/shared/utils/cn';
 import {
-  PartnerIntegration,
+  PartnerIntegration as PartnerIntegrationData,
   BankConnection,
   CardConnection,
   AutoPayoutConfig,
@@ -37,8 +37,8 @@ import {
 } from '../types/enhanced-wallet.types';
 
 interface PartnerIntegrationProps {
-  integration: PartnerIntegration;
-  onIntegrationUpdate: (updates: Partial<PartnerIntegration>) => void;
+  integration: PartnerIntegrationData;
+  onIntegrationUpdate: (updates: Partial<PartnerIntegrationData>) => void;
   onConnectBank: () => Promise<void>;
   onConnectCard: () => Promise<void>;
   onDisconnectBank: (bankId: string) => Promise<void>;
@@ -50,7 +50,8 @@ const connectionStatusColors = {
   active: 'text-emerald-500 bg-emerald-500/10',
   pending: 'text-amber-500 bg-amber-500/10',
   suspended: 'text-rose-500 bg-rose-500/10',
-  error: 'text-rose-500 bg-rose-500/10'
+  error: 'text-rose-500 bg-rose-500/10',
+  expired: 'text-slate-400 bg-slate-400/10'
 };
 
 const providerLogos = {

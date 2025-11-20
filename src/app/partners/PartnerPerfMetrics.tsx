@@ -40,10 +40,12 @@ export function PartnerPerfMetrics() {
   }, []);
 
   useEffect(() => {
+    type LCPEntry = PerformanceEntry & { element?: Element };
     onLCP((metric) => {
+      const lastEntry = metric.entries[metric.entries.length - 1] as LCPEntry | undefined;
       logMetric("LCP", {
         value: Math.round(metric.value),
-        element: metric.entries[metric.entries.length - 1]?.nodeName,
+        element: lastEntry?.element ? (lastEntry.element as Element).tagName : undefined,
       });
     });
     onINP((metric) => {

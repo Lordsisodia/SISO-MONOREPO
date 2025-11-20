@@ -6,8 +6,6 @@ import SubmitClientExperience from "./SubmitClientExperience.client";
 import type { PipelineOpsConfig } from "./types";
 import { getRequestBaseUrl } from "@/domains/shared/utils/request-base-url";
 
-export const cache = "no-store";
-
 const configFilePath = path.join(process.cwd(), "public/data/pipeline-ops-config.json");
 
 const loadConfigFromDisk = async (): Promise<PipelineOpsConfig> => {

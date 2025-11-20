@@ -2,7 +2,7 @@
  * Portfolio Client Data - CreativeHub Agency
  */
 
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 
 export const creativeHubAgency: PortfolioClient = {
   // Basic Info
@@ -19,7 +19,7 @@ export const creativeHubAgency: PortfolioClient = {
   caseStudyUrl: undefined,
 
   // Project Details
-  projectType: 'Website + CMS',
+  projectType: 'Website',
   status: 'Live',
   launchDate: '2024-07-25',
 

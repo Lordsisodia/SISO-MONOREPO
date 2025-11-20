@@ -129,7 +129,7 @@ export function ClientDetail() {
               items={[
                 { label: 'Portfolio', href: '/portfolio' },
                 { label: industry.name, href: `/portfolio/${industry.slug}` },
-                { label: project.name, current: true }
+                { label: project.name, href: `/portfolio/${project.id}`, current: true }
               ]}
             />
           </div>
@@ -463,7 +463,7 @@ export function ClientDetail() {
                       images: related.media?.screenshots?.desktop || [],
                       live_url: 'liveUrl' in related ? (related as any).liveUrl : undefined,
                       development_status: related.status,
-                      estimated_value: related.pricing.min,
+                      estimated_value: related.pricing.min ?? undefined,
                       completion_date: 'completionDate' in related ? (related as any).completionDate : undefined,
                       duration_months: 2,
                       key_features: related.features.key.slice(0, 5),

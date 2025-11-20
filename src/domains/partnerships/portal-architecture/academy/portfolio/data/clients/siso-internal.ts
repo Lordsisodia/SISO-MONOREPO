@@ -1,4 +1,4 @@
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 export const sisoInternal: PortfolioClient = {
   id: 'siso-internal', name: 'SISO Internal', industry: 'internal-tools',
   tagline: 'Internal task tracker and daily life manager for SISO agency',

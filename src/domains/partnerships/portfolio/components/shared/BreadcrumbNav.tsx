@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 interface BreadcrumbItem {
   label: string;
   href: string;
+  current?: boolean;
 }
 
 interface BreadcrumbNavProps {
@@ -23,7 +24,7 @@ export function BreadcrumbNav({ items, className }: BreadcrumbNavProps) {
       className={cn('flex items-center gap-2 text-sm text-siso-text-muted', className)}
     >
       {items.map((item, index) => {
-        const isLast = index === items.length - 1;
+        const isLast = item.current ?? index === items.length - 1;
 
         return (
           <div key={`breadcrumb-${index}-${item.href}`} className="flex items-center gap-2">

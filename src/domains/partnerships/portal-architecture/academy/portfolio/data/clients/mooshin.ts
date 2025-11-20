@@ -1,4 +1,4 @@
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 export const mooshin: PortfolioClient = {
   id: 'mooshin', name: 'Mooshin', industry: 'elearning',
   tagline: 'Martial arts course selling platform',

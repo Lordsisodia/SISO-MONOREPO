@@ -30,7 +30,7 @@ export const useEnhancedWallet = (options: UseEnhancedWalletOptions): EnhancedWa
   updateCurrency: (currency: string) => void;
   getBalance: (currency?: string) => number;
   getTransactions: (limit?: number, status?: Transaction['status']) => Transaction[];
-  convertCurrency: (amount: number, from: string, to: string) => Promise<number>;
+  convertCurrency: (amount: number, from: string, to: string) => number;
 } => {
   const [wallet, setWallet] = useState<EnhancedWallet | null>(null);
   const [loading, setLoading] = useState(false);
@@ -90,7 +90,7 @@ export const useEnhancedWallet = (options: UseEnhancedWalletOptions): EnhancedWa
   }, [loadWallet]);
 
   // Currency conversion
-  const convertCurrency = useCallback(async (amount: number, from: string, to: string): Promise<number> => {
+  const convertCurrency = useCallback((amount: number, from: string, to: string): number => {
     if (!wallet) return amount;
 
     try {
@@ -186,7 +186,7 @@ export const useRealTimePayments = (partnerId: string) => {
         currency: transactionData.currency || 'USD',
         description: transactionData.description || 'Transaction',
         status: 'pending',
-        paymentMethod: transactionData.paymentMethod || { type: 'bank', id: 'default' },
+        paymentMethod: transactionData.paymentMethod || { type: 'bank_transfer', id: 'default' },
         reference: `REF-${Date.now()}`,
         metadata: {},
         fees: [],
@@ -217,33 +217,42 @@ export const useRealTimePayments = (partnerId: string) => {
       // Simulate processing progress
       const progressInterval = setInterval(() => {
         setActiveTransactions(prev => {
-          const updated = prev.map(tx => {
-            if (tx.id === newTransaction.id) {
-              const nextStep = Math.min(tx.realTimeInfo.progress.currentStep + 1, tx.realTimeInfo.progress.totalSteps);
-              const percentage = (nextStep / tx.realTimeInfo.progress.totalSteps) * 100;
+          const updated = prev
+            .map(tx => {
+              if (tx.id === newTransaction.id) {
+                const nextStep = Math.min(tx.realTimeInfo.progress.currentStep + 1, tx.realTimeInfo.progress.totalSteps);
+                const percentage = (nextStep / tx.realTimeInfo.progress.totalSteps) * 100;
 
-              return {
-                ...tx,
-                realTimeInfo: {
-                  ...tx.realTimeInfo,
-                  progress: {
-                    ...tx.realTimeInfo.progress,
-                    currentStep: nextStep,
-                    percentage,
-                    status: percentage === 100 ? 'completed' : 'processing'
-                  },
-                  steps: tx.realTimeInfo.steps.map((step, index) => ({
-                    ...step,
-                    status: index < nextStep ? 'completed' :
-                            index === nextStep - 1 ? 'in_progress' : 'pending',
-                    startedAt: index === nextStep - 1 ? new Date() : step.startedAt,
-                    completedAt: index < nextStep ? new Date() : step.completedAt
-                  }))
-                }
-              };
-            }
-            return tx;
-          }).filter(tx => tx.realTimeInfo.progress.percentage < 100);
+                const updatedTransaction: Transaction = {
+                  ...tx,
+                  realTimeInfo: {
+                    ...tx.realTimeInfo,
+                    progress: {
+                      ...tx.realTimeInfo.progress,
+                      currentStep: nextStep,
+                      percentage,
+                      status: percentage === 100 ? 'completed' : 'processing'
+                    },
+                    steps: tx.realTimeInfo.steps.map((step, index) => {
+                      const stepStatus: Transaction['realTimeInfo']['steps'][number]['status'] =
+                        index < nextStep ? 'completed' :
+                        index === nextStep - 1 ? 'in_progress' : 'pending';
+
+                      return {
+                        ...step,
+                        status: stepStatus,
+                        startedAt: index === nextStep - 1 ? new Date() : step.startedAt,
+                        completedAt: index < nextStep ? new Date() : step.completedAt
+                      };
+                    })
+                  }
+                };
+
+                return updatedTransaction;
+              }
+              return tx;
+            })
+            .filter(tx => tx.realTimeInfo.progress.percentage < 100);
 
           return updated;
         });
@@ -380,14 +389,13 @@ export const useFinancialAnalytics = (partnerId: string) => {
   const [analytics, setAnalytics] = useState<WalletAnalytics | null>(null);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const loadAnalytics = async () => {
-      setLoading(true);
-      try {
-        // Simulate loading analytics data
-        await new Promise(resolve => setTimeout(resolve, 1000));
+  const loadAnalytics = useCallback(async () => {
+    setLoading(true);
+    try {
+      // Simulate loading analytics data
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-        const mockAnalytics: WalletAnalytics = {
+      const mockAnalytics: WalletAnalytics = {
           spending: {
             total: 4500,
             byCategory: [
@@ -436,20 +444,26 @@ export const useFinancialAnalytics = (partnerId: string) => {
               title: 'Software spending increased 15%',
               description: 'Your software expenses are trending upward. Consider reviewing subscriptions.',
               priority: 'medium',
-              type: 'spending',
-              impact: 'high',
-              actions: ['Review subscriptions', 'Identify unused tools'],
-              createdAt: new Date()
+              category: 'spending',
+              status: 'new',
+              actions: [
+                { label: 'Review subscriptions' },
+                { label: 'Identify unused tools' }
+              ],
+              lastUpdated: new Date()
             },
             {
               id: '2',
               title: 'Strong income growth this quarter',
               description: 'Your income has grown 12.3% this quarter. Keep up the great work!',
               priority: 'high',
-              type: 'income',
-              impact: 'positive',
-              actions: ['Reinvest profits', 'Update financial projections'],
-              createdAt: new Date()
+              category: 'earnings',
+              status: 'new',
+              actions: [
+                { label: 'Reinvest profits' },
+                { label: 'Update financial projections' }
+              ],
+              lastUpdated: new Date()
             }
           ],
           recommendations: [
@@ -457,23 +471,23 @@ export const useFinancialAnalytics = (partnerId: string) => {
               id: '1',
               title: 'Optimize tax strategy',
               description: 'Consider maximizing retirement contributions to reduce taxable income',
-              category: 'tax',
-              impact: 'high',
-              priority: 'high'
+              category: 'compliance',
+              impact: 'high'
             }
           ]
-        };
+      };
 
-        setAnalytics(mockAnalytics);
-      } catch (error) {
-        console.error('Failed to load analytics:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadAnalytics();
+      setAnalytics(mockAnalytics);
+    } catch (error) {
+      console.error('Failed to load analytics:', error);
+    } finally {
+      setLoading(false);
+    }
   }, [partnerId]);
+
+  useEffect(() => {
+    loadAnalytics();
+  }, [loadAnalytics]);
 
   return {
     analytics,

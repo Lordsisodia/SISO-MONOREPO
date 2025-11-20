@@ -5,14 +5,20 @@ import Link from "next/link";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsDetailLayout } from "../../components/SettingsDetailLayout";
 import { SettingsGroupCallout } from "../../menu/SettingsGroupCallout";
-import { IdCard, Edit3, ChevronLeft, Mail, Phone, Shield, Users, Globe, CreditCard, Activity, AlertTriangle, Download, ArrowRight, Pause, XCircle, Settings } from "lucide-react";
+import { IdCard, Edit3, ChevronLeft, Mail, Phone, Shield, Users, Globe, CreditCard, Activity, AlertTriangle, Download, ArrowRight, Pause, XCircle, Settings, Info as InfoIcon } from "lucide-react";
 import { InfoButton } from "@/components/ui/info-button";
 import { useAccountSettings } from "../application/useAccountSettings";
 import ScrimList from "@/domains/shared/ui/settings/ScrimList";
 
+type AccountInfoSection = {
+  title: string;
+  description: string;
+  items: string[];
+};
+
 export function AccountSettingsView() {
   const { contactFields, twoFactorActions, hero } = useAccountSettings();
-  const [infoItem, setInfoItem] = useState(null);
+  const [infoItem, setInfoItem] = useState<AccountInfoSection | null>(null);
 
   const accountInfoData = {
     contactDetails: {

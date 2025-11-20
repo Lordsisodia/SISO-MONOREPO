@@ -9,8 +9,9 @@ import { pitchKitDetails } from "@/domains/partnerships/portal-architecture/acad
 import { Waves } from "@/components/ui/wave-background";
 import { CopyShareButton } from "../../components/CopyShareButton.client";
 
-export default function PitchKitDetailPage({ params }: { params: { type: string; slug: string } }) {
-  const key = `${params.type}/${params.slug}`;
+export default async function PitchKitDetailPage({ params }: { params: Promise<{ type: string; slug: string }> }) {
+  const { type, slug } = await params;
+  const key = `${type}/${slug}`;
   const kit = pitchKitDetails[key];
 
   if (!kit) return notFound();
@@ -50,17 +51,15 @@ export default function PitchKitDetailPage({ params }: { params: { type: string;
             className="w-full pl-12"
             titleClassName="uppercase tracking-[0.25em] text-white"
             descriptionClassName="text-sm"
-            footerContent={
-              <div className="flex flex-wrap items-center gap-3 text-xs text-siso-text-muted">
-                <span className="inline-flex items-center gap-2 rounded-full border border-emerald-300/40 bg-emerald-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-emerald-200">
-                  Public
-                </span>
-                <span className="inline-flex items-center gap-2 rounded-full border border-amber-200/30 bg-amber-200/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-amber-100">
-                  Updated weekly
-                </span>
-              </div>
-            }
           />
+          <div className="flex flex-wrap items-center gap-3 text-xs text-siso-text-muted">
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-300/40 bg-emerald-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-emerald-200">
+              Public
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-amber-200/30 bg-amber-200/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-amber-100">
+              Updated weekly
+            </span>
+          </div>
         </div>
 
         <section className="grid gap-3 sm:grid-cols-2">
@@ -97,30 +96,34 @@ export default function PitchKitDetailPage({ params }: { params: { type: string;
           </SettingsGroupCallout>
         ) : null}
 
-        <SettingsGroupCallout icon={<Sparkles className="h-4 w-4" />} title="Talk track" subtitle="Use as your default narrative." showChevron={false} id="talk-track">
-          <div className="rounded-[18px] border border-white/10 bg-white/5 p-4 space-y-3">
-            <p className="text-sm text-siso-text-muted">{kit.talkTrack}</p>
-            <div className="space-y-2 text-sm">
-              {kit.followUps.map((q) => (
-                <p key={q} className="flex items-start gap-2 text-siso-text-muted">
-                  <ArrowRight className="mt-1 h-3 w-3 text-siso-orange" />
-                  {q}
-                </p>
+        <div id="talk-track">
+          <SettingsGroupCallout icon={<Sparkles className="h-4 w-4" />} title="Talk track" subtitle="Use as your default narrative." showChevron={false}>
+            <div className="rounded-[18px] border border-white/10 bg-white/5 p-4 space-y-3">
+              <p className="text-sm text-siso-text-muted">{kit.talkTrack}</p>
+              <div className="space-y-2 text-sm">
+                {kit.followUps.map((q) => (
+                  <p key={q} className="flex items-start gap-2 text-siso-text-muted">
+                    <ArrowRight className="mt-1 h-3 w-3 text-siso-orange" />
+                    {q}
+                  </p>
+                ))}
+              </div>
+            </div>
+          </SettingsGroupCallout>
+        </div>
+
+        <div id="objections">
+          <SettingsGroupCallout icon={<Share2 className="h-4 w-4" />} title="Objection handling" subtitle="Keep replies tight and evidence-backed." showChevron={false}>
+            <div className="space-y-3">
+              {kit.objections.map((item) => (
+                <article key={item.objection} className="rounded-2xl border border-white/10 bg-white/[0.02] p-3 text-sm">
+                  <p className="font-semibold text-white">Q: {item.objection}</p>
+                  <p className="mt-1 text-siso-text-muted">A: {item.reply}</p>
+                </article>
               ))}
             </div>
-          </div>
-        </SettingsGroupCallout>
-
-        <SettingsGroupCallout icon={<Share2 className="h-4 w-4" />} title="Objection handling" subtitle="Keep replies tight and evidence-backed." showChevron={false} id="objections">
-          <div className="space-y-3">
-            {kit.objections.map((item) => (
-              <article key={item.objection} className="rounded-2xl border border-white/10 bg-white/[0.02] p-3 text-sm">
-                <p className="font-semibold text-white">Q: {item.objection}</p>
-                <p className="mt-1 text-siso-text-muted">A: {item.reply}</p>
-              </article>
-            ))}
-          </div>
-        </SettingsGroupCallout>
+          </SettingsGroupCallout>
+        </div>
 
         {kit.sequenceSnippets && (kit.sequenceSnippets.email || kit.sequenceSnippets.linkedin || kit.sequenceSnippets.sms) ? (
           <SettingsGroupCallout icon={<Share2 className="h-4 w-4" />} title="Sequence snippets" subtitle="Copy/paste outreach starters." showChevron={false}>

@@ -19,7 +19,7 @@ export const creativeHubAgency: PortfolioClient = {
   caseStudyUrl: undefined,
 
   // Project Details
-  projectType: 'Website + CMS',
+  projectType: 'Website',
   status: 'Live',
   launchDate: '2024-07-25',
 

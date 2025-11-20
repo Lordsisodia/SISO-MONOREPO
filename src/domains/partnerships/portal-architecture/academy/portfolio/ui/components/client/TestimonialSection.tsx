@@ -7,9 +7,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Quote } from 'lucide-react';
 
 interface Testimonial {
-  text: string;
+  text?: string;
+  quote?: string;
   author: string;
-  role: string;
+  role?: string;
+  title?: string;
   company?: string;
 }
 
@@ -37,7 +39,7 @@ export function TestimonialSection({ testimonial }: TestimonialSectionProps) {
 
             {/* Testimonial Text */}
             <blockquote className="text-lg sm:text-xl text-siso-text leading-relaxed italic">
-              "{testimonial.text}"
+              "{testimonial.text ?? testimonial.quote ?? ''}"
             </blockquote>
 
             {/* Author Info */}
@@ -53,9 +55,9 @@ export function TestimonialSection({ testimonial }: TestimonialSectionProps) {
                   {testimonial.author}
                 </div>
                 <div className="text-sm text-siso-text-muted">
-                  {testimonial.role}
+                  {(testimonial.role ?? testimonial.title) ?? 'Partner'}
                   {testimonial.company && ` at ${testimonial.company}`}
-                </div>
+            </div>
               </div>
             </div>
           </div>

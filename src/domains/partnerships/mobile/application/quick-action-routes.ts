@@ -10,7 +10,7 @@ const SETTINGS_QUICK_ACTION_PATHS = settingsRouteRegistry.reduce<Partial<Record<
   return acc;
 }, {});
 
-export const QUICK_ACTION_PATHS: Record<QuickActionId, string> = {
+export const QUICK_ACTION_PATHS: Partial<Record<QuickActionId, string>> = {
   settings: QUICK_ACTION_DEFAULT_PATH,
   ...(SETTINGS_QUICK_ACTION_PATHS as Record<string, string>),
   "settings-notifications": "/partners/settings/general#notifications",
@@ -28,7 +28,9 @@ export const QUICK_ACTION_PATH_LOOKUP: Record<string, QuickActionId> = {
   "/partners/quick": "settings",
   "/partners/messages": "messages-new",
   ...Object.entries(QUICK_ACTION_PATHS).reduce<Record<string, QuickActionId>>((acc, [action, path]) => {
-    acc[path] = action as QuickActionId;
+    if (path) {
+      acc[path] = action as QuickActionId;
+    }
     return acc;
   }, {}),
 };

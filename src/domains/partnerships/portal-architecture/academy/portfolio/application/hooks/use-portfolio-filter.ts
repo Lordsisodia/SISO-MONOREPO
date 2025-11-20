@@ -2,15 +2,15 @@
  * Portfolio Domain - Portfolio Filter Hook
  */
 
-import { useState, useMemo } from 'react';
-import { PortfolioClient, IndustryCategory } from '../types';
+import { useState, useMemo } from "react";
+import { PortfolioClient, IndustryCategory } from "../../domain/types";
 import {
   filterClients,
   sortClients,
   searchClients,
   SortOption,
   FilterOptions,
-} from '../lib';
+} from "../../domain/lib";
 
 export function usePortfolioFilter(initialClients: PortfolioClient[]) {
   const [searchQuery, setSearchQuery] = useState('');

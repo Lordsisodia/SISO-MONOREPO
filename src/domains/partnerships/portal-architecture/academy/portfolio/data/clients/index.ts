@@ -2,7 +2,7 @@
  * Portfolio Domain - Client Data Exports
  */
 
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 
 // Import all client data
 import { mayorker } from './mayorker';

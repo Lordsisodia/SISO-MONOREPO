@@ -1,11 +1,8 @@
-"use client";
-
 import Link from "next/link";
+import { Suspense } from "react";
 import { ArrowLeft, ArrowRight, Sparkles, Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
-import { useRouter } from "next/navigation";
 import { Waves } from "@/components/ui/wave-background";
 
 const spotlight = {
@@ -38,26 +35,26 @@ const proofAssets = [
 ];
 
 export function TrainingSpotlightScreen() {
-  const router = useRouter();
-
   return (
     <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen relative overflow-hidden">
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{ filter: "blur(6px)", opacity: 0.9 }}
       >
-        <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="#0b0b0f" pointerSize={0.35} />
+        <Suspense fallback={<div className="h-full w-full bg-[#0b0b0f]" aria-hidden="true" />}>
+          <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="#0b0b0f" pointerSize={0.35} />
+        </Suspense>
       </div>
       <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
         <div className="relative min-h-[128px]">
           <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
-            <button
-              onClick={() => router.back()}
+            <Link
+              href="/partners/academy"
               aria-label="Back"
               className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
             >
               <ArrowLeft className="h-5 w-5" />
-            </button>
+            </Link>
           </div>
           <HighlightCard
             color="orange"
@@ -65,8 +62,8 @@ export function TrainingSpotlightScreen() {
             description="Next up in your flow: finish the required induction course."
             metricValue=""
             metricLabel=""
-            buttonText=""
-            onButtonClick={() => {}}
+            buttonText="Open lesson"
+            buttonHref={spotlight.lessonPath}
             icon={<Sparkles className="h-5 w-5 text-siso-orange" />}
             className="w-full pl-12"
             hideDivider
@@ -89,9 +86,12 @@ export function TrainingSpotlightScreen() {
                   <p className="text-white text-base font-semibold">{spotlight.title}</p>
                   <p className="text-xs">You’re {spotlight.progress}% through this requirement.</p>
                 </div>
-                <Button variant="secondary" size="sm" onClick={() => router.push(spotlight.lessonPath)}>
+                <Link
+                  href={spotlight.lessonPath}
+                  className="inline-flex items-center rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:border-siso-orange"
+                >
                   Go to course
-                </Button>
+                </Link>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-3">
                 <div className="flex items-center justify-between text-xs text-siso-text-muted">
@@ -176,9 +176,9 @@ export function TrainingSpotlightScreen() {
           <div className="rounded-3xl border border-white/5 bg-[#1F1F1F] p-4 shadow-[0_15px_40px_rgba(0,0,0,0.22)]">
             <div className="flex items-center justify-between">
               <p className="text-xs uppercase tracking-[0.35em] text-siso-text-muted">Stay on track</p>
-              <Button variant="link" size="sm" className="text-siso-orange" onClick={() => router.push(spotlight.lessonPath)}>
+              <Link href={spotlight.lessonPath} className="text-xs font-semibold uppercase tracking-[0.3em] text-siso-orange">
                 Open lesson
-              </Button>
+              </Link>
             </div>
             <ol className="mt-3 space-y-3 text-sm text-siso-text-muted">
               {[

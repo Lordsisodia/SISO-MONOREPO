@@ -175,7 +175,6 @@ export function MessagesScreen({ initialThreadId }: MessagesScreenProps = {}) {
           contentOffset={effectiveComposerHeight + navHeight + 6}
           onToggleThreadInfo={() => setIsThreadInfoOpen((prev) => !prev)}
           isThreadInfoOpen={isThreadInfoOpen}
-          threadInfo={currentThreadInfo}
           onOpenAppDrawer={openDrawer}
         >
           <div className="mb-4 text-center">

@@ -48,6 +48,8 @@ type ChatMessage = {
 const DEFAULT_ASSISTANT_MESSAGE =
   "Hey—I'm the SISO intake assistant. Answer a few quick questions and type NA or Skip anytime if you don't have the info.";
 
+const DEFAULT_SERVICE_OPTIONS = ["Website", "Web App", "SEO", "Automation", "AI Builder", "Integrations"] as const;
+
 const createPromptMessage = (prompt: WizardPrompt): ChatMessage => ({
   id: `prompt-${prompt.id}-${Date.now()}`,
   role: "assistant",
@@ -334,11 +336,12 @@ function SubmitClientChat({
 
     if (currentPrompt.type === "multi-select") {
       const hasSelection = formState.servicesRequested.length > 0;
+      const services = currentPrompt.options ?? DEFAULT_SERVICE_OPTIONS;
       return container(
         <>
           {header}
           <div className="flex flex-wrap gap-2">
-            {serviceOptions.map((service) => {
+            {services.map((service) => {
               const selected = formState.servicesRequested.includes(service);
               return (
                 <button

@@ -1,1 +1,1 @@
-export { default as placeholder } from ''
+export { WhatsNewView as WhatsNewScreen } from "@/domains/partnerships/portal-architecture/community/announcements/ui/WhatsNewView";

@@ -2,7 +2,7 @@
  * Portfolio Client Data - Mayorker Activities
  */
 
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 
 export const mayorker: PortfolioClient = {
   // Basic Info

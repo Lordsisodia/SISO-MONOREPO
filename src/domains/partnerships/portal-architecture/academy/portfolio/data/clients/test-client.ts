@@ -3,7 +3,7 @@
  * Complete example with all optional fields filled in
  */
 
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 
 export const testClient: PortfolioClient = {
   // Basic Info

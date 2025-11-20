@@ -1,9 +1,6 @@
 import { redirect } from "next/navigation";
 
-interface ThreadPageProps {
-  params: { threadId: string };
-}
-
-export default function PartnersMessageThreadPage({ params }: ThreadPageProps) {
-  redirect(`/partners/community/messages/${encodeURIComponent(params.threadId)}`);
+export default async function PartnersMessageThreadPage({ params }: { params: Promise<{ threadId: string }> }) {
+  const { threadId } = await params;
+  redirect(`/partners/community/messages/${encodeURIComponent(threadId)}`);
 }

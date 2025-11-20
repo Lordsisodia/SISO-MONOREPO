@@ -9,6 +9,7 @@ import {
   CircleX,
 } from "lucide-react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
+import type { Variants } from "framer-motion";
 
 interface Subtask {
   id: string;
@@ -282,7 +283,10 @@ export default function Plan() {
     );
   };
 
-  const taskVariants = {
+  const defaultEase: [number, number, number, number] = [0.2, 0.65, 0.3, 0.9];
+  const pulseEase: [number, number, number, number] = [0.34, 1.56, 0.64, 1];
+
+  const taskVariants: Variants = {
     hidden: {
       opacity: 0,
       y: prefersReducedMotion ? 0 : -5,
@@ -304,7 +308,7 @@ export default function Plan() {
     },
   };
 
-  const subtaskListVariants = {
+  const subtaskListVariants: Variants = {
     hidden: {
       opacity: 0,
       height: 0,
@@ -318,7 +322,7 @@ export default function Plan() {
         duration: 0.25,
         staggerChildren: prefersReducedMotion ? 0 : 0.05,
         when: "beforeChildren",
-        ease: [0.2, 0.65, 0.3, 0.9],
+        ease: defaultEase,
       },
     },
     exit: {
@@ -327,12 +331,12 @@ export default function Plan() {
       overflow: "hidden",
       transition: {
         duration: 0.2,
-        ease: [0.2, 0.65, 0.3, 0.9],
+        ease: defaultEase,
       },
     },
   };
 
-  const subtaskVariants = {
+  const subtaskVariants: Variants = {
     hidden: {
       opacity: 0,
       x: prefersReducedMotion ? 0 : -10,
@@ -366,18 +370,18 @@ export default function Plan() {
       overflow: "visible",
       transition: {
         duration: 0.25,
-        ease: [0.2, 0.65, 0.3, 0.9],
+        ease: defaultEase,
       },
     },
   };
 
-  const statusBadgeVariants = {
+  const statusBadgeVariants: Variants = {
     initial: { scale: 1 },
     animate: {
       scale: prefersReducedMotion ? 1 : [1, 1.08, 1],
       transition: {
         duration: 0.35,
-        ease: [0.34, 1.56, 0.64, 1],
+        ease: pulseEase,
       },
     },
   };
@@ -392,7 +396,7 @@ export default function Plan() {
           y: 0,
           transition: {
             duration: 0.3,
-            ease: [0.2, 0.65, 0.3, 0.9],
+        ease: defaultEase,
           },
         }}
       >

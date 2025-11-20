@@ -8,10 +8,10 @@ import { cn } from "@/lib/utils";
 
 const boardColumns: Array<{ id: DealSummary["stage"]; label: string }> = [
   { id: "qualified", label: "Qualified" },
-  { id: "discovery", label: "Discovery" },
+  { id: "discovery" as DealSummary["stage"], label: "Discovery" },
   { id: "proposal", label: "Proposal" },
   { id: "negotiation", label: "Negotiation" },
-  { id: "closing", label: "Closing" },
+  { id: "closing" as DealSummary["stage"], label: "Closing" },
   { id: "won", label: "Won" },
   { id: "lost", label: "Lost" },
 ];

@@ -4,7 +4,7 @@
  */
 
 import { ClientStats } from '@/components/ui/stats-section';
-import { PortfolioStats } from '../types';
+import { PortfolioStats } from '../../domain/types';
 
 interface PortfolioStatsSectionProps {
   stats: PortfolioStats;

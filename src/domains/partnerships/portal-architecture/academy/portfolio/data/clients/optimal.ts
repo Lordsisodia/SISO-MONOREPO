@@ -1,4 +1,4 @@
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 export const optimal: PortfolioClient = {
   id: 'optimal', name: 'Optimal Building Maintenance', industry: 'construction',
   tagline: 'Construction company management and operations system',

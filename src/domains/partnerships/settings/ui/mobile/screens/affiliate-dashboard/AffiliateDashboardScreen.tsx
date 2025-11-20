@@ -1,1 +1,1 @@
-export { default as placeholder } from ''
+export { AffiliateDashboardView as AffiliateDashboardScreen } from "@/domains/partnerships/portal-architecture/recruitment/invite-partners/ui/AffiliateDashboardView";

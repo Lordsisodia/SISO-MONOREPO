@@ -1,24 +1,31 @@
+"use client";
+
 /**
  * Portfolio Domain - Client Data Hook
  */
 
-import { useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getClientBySlug } from '../lib';
+import { useEffect, useMemo } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { getClientBySlug } from "../../domain/lib";
+
+const FALLBACK_ROUTE = "/partners/academy/portfolio";
 
 export function useClientData() {
-  const { client: slug } = useParams<{ client: string }>();
-  const navigate = useNavigate();
+  const params = useParams();
+  const router = useRouter();
+  const slugParam = params?.client ?? params?.slug ?? null;
+  const slug = Array.isArray(slugParam) ? slugParam[0] : slugParam;
 
   const client = useMemo(() => {
-    if (!slug) return null;
-    return getClientBySlug(slug);
+    if (typeof slug !== "string" || !slug) return null;
+    return getClientBySlug(slug) ?? null;
   }, [slug]);
 
-  // Redirect if client not found
-  if (slug && !client) {
-    navigate('/portfolio', { replace: true });
-  }
+  useEffect(() => {
+    if (typeof slug === "string" && slug.length > 0 && !client) {
+      router.replace(FALLBACK_ROUTE);
+    }
+  }, [client, router, slug]);
 
   return client;
 }

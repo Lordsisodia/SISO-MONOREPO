@@ -1,4 +1,4 @@
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 export const fiveStarHire: PortfolioClient = {
   id: 'five-star-hire', name: 'Five Star Car Hire', industry: 'transportation',
   tagline: 'Car rental booking platform',

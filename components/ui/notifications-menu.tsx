@@ -18,6 +18,11 @@ export type NotificationsMenuItem = {
   action: string;
   target?: string;
   content?: string;
+  file?: {
+    name: string;
+    size: string;
+    type: string;
+  };
   timestamp: string;
   timeAgo: string;
   isRead: boolean;
@@ -132,7 +137,11 @@ type NotificationsFilterTabsProps = {
 
 export function NotificationsFilterTabs({ value, onValueChange, counts, className }: NotificationsFilterTabsProps) {
   return (
-    <Tabs value={value} onValueChange={onValueChange} className={cn("w-full", className)}>
+    <Tabs
+      value={value}
+      onValueChange={(val) => onValueChange(val as NotificationFilter)}
+      className={cn("w-full", className)}
+    >
       <TabsList className="flex w-full gap-2 overflow-x-auto bg-transparent p-0">
         <TabsTrigger value="all" className={pillBase}>
           <span>View all</span>

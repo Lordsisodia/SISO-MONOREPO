@@ -25,9 +25,13 @@ export function sortClients(clients: PortfolioClient[], sortBy: SortOption): Por
         (a, b) => new Date(a.launchDate).getTime() - new Date(b.launchDate).getTime()
       );
     case 'value-high':
-      return sorted.sort((a, b) => b.pricing.sisoPrice - a.pricing.sisoPrice);
+      return sorted.sort(
+        (a, b) => (b.pricing.sisoPrice ?? 0) - (a.pricing.sisoPrice ?? 0)
+      );
     case 'value-low':
-      return sorted.sort((a, b) => a.pricing.sisoPrice - b.pricing.sisoPrice);
+      return sorted.sort(
+        (a, b) => (a.pricing.sisoPrice ?? 0) - (b.pricing.sisoPrice ?? 0)
+      );
     case 'rating':
       return sorted.sort(
         (a, b) =>

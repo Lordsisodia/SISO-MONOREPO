@@ -5,9 +5,7 @@ export const metadata: Metadata = {
   title: "SISO Partner Academy • Course",
 };
 
-type CourseParams = { courseId: string };
-
-export default async function CourseProgramPage({ params }: { params: Promise<CourseParams> }) {
+export default async function CourseProgramPage({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = await params;
   return <CourseProgramScreen courseId={courseId} />;
 }

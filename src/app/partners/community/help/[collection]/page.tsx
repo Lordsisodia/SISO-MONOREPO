@@ -15,14 +15,8 @@ export function generateStaticParams() {
   return getHelpCollections().map((collection) => ({ collection: collection.slug }));
 }
 
-type PartnersCommunityHelpCollectionPageProps = {
-  params: { collection: string };
-};
-
-export default async function PartnersCommunityHelpCollectionPage({
-  params,
-}: PartnersCommunityHelpCollectionPageProps) {
-  const { collection: collectionSlug } = params;
+export default async function PartnersCommunityHelpCollectionPage({ params }: { params: Promise<{ collection: string }> }) {
+  const { collection: collectionSlug } = await params;
   const collection = getHelpCollection(collectionSlug);
   if (!collection) {
     notFound();
@@ -30,7 +24,7 @@ export default async function PartnersCommunityHelpCollectionPage({
 
   return (
     <MobileNavigationProvider
-      initialState={{ activeTab: "community", previousTab: "community", isImmersiveMode: true }}
+      initialState={{ activeTab: "messages", previousTab: "messages", isImmersiveMode: true }}
     >
       <HelpCollectionScreen collection={collection} />
     </MobileNavigationProvider>

@@ -1,4 +1,4 @@
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 export const teamApollo: PortfolioClient = {
   id: 'team-apollo', name: 'Team Apollo', industry: 'internal-tools',
   tagline: 'Internal team collaboration tool',

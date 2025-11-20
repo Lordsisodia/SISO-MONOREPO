@@ -20,14 +20,8 @@ export function generateStaticParams() {
   );
 }
 
-type PartnersCommunityHelpArticlePageProps = {
-  params: { collection: string; article: string };
-};
-
-export default async function PartnersCommunityHelpArticlePage({
-  params,
-}: PartnersCommunityHelpArticlePageProps) {
-  const { collection, article } = params;
+export default async function PartnersCommunityHelpArticlePage({ params }: { params: Promise<{ collection: string; article: string }> }) {
+  const { collection, article } = await params;
   const result = getHelpArticle(collection, article);
   if (!result || !result.collection || !result.article) {
     notFound();
@@ -35,7 +29,7 @@ export default async function PartnersCommunityHelpArticlePage({
 
   return (
     <MobileNavigationProvider
-      initialState={{ activeTab: "community", previousTab: "community", isImmersiveMode: true }}
+      initialState={{ activeTab: "messages", previousTab: "messages", isImmersiveMode: true }}
     >
       <HelpArticleScreen collection={result.collection} article={result.article} />
     </MobileNavigationProvider>

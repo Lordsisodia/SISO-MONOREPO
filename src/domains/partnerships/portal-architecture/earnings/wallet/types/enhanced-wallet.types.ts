@@ -17,6 +17,139 @@ export interface EnhancedWallet {
   lastUpdated: Date;
 }
 
+export interface PaymentMethod {
+  id: string;
+  type: PaymentType;
+  name: string;
+  description?: string;
+  details: PaymentMethodDetails;
+  verification: PaymentVerification;
+  security: PaymentSecurity;
+  status: PaymentMethodStatus;
+  isDefault: boolean;
+  currency: string;
+  limits: PaymentLimit[];
+  fees: PaymentFee[];
+  createdAt: Date;
+  lastUsed?: Date;
+}
+
+export interface PaymentMethodDetails {
+  provider: string;
+  accountType?: 'checking' | 'savings' | 'business' | 'wallet';
+  last4?: string;
+  bankName?: string;
+  country?: string;
+  routingNumberMasked?: string;
+  accountHolder?: string;
+  payoutSchedule?: string;
+  supportedCurrencies?: string[];
+  metadata?: Record<string, string>;
+}
+
+export type PaymentVerificationStatus = 'required' | 'pending' | 'verified' | 'failed';
+
+export interface PaymentVerification {
+  status: PaymentVerificationStatus;
+  requestedAt?: Date;
+  completedAt?: Date;
+  methods?: Array<'micro_deposit' | 'instant' | 'document_upload'>;
+  requiredDocuments?: string[];
+  notes?: string;
+}
+
+export interface PaymentSecurity {
+  riskScore: number;
+  twoFactorRequired: boolean;
+  lastAudit: Date;
+  recentAlerts: SecurityAlert[];
+}
+
+export interface PaymentLimit {
+  id: string;
+  type: 'daily' | 'weekly' | 'monthly' | 'per_transaction';
+  amount: number;
+  currency: string;
+  used: number;
+  remaining: number;
+  resetDate?: Date;
+  requiresReview?: boolean;
+}
+
+export interface PaymentFee {
+  id: string;
+  label: string;
+  type: 'percentage' | 'flat';
+  amount: number;
+  currency: string;
+  description?: string;
+}
+
+export interface PaymentMethodInfo {
+  id: string;
+  type: PaymentType;
+  label?: string;
+  last4?: string;
+  provider?: string;
+  status?: PaymentMethodStatus;
+}
+
+export interface Payout {
+  id: string;
+  amount: number;
+  currency: string;
+  status: 'scheduled' | 'processing' | 'completed' | 'failed' | 'cancelled';
+  scheduledDate: Date;
+  processedAt?: Date;
+  destination: PaymentMethodInfo;
+  reference: string;
+  description?: string;
+  fees?: PaymentFee[];
+}
+
+export interface WalletSettings {
+  preferredCurrency: string;
+  notificationPreferences: WalletNotificationPreferences;
+  payoutPreferences: PayoutPreferences;
+  securityPreferences: WalletSecurityPreferences;
+  featureFlags: WalletFeatureFlags;
+}
+
+export interface WalletNotificationPreferences {
+  payouts: boolean;
+  compliance: boolean;
+  insights: boolean;
+  productUpdates: boolean;
+  channels: {
+    email: boolean;
+    sms: boolean;
+    push: boolean;
+  };
+}
+
+export interface PayoutPreferences {
+  defaultMethodId: string;
+  schedule: 'daily' | 'weekly' | 'biweekly' | 'monthly' | 'threshold';
+  thresholdAmount?: number;
+  autoInvest?: boolean;
+}
+
+export interface WalletSecurityPreferences {
+  twoFactorAuth: boolean;
+  deviceNotifications: boolean;
+  sessionTimeoutMinutes: number;
+  trustedDeviceLimit: number;
+}
+
+export interface WalletFeatureFlags {
+  instantPayouts: boolean;
+  smartBudgeting: boolean;
+  advancedAnalytics: boolean;
+  experimentalFeatures: boolean;
+}
+
+export type WalletStatus = 'active' | 'suspended' | 'pending_verification' | 'closed';
+
 // Enhanced Balance with Real-Time Features
 export interface EnhancedWalletBalance {
   total: number;
@@ -126,6 +259,33 @@ export interface Transaction {
   tags: string[];
 }
 
+export interface TransactionMetadata {
+  partnerId?: string;
+  campaignId?: string;
+  cohort?: string;
+  notes?: string;
+  tags?: string[];
+  attachments?: Array<{ id: string; name: string; url: string }>;
+  customFields?: Record<string, unknown>;
+}
+
+export interface TransactionFee {
+  id: string;
+  type: 'processing' | 'platform' | 'network' | 'conversion' | 'other';
+  amount: number;
+  currency: string;
+  description?: string;
+}
+
+export interface RelatedEarning {
+  id: string;
+  type: 'deal' | 'bonus' | 'referral' | 'adjustment';
+  amount: number;
+  currency: string;
+  occurredAt: Date;
+  description?: string;
+}
+
 export interface TransactionProgress {
   currentStep: number;
   totalSteps: number;
@@ -218,6 +378,14 @@ export interface TrustedDevice {
   restrictions: DeviceRestrictions[];
 }
 
+export interface DeviceRestrictions {
+  id: string;
+  description: string;
+  enforcedAt: Date;
+  expiresAt?: Date;
+  severity: 'low' | 'medium' | 'high';
+}
+
 export interface LoginSession {
   id: string;
   device: string;
@@ -238,6 +406,17 @@ export interface TaxManagement {
   reporting: TaxReporting;
 }
 
+export interface WithholdingInfo {
+  id: string;
+  jurisdiction: string;
+  rate: number;
+  amountWithheld: number;
+  currency: string;
+  effectiveDate: Date;
+  updatedAt: Date;
+  notes?: string;
+}
+
 export interface TaxDocument {
   id: string;
   type: TaxDocumentType;
@@ -248,6 +427,14 @@ export interface TaxDocument {
   metadata: TaxDocumentMetadata;
 }
 
+export interface TaxDocumentMetadata {
+  preparedBy?: string;
+  submissionMethod?: 'manual' | 'automatic';
+  dueDate?: Date;
+  notes?: string;
+  attachments?: Array<{ id: string; name: string; url: string }>;
+}
+
 export interface TaxSettings {
   taxId: string;
   taxForm: 'W9' | 'W8BEN' | 'other';
@@ -255,6 +442,17 @@ export interface TaxSettings {
   exemptions: string[];
   autoFile: boolean;
   notifications: TaxNotifications;
+}
+
+export interface TaxNotifications {
+  email: boolean;
+  sms: boolean;
+  push?: boolean;
+  upcomingDeadlines?: boolean;
+  missingDocuments?: boolean;
+  payoutHolds?: boolean;
+  auditAlerts?: boolean;
+  lastSent?: Date;
 }
 
 export interface TaxSummary {
@@ -312,12 +510,108 @@ export interface FinancialProjections {
   factors: ProjectionFactor[];
 }
 
+export interface TrendMetric {
+  direction: 'up' | 'down' | 'stable';
+  change: number;
+  period: 'day' | 'week' | 'month' | 'quarter' | 'year';
+}
+
+export interface CategorySpending {
+  category: string;
+  amount: number;
+  percentage: number;
+  trend: TrendMetric;
+}
+
+export interface TimeSpending {
+  period: string;
+  amount: number;
+  percentage?: number;
+  trend?: TrendMetric;
+}
+
+export interface SpendingTrend {
+  label: string;
+  change: number;
+  direction: TrendMetric['direction'];
+  confidence: ConfidenceLevel;
+}
+
+export interface TransactionFrequency {
+  perWeek: number;
+  perMonth: number;
+  perYear: number;
+}
+
+export interface IncomeSource {
+  name: string;
+  amount: number;
+  percentage: number;
+  trend: TrendMetric;
+}
+
+export interface IncomeTrend {
+  label: string;
+  amount: number;
+  direction: TrendMetric['direction'];
+  change?: number;
+}
+
+export interface IncomeProjection {
+  date: Date;
+  projected: number;
+  confidence: ConfidenceLevel;
+}
+
+export interface GrowthMetrics {
+  monthly: number;
+  quarterly: number;
+  yearly: number;
+}
+
+export interface ProjectionData {
+  date: Date;
+  projected: number;
+  confidence: ConfidenceLevel;
+  factors: ProjectionFactor[];
+}
+
+export interface ProjectionFactor {
+  label: string;
+  impact: 'positive' | 'negative' | 'neutral';
+  description?: string;
+}
+
 export interface FinancialHealthScore {
   score: number;
   grade: 'A' | 'B' | 'C' | 'D' | 'F';
   factors: HealthFactor[];
   recommendations: string[];
   lastCalculated: Date;
+}
+
+export interface FinancialInsight {
+  id: string;
+  title: string;
+  description: string;
+  priority: 'high' | 'medium' | 'low';
+  category: 'earnings' | 'spending' | 'risk' | 'opportunity';
+  status: 'new' | 'in_progress' | 'resolved';
+  impactScore?: number;
+  actions?: { label: string; href?: string }[];
+  metrics?: { label: string; value: string }[];
+  lastUpdated: Date;
+}
+
+export interface FinancialRecommendation {
+  id: string;
+  title: string;
+  description: string;
+  category: 'revenue' | 'expense' | 'compliance' | 'savings' | 'risk';
+  impact: 'high' | 'medium' | 'low';
+  steps?: string[];
+  dueDate?: Date;
+  completed?: boolean;
 }
 
 // Mobile Experience Features
@@ -327,6 +621,41 @@ export interface MobileWalletFeatures {
   pushNotifications: PushNotificationSettings;
   offlineMode: OfflineModeConfig;
   swipeActions: SwipeAction[];
+}
+
+export interface GestureControl {
+  id: string;
+  gesture: 'swipe_left' | 'swipe_right' | 'pinch' | 'double_tap' | 'long_press';
+  action: string;
+  description?: string;
+  enabled: boolean;
+}
+
+export interface PushNotificationSettings {
+  enabled: boolean;
+  channels: {
+    email: boolean;
+    sms: boolean;
+    push: boolean;
+  };
+  categories: Array<{ id: string; label: string; enabled: boolean }>;
+}
+
+export interface OfflineModeConfig {
+  enabled: boolean;
+  lastSync: Date;
+  availableFeatures: string[];
+  storageUsageMB: number;
+  syncStatus: 'idle' | 'syncing' | 'error';
+  syncOnReconnect: boolean;
+  cachedData: CachedDataType[];
+}
+
+export interface CachedDataType {
+  id: string;
+  type: 'transaction' | 'document' | 'insight' | 'notification' | 'settings';
+  sizeKB: number;
+  updatedAt: Date;
 }
 
 export interface QuickAction {
@@ -343,13 +672,6 @@ export interface SwipeAction {
   action: string;
   icon: string;
   color: string;
-}
-
-export interface OfflineModeConfig {
-  enabled: boolean;
-  syncOnReconnect: boolean;
-  cachedData: CachedDataType[];
-  lastSync: Date;
 }
 
 // Partner Integration Features
@@ -372,6 +694,27 @@ export interface BankConnection {
   lastSync: Date;
 }
 
+export interface BankFee {
+  id: string;
+  label: string;
+  type: 'transfer' | 'instant' | 'international' | 'service';
+  amount: number;
+  currency: string;
+  description?: string;
+}
+
+export interface BankLimits {
+  currency: string;
+  perTransaction: number;
+  daily: number;
+  monthly: number;
+  remaining: {
+    perTransaction: number;
+    daily: number;
+    monthly: number;
+  };
+}
+
 export interface CardConnection {
   id: string;
   type: 'credit' | 'debit';
@@ -383,6 +726,21 @@ export interface CardConnection {
   lastUsed?: Date;
 }
 
+export interface CardFee {
+  id: string;
+  label: string;
+  type: 'processing' | 'currency' | 'network';
+  amount: number;
+  currency: string;
+}
+
+export interface CardLimits {
+  daily: number;
+  monthly: number;
+  perTransaction: number;
+  currency: string;
+}
+
 export interface AutoPayoutConfig {
   id: string;
   enabled: boolean;
@@ -392,6 +750,26 @@ export interface AutoPayoutConfig {
   maxAmount: number;
   nextRun: Date;
   history: AutoPayoutHistory[];
+}
+
+export interface AutoPayoutHistory {
+  id: string;
+  runAt: Date;
+  amount: number;
+  currency: string;
+  status: 'scheduled' | 'processing' | 'completed' | 'failed';
+  reference?: string;
+}
+
+export interface PaymentHistoryEntry {
+  id: string;
+  type: 'credit' | 'debit';
+  description: string;
+  method: string;
+  amount: number;
+  currency: string;
+  status: 'pending' | 'completed' | 'failed';
+  date: Date;
 }
 
 // Financial Tools
@@ -415,6 +793,14 @@ export interface Budget {
   alerts: BudgetAlert[];
 }
 
+export interface BudgetAlert {
+  id: string;
+  type: 'threshold' | 'overspend' | 'upcoming';
+  message: string;
+  triggeredAt: Date;
+  resolved: boolean;
+}
+
 export interface SavingsGoal {
   id: string;
   name: string;
@@ -426,6 +812,25 @@ export interface SavingsGoal {
   milestones: SavingsMilestone[];
 }
 
+export interface AutoContributionConfig {
+  enabled: boolean;
+  amount: number;
+  currency?: string;
+  frequency: 'weekly' | 'monthly' | 'quarterly';
+  nextContribution?: Date;
+}
+
+export interface SavingsMilestone {
+  id: string;
+  label?: string;
+  percentage?: number;
+  amount: number;
+  targetAmount?: number;
+  achieved?: boolean;
+  reached: boolean;
+  achievedAt?: Date;
+}
+
 export interface ExpenseTracking {
   categories: ExpenseCategory[];
   rules: CategorizationRule[];
@@ -433,10 +838,80 @@ export interface ExpenseTracking {
   insights: ExpenseInsight[];
 }
 
+export interface ExpenseCategory {
+  id: string;
+  name: string;
+  budget?: number;
+  spent?: number;
+  totalSpent: number;
+  transactionCount: number;
+  averageTransaction: number;
+  status: 'active' | 'archived';
+}
+
+export interface CategorizationRule {
+  id: string;
+  pattern: string;
+  categoryId: string;
+  confidence: number;
+  enabled: boolean;
+}
+
+export interface RecurringExpense {
+  id: string;
+  name: string;
+  amount: number;
+  currency: string;
+  frequency: 'weekly' | 'monthly' | 'quarterly' | 'yearly';
+  nextOccurrence: Date;
+  categoryId: string;
+  status: 'active' | 'paused' | 'cancelled';
+}
+
+export interface ExpenseInsight {
+  id: string;
+  title: string;
+  description: string;
+  impact: 'positive' | 'negative' | 'neutral';
+  recommendation?: string;
+  detectedAt: Date;
+}
+
 export interface FinancialCalendar {
   events: CalendarEvent[];
   reminders: CalendarReminder[];
   templates: CalendarTemplate[];
+}
+
+export interface CalendarEvent {
+  id: string;
+  title: string;
+  type: 'payout' | 'tax' | 'goal' | 'expense' | 'milestone' | 'payment' | 'deadline' | 'reminder';
+  date: Date;
+  startDate?: Date;
+  endDate?: Date;
+  amount?: number;
+  currency?: string;
+  status: 'upcoming' | 'completed' | 'missed' | 'cancelled';
+  notes?: string;
+  relatedGoalId?: string;
+  time?: string;
+}
+
+export interface CalendarReminder {
+  id: string;
+  eventId: string;
+  minutesBefore: number;
+  channel: 'email' | 'push' | 'sms';
+  sentAt?: Date;
+  acknowledged?: boolean;
+}
+
+export interface CalendarTemplate {
+  id: string;
+  name: string;
+  description?: string;
+  defaultReminders: Array<{ minutesBefore: number; channel: 'email' | 'push' | 'sms' }>;
 }
 
 // Enums and Type Definitions

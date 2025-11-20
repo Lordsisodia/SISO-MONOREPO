@@ -4,7 +4,7 @@ import { HighlightCard as GradientHighlightCard } from "@/components/ui/card-5-s
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
-import { Timeline } from "@/components/ui/timeline";
+import { Timeline, type TimelineItem } from "@/components/ui/timeline";
 import { cn } from "@/domains/shared/utils/cn";
 import { ArrowRight, Bell, CheckSquare, ClipboardList, Clock, ListChecks, Sparkles, Users, Zap } from "lucide-react";
 
@@ -97,7 +97,7 @@ const delegationRows = [
   { assignee: "Jordan", task: "Review earnings dashboard", due: "Tomorrow", status: "Pending" },
 ];
 
-const activityTimeline = [
+const activityTimeline: TimelineItem[] = [
   {
     id: "act1",
     title: "Task completed",

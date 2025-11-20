@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 /**
  * Portfolio Client Data - Template
  *
@@ -8,7 +10,7 @@
  * 4. Update export name to match client slug
  */
 
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 
 export const [CLIENT_SLUG]: PortfolioClient = {
   // Basic Info

@@ -4,13 +4,31 @@ import Link from "next/link";
 import { useState } from "react";
 import { SettingsDetailLayout } from "../../components/SettingsDetailLayout";
 import { HighlightCard } from "@/components/ui/card-5";
-import { Plug, ChevronLeft, ExternalLink, Settings, Activity, Clock, Data, XCircle, ChevronDown, Search, Loader2 } from "lucide-react";
+import { Plug, ChevronLeft, ExternalLink, Settings, Activity, Clock, XCircle, ChevronDown, Search, Loader2 } from "lucide-react";
 import ScrimList from "@/domains/shared/ui/settings/ScrimList";
 import { InfoButton } from "@/components/ui/info-button";
 import { SettingsGroupCallout } from "../../menu/SettingsGroupCallout";
 import { integrationLogos, type IntegrationLogoKey } from "@/assets/integrations";
 
-const availableIntegrations = [
+type IntegrationItem = {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  category: string;
+  connected: boolean;
+  color: string;
+  lastSync?: string;
+  syncStatus?: string;
+  usageStats?: {
+    syncedItems?: number;
+    messages?: number;
+    lastWeek: number;
+  };
+  features?: string[];
+};
+
+const availableIntegrations: IntegrationItem[] = [
   {
     id: "notion",
     name: "Notion",
@@ -112,8 +130,8 @@ const availableIntegrations = [
 ];
 
 export function IntegrationsSettingsScreen() {
-  const [integrations, setIntegrations] = useState(availableIntegrations);
-  const [selectedIntegration, setSelectedIntegration] = useState(null);
+  const [integrations, setIntegrations] = useState<IntegrationItem[]>(availableIntegrations);
+  const [selectedIntegration, setSelectedIntegration] = useState<IntegrationItem | null>(null);
   const [showManageModal, setShowManageModal] = useState(false);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [query, setQuery] = useState("");
@@ -135,7 +153,7 @@ export function IntegrationsSettingsScreen() {
     );
   };
 
-  const openManageModal = (integration: any) => {
+  const openManageModal = (integration: IntegrationItem) => {
     setSelectedIntegration(integration);
     // If not connected, start in wizard. If connected, show status.
     if (!integration.connected) {

@@ -1,11 +1,6 @@
 import { LazyMobileShell } from "@/domains/partnerships/mobile/ui/LazyMobileShell";
 
-interface ThreadPageProps {
-  params: { threadId: string };
-}
-
-export default function PartnersCommunityMessageThreadPage({ params }: ThreadPageProps) {
-  void params.threadId;
-
+export default async function PartnersCommunityMessageThreadPage({ params }: { params: Promise<{ threadId: string }> }) {
+  await params;
   return <LazyMobileShell initialTab="messages" initialImmersiveMode showFloatingNavButton={false} />;
 }

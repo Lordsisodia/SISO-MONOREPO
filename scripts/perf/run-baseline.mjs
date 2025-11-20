@@ -5,7 +5,7 @@ import path from 'node:path';
 
 const port = process.env.BASELINE_PORT || process.env.PORT || '3003';
 const slug = process.env.BASELINE_DIR || new Date().toISOString().slice(0, 10);
-const baselineDir = path.resolve(`docs/perf/baselines/${slug}`);
+const baselineDir = path.resolve(`docs/partners/perf/baselines/${slug}`);
 
 async function ensureBaselineDir() {
   await fs.mkdir(baselineDir, { recursive: true });
@@ -111,7 +111,7 @@ async function main() {
   }
 
   await copyAnalyzerArtifacts();
-  console.log('Baseline capture complete. Artifacts stored under docs/perf/baselines/' + slug);
+  console.log('Baseline capture complete. Artifacts stored under docs/partners/perf/baselines/' + slug);
 }
 
 main().catch((err) => {

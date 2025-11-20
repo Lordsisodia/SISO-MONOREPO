@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
 import {
@@ -188,7 +189,7 @@ export const TaxAutomation: React.FC<TaxAutomationProps> = ({
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="space-y-2">
             <Label>Document Type</Label>
-            <Select value={selectedDocumentType} onValueChange={(value: TaxDocumentType) => setSelectedDocumentType(value)}>
+            <Select value={selectedDocumentType} onValueChange={(value) => setSelectedDocumentType(value as TaxDocumentType)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -326,8 +327,8 @@ export const TaxAutomation: React.FC<TaxAutomationProps> = ({
                 <Label>Tax Form</Label>
                 <Select
                   value={editingSettings.taxForm}
-                  onValueChange={(value: 'W9' | 'W8BEN' | 'other') =>
-                    setEditingSettings(prev => ({ ...prev, taxForm: value }))
+                  onValueChange={(value) =>
+                    setEditingSettings(prev => ({ ...prev, taxForm: value as 'W9' | 'W8BEN' | 'other' }))
                   }
                 >
                   <SelectTrigger>

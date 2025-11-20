@@ -40,7 +40,28 @@ const prospectsStats = {
   },
 };
 
-const pipelineCallouts = [
+type SubmitCallout = {
+  id: string;
+  title: string;
+  subtitle: string;
+  href: string;
+  icon: typeof Send;
+  type: "submit";
+  cta: string;
+};
+
+type ProspectsCallout = {
+  id: string;
+  title: string;
+  subtitle: string;
+  href: string;
+  icon: typeof Users2;
+  type: "prospects";
+  cta: string;
+  cards: Array<{ label: string; heading: string; description: string; meta?: string }>;
+};
+
+const pipelineCallouts: Array<SubmitCallout | ProspectsCallout> = [
   {
     id: "submit",
     title: "Submit client",
@@ -58,6 +79,29 @@ const pipelineCallouts = [
     icon: Users2,
     type: "prospects" as const,
     cta: "Open prospects",
+    cards: [
+      {
+        label: "Total in funnel",
+        heading: `${prospectsStats.total}`,
+        description: "Prospects actively tracked",
+        meta: `+${prospectsStats.new24h} new in 24h`,
+      },
+      {
+        label: "Untouched",
+        heading: `${prospectsStats.unattended}`,
+        description: "Haven't been nudged in 7d",
+      },
+      {
+        label: prospectsStats.stageBreakdown[0].label,
+        heading: `${prospectsStats.stageBreakdown[0].count}`,
+        description: "Largest stage volume",
+      },
+      {
+        label: "Win rate",
+        heading: "63%",
+        description: "Rolling 30d win rate",
+      },
+    ],
   },
 ];
 
@@ -199,34 +243,7 @@ export default function PipelineOpsDashboardPage() {
               );
             }
 
-            return (
-              <SettingsGroupCallout
-                key={callout.id}
-                icon={<Icon className="h-4 w-4" />}
-                title={callout.title}
-                subtitle={callout.subtitle}
-                showChevron={false}
-              >
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {callout.cards.map((card) => (
-                    <article key={card.label} className="flex h-full flex-col gap-2 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/60">{card.label}</p>
-                      <h4 className="text-base font-semibold text-white">{card.heading}</h4>
-                      <p className="text-xs text-siso-text-muted">{card.description}</p>
-                      {card.meta ? <p className="text-[11px] text-white/70">{card.meta}</p> : null}
-                    </article>
-                  ))}
-                </div>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <Button asChild size="sm" className="rounded-full bg-white/20 px-4 text-xs font-semibold uppercase tracking-[0.3em] text-white hover:bg-white/30">
-                    <Link href={callout.href}>
-                      {callout.cta}
-                      <ArrowUpRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </div>
-              </SettingsGroupCallout>
-            );
+            return null;
           })}
 
           <SettingsGroupCallout

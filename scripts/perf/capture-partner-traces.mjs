@@ -4,7 +4,7 @@ import puppeteer from 'puppeteer';
 
 const baseUrl = process.env.PARTNERS_BASE_URL || 'http://localhost:3003';
 const baselineSlug = process.env.BASELINE_DIR || '2025-11-19';
-const outputDir = path.resolve(`docs/perf/baselines/${baselineSlug}`);
+const outputDir = path.resolve(`docs/partners/perf/baselines/${baselineSlug}`);
 const routes = [
   { name: 'academy', path: '/partners/academy' },
   { name: 'pipeline-ops', path: '/partners/pipeline-ops' },

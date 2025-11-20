@@ -1,19 +1,25 @@
+"use client";
+
 /**
  * Portfolio Domain - Industry Data Hook
  */
 
-import { useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getIndustryBySlug } from '../data';
-import { getIndustryClients } from '../lib';
+import { useEffect, useMemo } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { getIndustryBySlug } from "../../data";
+import { getIndustryClients } from "../../domain/lib";
+
+const FALLBACK_ROUTE = "/partners/academy/portfolio";
 
 export function useIndustryData() {
-  const { industry: slug } = useParams<{ industry: string }>();
-  const navigate = useNavigate();
+  const params = useParams();
+  const router = useRouter();
+  const slugParam = params?.industry ?? params?.slug ?? null;
+  const slug = Array.isArray(slugParam) ? slugParam[0] : slugParam;
 
   const industry = useMemo(() => {
-    if (!slug) return null;
-    return getIndustryBySlug(slug);
+    if (typeof slug !== "string" || !slug) return null;
+    return getIndustryBySlug(slug) ?? null;
   }, [slug]);
 
   const clients = useMemo(() => {
@@ -21,10 +27,11 @@ export function useIndustryData() {
     return getIndustryClients(industry.id);
   }, [industry]);
 
-  // Redirect if industry not found
-  if (slug && !industry) {
-    navigate('/portfolio', { replace: true });
-  }
+  useEffect(() => {
+    if (typeof slug === "string" && slug.length > 0 && !industry) {
+      router.replace(FALLBACK_ROUTE);
+    }
+  }, [industry, router, slug]);
 
   return {
     industry,

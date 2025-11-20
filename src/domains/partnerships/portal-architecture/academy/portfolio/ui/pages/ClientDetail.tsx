@@ -32,8 +32,8 @@ import {
   Timer,
   MessageSquareQuote
 } from 'lucide-react';
-import { usePortfolioData } from '../hooks';
-import { getIndustryBySlug } from '../data/industries';
+import { usePortfolioData } from '../../application/hooks/use-portfolio-data';
+import { getIndustryBySlug } from '../../data/industries';
 import { BreadcrumbNav } from '../components/shared/BreadcrumbNav';
 import { TechStackBadge } from '../components/shared/TechStackBadge';
 import { PortfolioCard } from '@/components/portfolio/PortfolioCard';
@@ -129,7 +129,7 @@ export function ClientDetail() {
               items={[
                 { label: 'Portfolio', href: '/portfolio' },
                 { label: industry.name, href: `/portfolio/${industry.slug}` },
-                { label: project.name, current: true }
+                { label: project.name, href: `/portfolio/${industry.slug}/${project.id}` }
               ]}
             />
           </div>
@@ -463,7 +463,8 @@ export function ClientDetail() {
                       images: related.media?.screenshots?.desktop || [],
                       live_url: 'liveUrl' in related ? (related as any).liveUrl : undefined,
                       development_status: related.status,
-                      estimated_value: related.pricing.min,
+                      estimated_value:
+                        related.pricing.min ?? related.pricing.max ?? related.pricing.sisoPrice ?? 0,
                       completion_date: 'completionDate' in related ? (related as any).completionDate : undefined,
                       duration_months: 2,
                       key_features: related.features.key.slice(0, 5),

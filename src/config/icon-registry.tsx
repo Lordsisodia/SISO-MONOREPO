@@ -1,6 +1,5 @@
 "use client";
 
-import type { ComponentType } from "react";
 import {
   Home,
   TrendingUp,
@@ -18,6 +17,7 @@ import {
   Briefcase,
   Wrench,
   UserPlus,
+  type LucideIcon,
 } from "lucide-react";
 
 export type IconName =
@@ -38,7 +38,7 @@ export type IconName =
   | "Wrench"
   | "UserPlus";
 
-const registry: Record<IconName, ComponentType<{ size?: number; className?: string }>> = {
+const registry: Record<IconName, LucideIcon> = {
   Home,
   TrendingUp,
   GraduationCap,
@@ -57,6 +57,6 @@ const registry: Record<IconName, ComponentType<{ size?: number; className?: stri
   UserPlus,
 };
 
-export function getIconComponent(name: string): ComponentType<{ size?: number; className?: string }> | null {
-  return (registry as Record<string, ComponentType<{ size?: number; className?: string }>>)[name] || null;
+export function getIconComponent(name: string): LucideIcon | null {
+  return (registry as Record<string, LucideIcon>)[name] || null;
 }

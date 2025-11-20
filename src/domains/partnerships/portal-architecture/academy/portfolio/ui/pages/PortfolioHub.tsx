@@ -26,8 +26,8 @@ import {
   Users,
   Award
 } from 'lucide-react';
-import { usePortfolioData } from '../hooks';
-import { industries } from '../data/industries';
+import { usePortfolioData } from '../../application/hooks/use-portfolio-data';
+import { industries } from '../../data/industries';
 import { PortfolioCard } from '@/components/portfolio/PortfolioCard';
 import { IndustryCategoryCard } from '../components/shared';
 import { Helmet } from 'react-helmet-async';
@@ -138,19 +138,7 @@ export function PortfolioHub() {
           </motion.div>
 
           {/* Waves Background */}
-          <Waves
-            lineColor="rgba(255, 87, 34, 0.2)"
-            backgroundColor="transparent"
-            waveSpeedX={0.018}
-            waveSpeedY={0.015}
-            waveAmpX={70}
-            waveAmpY={35}
-            friction={0.92}
-            tension={0.012}
-            maxCursorMove={180}
-            xGap={22}
-            yGap={55}
-          />
+          <Waves className="absolute inset-0 -z-10" strokeColor="rgba(255, 87, 34, 0.2)" backgroundColor="transparent" pointerSize={0.25} />
         </section>
 
         {/* Portfolio Stats Section */}
@@ -232,7 +220,8 @@ export function PortfolioHub() {
                         images: project.media?.screenshots?.desktop || [],
                         live_url: 'liveUrl' in project ? (project as any).liveUrl : undefined,
                         development_status: project.status,
-                        estimated_value: project.pricing.min,
+                      estimated_value:
+                        project.pricing.min ?? project.pricing.max ?? project.pricing.sisoPrice ?? 0,
                         completion_date: 'completionDate' in project ? (project as any).completionDate : undefined,
                         duration_months: 2,
                         key_features: project.features.key.slice(0, 5),

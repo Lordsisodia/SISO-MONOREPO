@@ -11,12 +11,11 @@ async function SettingsRouteRenderer({ slug }: { slug: string }) {
   return renderSettingsRouteBySlug(slug);
 }
 
-export default async function SettingsDynamicPage({ params }: { params: SettingsDynamicParams }) {
-  const resolved = params as { slug?: string[] };
+export default async function SettingsDynamicPage({ params }: { params: Promise<SettingsDynamicParams> }) {
+  const resolved = await params;
   return (
     <Suspense fallback={null}>
       {/* Route-level loading uses loading.tsx with shared Loader */}
-      {/* @ts-expect-error Async Server Component */}
       <SettingsRouteRenderer slug={(resolved.slug ?? []).join("/")} />
     </Suspense>
   );

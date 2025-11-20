@@ -39,13 +39,24 @@ interface IconNavButtonProps {
   onClick?: () => void;
   badge?: number | "dot";
   onLongPress?: () => void;
+  onPointerEnter?: () => void;
+  onTouchStart?: () => void;
 }
 
-function IconNavButton({ children, isActive = false, onClick, badge, onLongPress }: IconNavButtonProps) {
+function IconNavButton({
+  children,
+  isActive = false,
+  onClick,
+  badge,
+  onLongPress,
+  onPointerEnter,
+  onTouchStart,
+}: IconNavButtonProps) {
   let pressTimer: NodeJS.Timeout | undefined;
 
   const startPress = () => {
     if (!onLongPress) return;
+    if (pressTimer) clearTimeout(pressTimer);
     pressTimer = setTimeout(() => onLongPress?.(), 550);
   };
 
@@ -72,9 +83,14 @@ function IconNavButton({ children, isActive = false, onClick, badge, onLongPress
             : {}),
         }}
         onClick={onClick}
+        onPointerEnter={onPointerEnter}
         onPointerDown={startPress}
         onPointerUp={cancelPress}
         onPointerLeave={cancelPress}
+        onTouchStart={() => {
+          onTouchStart?.();
+          startPress();
+        }}
       >
         {children}
       </button>

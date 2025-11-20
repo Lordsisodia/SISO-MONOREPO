@@ -17,6 +17,7 @@ import type { ConversationMessage } from "@/domains/partnerships/portal-architec
 import { ExternalLink, Megaphone, UsersRound, ListChecks, Bookmark } from "lucide-react";
 import Link from "next/link";
 import { MobileNavigationProvider, useMobileNavigation } from "@/domains/partnerships/mobile/application/navigation-store";
+import type { NavigationState } from "@/domains/partnerships/mobile/types/navigation";
 import { useHydrateOnView } from "@/domains/shared/hooks/useHydrateOnView";
 
 const LazyComposerBar = dynamic(
@@ -24,7 +25,7 @@ const LazyComposerBar = dynamic(
     import("@/domains/partnerships/portal-architecture/community/messages/ui/mobile/components/ComposerBar").then(
       (mod) => ({ default: mod.ComposerBar }),
     ),
-  { ssr: false, suspense: true },
+  { ssr: false },
 );
 
 const localeFormatter = new Intl.DateTimeFormat("en-US", {
@@ -48,7 +49,7 @@ function ComposerBarFallback({ minHeight }: { minHeight: number }) {
 
 const CampusDrawerHydrator = dynamic(
   () => import("@/domains/partnerships/shared/ui/mobile/campus-sidebar/CampusDrawerHydrator.client").then((m) => m.CampusDrawerHydrator),
-  { ssr: false, suspense: true },
+  { ssr: false },
 );
 
 const toConversationMessages = (channel: CommunityChannelPreset): ConversationMessage[] =>
@@ -103,7 +104,7 @@ export function GeneralChatScreen() {
 
 export function CommunityChannelScreen({ config }: { config: CommunityChannelScreenConfig }) {
   const channel = communityChannels[config.channelId];
-  const navState = useMemo(
+  const navState = useMemo<Partial<NavigationState>>(
     () => ({ activeTab: "messages", previousTab: "messages", isImmersiveMode: true }),
     [],
   );

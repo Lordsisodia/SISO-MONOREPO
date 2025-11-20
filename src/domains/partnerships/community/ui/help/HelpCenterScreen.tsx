@@ -2,7 +2,7 @@
 
 import { useMemo, useState, type ComponentType } from "react";
 import Link from "next/link";
-import { Search, Globe, ArrowRight, ChevronRight, BookmarkCheck, Share2, Sparkles, CreditCard, ShieldCheck, BarChart3, UsersRound, LifeBuoy, Clock3, Edit3 } from "lucide-react";
+import { Search, Globe, ArrowRight, ChevronRight, BookmarkCheck, Share2, Sparkles, CreditCard, ShieldCheck, BarChart3, UsersRound, LifeBuoy, Clock3, Edit3, Bell } from "lucide-react";
 
 import { SettingsDetailLayout } from "@/domains/partnerships/portal-architecture/settings/components/SettingsDetailLayout";
 import { HighlightCard } from "@/components/ui/card-5-static";
@@ -156,7 +156,7 @@ type HelpShellProps = {
 
 function HelpShell({ title, children, breadcrumbs }: HelpShellProps) {
   return (
-    <SettingsDetailLayout wrapContent={false} compactHeader hideHeader srTitle={title} backHref={null}>
+    <SettingsDetailLayout wrapContent={false} compactHeader hideHeader title={title} srTitle={title} backHref={null}>
       <div className="relative space-y-6">
         {breadcrumbs && (
           <div className="rounded-[18px] border border-white/10 bg-siso-bg-secondary/80 px-3 py-2 shadow-[0_8px_20px_rgba(0,0,0,0.35)]">
@@ -227,6 +227,7 @@ const iconMap: Record<HelpCollectionIcon, ComponentType<{ className?: string }>>
   "shield-check": ShieldCheck,
   "bar-chart": BarChart3,
   users: UsersRound,
+  bell: Bell,
 };
 
 const resolveIcon = (key: HelpCollectionIcon) => iconMap[key] ?? LifeBuoy;

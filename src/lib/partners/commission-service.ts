@@ -16,20 +16,23 @@ export class CommissionService {
         let rate = 0;
 
         switch (partnerTier) {
-            case 'Starter':
-                rate = rates.Starter;
+            case 'Trailblazer':
+                rate = rates.Trailblazer;
                 break;
-            case 'Active':
-                rate = rates.Active;
+            case 'Builder':
+                rate = rates.Builder;
                 break;
-            case 'Performer':
-                rate = rates.Performer;
+            case 'Vanguard':
+                rate = rates.Vanguard;
                 break;
-            case 'Elite':
-                rate = rates.Elite;
+            case 'Apex':
+                rate = rates.Apex;
+                break;
+            case 'Sovereign':
+                rate = rates.Sovereign;
                 break;
             default:
-                rate = rates.Starter; // Fallback
+                rate = rates.Trailblazer; // Fallback
         }
 
         return deal.value * rate;
@@ -41,15 +44,16 @@ export class CommissionService {
      */
     static calculatePotentialUpside(deal: Deal, currentTier: PartnerTier): number {
         if (!deal.value || deal.value <= 0) return 0;
-        if (currentTier === 'Elite') return 0; // Already at max
+        if (currentTier === 'Sovereign') return 0; // Already at max
 
         const currentCommission = this.calculateCommission(deal, currentTier);
 
         // Compare with next tier
-        let nextTier: PartnerTier = 'Starter';
-        if (currentTier === 'Starter') nextTier = 'Active';
-        else if (currentTier === 'Active') nextTier = 'Performer';
-        else if (currentTier === 'Performer') nextTier = 'Elite';
+        let nextTier: PartnerTier = 'Trailblazer';
+        if (currentTier === 'Trailblazer') nextTier = 'Builder';
+        else if (currentTier === 'Builder') nextTier = 'Vanguard';
+        else if (currentTier === 'Vanguard') nextTier = 'Apex';
+        else if (currentTier === 'Apex') nextTier = 'Sovereign';
 
         const nextTierCommission = this.calculateCommission(deal, nextTier);
 

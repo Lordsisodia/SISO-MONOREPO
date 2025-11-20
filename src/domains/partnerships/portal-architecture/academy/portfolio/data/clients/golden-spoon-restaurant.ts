@@ -2,7 +2,7 @@
  * Portfolio Client Data - The Golden Spoon Restaurant
  */
 
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 
 export const goldenSpoonRestaurant: PortfolioClient = {
   // Basic Info

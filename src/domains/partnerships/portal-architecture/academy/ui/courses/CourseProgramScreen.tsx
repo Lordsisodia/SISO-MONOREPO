@@ -53,20 +53,19 @@ export function CourseProgramScreen({ courseId }: { courseId: string }) {
             className="pl-12"
             titleClassName="uppercase tracking-[0.3em] text-white"
             descriptionClassName="text-sm"
-            footerContent={
-              <div className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-white/70">
+          >
+            <div className="flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-white/70">
+              <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1">
+                <Clock className="h-3.5 w-3.5" />
+                {program.duration}
+              </span>
+              {program.legend ? (
                 <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1">
-                  <Clock className="h-3.5 w-3.5" />
-                  {program.duration}
+                  {program.legend}
                 </span>
-                {program.legend ? (
-                  <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1">
-                    {program.legend}
-                  </span>
-                ) : null}
-              </div>
-            }
-          />
+              ) : null}
+            </div>
+          </HighlightCard>
         </div>
 
         <SettingsGroupCallout

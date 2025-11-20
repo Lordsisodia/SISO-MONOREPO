@@ -222,7 +222,7 @@ export function DirectoryOverlay({
               search={search}
               onSearchChange={setSearch}
               activeFilter={activeFilter}
-              onFilterChange={(value) => setActiveFilter(value)}
+              onFilterChange={(value) => setActiveFilter(value as DirectoryFilter)}
               isFilterTrayOpen={isFilterTrayOpen}
               onToggleFilters={() => setIsFilterTrayOpen((prev) => !prev)}
               searchPlaceholder={headerConfig.searchPlaceholder}

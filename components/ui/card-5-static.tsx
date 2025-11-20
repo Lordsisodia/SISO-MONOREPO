@@ -3,7 +3,8 @@
 "use client";
 
 import Link from "next/link";
-import { forwardRef } from "react";
+import { forwardRef, type ReactNode } from "react";
+import type { CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 
 const colorThemes = {
@@ -11,17 +12,20 @@ const colorThemes = {
   blue: { from: "217 91% 60%", to: "221 83% 53%", foreground: "0 0% 100%" },
   violet: { from: "262 83% 58%", to: "262 70% 50%", foreground: "0 0% 100%" },
   orange: { from: "24 94% 52%", to: "35 92% 60%", foreground: "0 0% 100%" },
+  green: { from: "140 63% 45%", to: "152 60% 42%", foreground: "0 0% 100%" },
+  purple: { from: "283 67% 55%", to: "296 64% 48%", foreground: "0 0% 100%" },
 };
 
 export interface HighlightCardProps {
   title: string;
   description: string;
+  children?: ReactNode;
   metricValue?: string;
   metricLabel?: string;
   buttonText?: string;
   buttonHref?: string;
   onButtonClick?: () => void;
-  icon: React.ReactNode;
+  icon?: ReactNode;
   color?: keyof typeof colorThemes;
   className?: string;
   hideDivider?: boolean;
@@ -37,6 +41,7 @@ export const HighlightCard = forwardRef<HTMLDivElement, HighlightCardProps>(
     {
       title,
       description,
+      children,
       metricValue,
       metricLabel,
       buttonText,
@@ -61,22 +66,24 @@ export const HighlightCard = forwardRef<HTMLDivElement, HighlightCardProps>(
     const buttonLabel = buttonText ?? "";
     const shouldShowFooter = !hideFooter && (shouldShowMetric || shouldShowButton);
 
+    const cardStyle: CSSProperties & Record<"--card-from-color" | "--card-to-color" | "--card-foreground-color", string> = {
+      "--card-from-color": `hsl(${theme.from})`,
+      "--card-to-color": `hsl(${theme.to})`,
+      "--card-foreground-color": `hsl(${theme.foreground})`,
+      color: "var(--card-foreground-color)",
+      backgroundImage:
+        "radial-gradient(circle at 1px 1px, hsla(0,0%,100%,0.15) 1px, transparent 0)," +
+        "linear-gradient(to bottom right, var(--card-from-color), var(--card-to-color))",
+      backgroundSize: "0.5rem 0.5rem, 100% 100%",
+    };
+
     return (
       <div
         ref={ref}
         className={cn("relative w-full overflow-hidden rounded-2xl p-6 shadow-lg", fullWidth ? "" : "max-w-md", className)}
-        style={{
-          ["--card-from-color" as const]: `hsl(${theme.from})`,
-          ["--card-to-color" as const]: `hsl(${theme.to})`,
-          ["--card-foreground-color" as const]: `hsl(${theme.foreground})`,
-          color: "var(--card-foreground-color)",
-          backgroundImage:
-            "radial-gradient(circle at 1px 1px, hsla(0,0%,100%,0.15) 1px, transparent 0)," +
-            "linear-gradient(to bottom right, var(--card-from-color), var(--card-to-color))",
-          backgroundSize: "0.5rem 0.5rem, 100% 100%",
-        }}
+        style={cardStyle}
       >
-        {showCornerIcon ? (
+        {showCornerIcon && icon ? (
           <div className="absolute right-6 top-0 h-16 w-12 bg-white/95 backdrop-blur-sm [clip-path:polygon(0%_0%,_100%_0%,_100%_100%,_50%_75%,_0%_100%)] dark:bg-zinc-800/80">
             <div className="absolute inset-0 flex items-center justify-center" style={{ color: "var(--card-from-color)" }}>
               {icon}
@@ -89,6 +96,8 @@ export const HighlightCard = forwardRef<HTMLDivElement, HighlightCardProps>(
             <h3 className={cn("text-2xl font-bold tracking-tight", titleClassName)}>{title}</h3>
             <p className={cn("mt-1 max-w-[80%] text-sm opacity-90", descriptionClassName)}>{description}</p>
           </div>
+
+          {children ? <div className="mt-4 space-y-3 text-sm text-white/90">{children}</div> : null}
 
           {!hideDivider && <div className="my-4 h-px w-full bg-white/20" />}
 

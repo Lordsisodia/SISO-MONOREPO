@@ -1,13 +1,11 @@
-"use client";
-
 import Link from "next/link";
-import { ArrowRight, DownloadCloud, Filter, Layers, Link as LinkIcon, Share2, Sparkles } from "lucide-react";
+import { Suspense } from "react";
+import { ArrowLeft, ArrowRight, DownloadCloud, Filter, Layers, Link as LinkIcon, Share2, Sparkles } from "lucide-react";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { Button } from "@/components/ui/button";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { cn } from "@/domains/shared/utils/cn";
-import { useRouter } from "next/navigation";
-import { assetTypes, pitchAssets } from "./data";
+import { pitchAssets, type PitchAsset } from "./data";
 import { Waves } from "@/components/ui/wave-background";
 
 const guideSteps = [
@@ -16,7 +14,97 @@ const guideSteps = [
   "Copy the link or bundle with proof assets",
 ];
 
-function AssetCard({ asset, onCopy }: { asset: PitchAsset; onCopy: (value: string) => void }) {
+export function PitchKitScreen() {
+  return (
+    <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 z-0" style={{ filter: "blur(6px)", opacity: 0.9 }}>
+        <Suspense fallback={<div className="h-full w-full bg-[#0b0b0f]" aria-hidden="true" />}>
+          <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="#0b0b0f" pointerSize={0.35} />
+        </Suspense>
+      </div>
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
+        <div className="relative min-h-[128px]">
+          <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
+            <Link
+              href="/partners/academy"
+              aria-label="Back"
+              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+          </div>
+          <HighlightCard
+            color="orange"
+            title="Pitch kit"
+            description="Ready-to-share sales materials aligned with your tier."
+            icon={<Sparkles className="h-5 w-5 text-siso-orange" />}
+            className="w-full pl-12"
+            hideDivider
+            titleClassName="uppercase tracking-[0.3em] text-white"
+            descriptionClassName="text-sm"
+          />
+        </div>
+
+        <SettingsGroupCallout icon={<Layers className="h-4 w-4" />} title="How to use" subtitle="Three steps to send a winning pitch." showChevron={false}>
+          <div className="rounded-[18px] border border-white/8 bg-[#1F1F1F] p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)] space-y-3">
+            <ol className="space-y-2 text-xs text-siso-text-muted">
+              {guideSteps.map((step, index) => (
+                <li key={step} className="flex items-start gap-2">
+                  <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/20 text-[11px] font-semibold text-white">
+                    {index + 1}
+                  </span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/40 bg-emerald-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-emerald-200">
+              Updated weekly
+            </div>
+          </div>
+        </SettingsGroupCallout>
+
+        <SettingsGroupCallout icon={<Filter className="h-4 w-4" />} title="Search pitch kits" subtitle="Find the industry you're trying to approach." showChevron={false}>
+          <div className="rounded-[18px] border border-white/8 bg-[#1F1F1F] p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)] space-y-2">
+            <label className="relative block">
+              <span className="sr-only">Search pitch kits</span>
+              <input
+                type="search"
+                placeholder="Search by industry, audience, or outcome"
+                className="w-full rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-sm text-white placeholder:text-siso-text-muted focus:border-siso-orange focus:outline-none"
+                readOnly
+              />
+              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-siso-text-muted">
+                <LinkIcon className="h-4 w-4" />
+              </span>
+            </label>
+            <p className="text-xs text-siso-text-muted">Showing all pitch kits (search coming soon).</p>
+          </div>
+        </SettingsGroupCallout>
+
+        <SettingsGroupCallout icon={<ArrowRight className="h-4 w-4" />} title="Assets" subtitle="Copy, open, or share without leaving the page." showChevron={false}>
+          <div className="space-y-4">
+            {pitchAssets.map((asset) => (
+              <AssetCard key={asset.id} asset={asset} />
+            ))}
+          </div>
+        </SettingsGroupCallout>
+
+        <SettingsGroupCallout icon={<Sparkles className="h-4 w-4" />} title="Need more social proof?" subtitle="Jump to portfolio to pair your pitch with proof." showChevron={false}>
+          <div className="rounded-[18px] border border-white/8 bg-[#1F1F1F] p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)] space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-siso-text-muted">Browse portfolio case studies and attach to your pitch.</p>
+              <Button asChild variant="secondary" size="sm">
+                <Link href="/partners/academy/portfolio">Open portfolio</Link>
+              </Button>
+            </div>
+          </div>
+        </SettingsGroupCallout>
+      </div>
+    </main>
+  );
+}
+
+function AssetCard({ asset }: { asset: PitchAsset }) {
   return (
     <article className="rounded-3xl border border-white/0 bg-[#181818] p-4 shadow-[0_18px_48px_rgba(0,0,0,0.32)]">
       <header className="flex flex-wrap items-start justify-between gap-3">
@@ -43,43 +131,18 @@ function AssetCard({ asset, onCopy }: { asset: PitchAsset; onCopy: (value: strin
         ))}
       </div>
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        <Button
-          asChild
-          size="sm"
-          className="h-9 px-3 rounded-2xl border border-white/10 bg-white/5 text-white/90"
-        >
+        <Button asChild size="sm" className="h-9 px-3 rounded-2xl border border-white/10 bg-white/5 text-white/90">
           <Link href={asset.link} className="flex items-center gap-1">
             <DownloadCloud className="h-4 w-4" />
             <span>Open</span>
           </Link>
-        </Button>
-        <Button
-          size="icon"
-          variant="ghost"
-          className="h-9 w-9 border border-white/10"
-          onClick={() => onCopy(asset.link)}
-          aria-label="Copy link"
-        >
-          <LinkIcon className="h-4 w-4" />
-        </Button>
-        <Button
-          size="icon"
-          variant="ghost"
-          className="h-9 w-9 border border-white/10"
-          aria-label="Save & share"
-        >
-          <Share2 className="h-4 w-4" />
         </Button>
       </div>
       <div className="mt-4 space-y-2 rounded-2xl border border-white/10 bg-white/[0.04] p-3 text-xs">
         <p className="font-semibold text-white">Related proof</p>
         <div className="flex flex-wrap gap-2">
           {asset.relatedProofs.map((proof) => (
-            <Link
-              key={proof.href}
-              href={proof.href}
-              className="inline-flex items-center gap-1 rounded-full border border-white/10 px-3 py-1 text-[11px] text-siso-orange"
-            >
+            <Link key={proof.href} href={proof.href} className="inline-flex items-center gap-1 rounded-full border border-white/10 px-3 py-1 text-[11px] text-siso-orange">
               <ArrowRight className="h-3 w-3" />
               {proof.label}
             </Link>
@@ -87,123 +150,5 @@ function AssetCard({ asset, onCopy }: { asset: PitchAsset; onCopy: (value: strin
         </div>
       </div>
     </article>
-  );
-}
-
-export function PitchKitScreen() {
-  const router = useRouter();
-
-  const handleCopy = (value: string) => {
-    if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(value).catch(() => {});
-    }
-  };
-
-  return (
-    <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen relative overflow-hidden">
-      <div
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{ filter: "blur(6px)", opacity: 0.9 }}
-      >
-        <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="#0b0b0f" pointerSize={0.35} />
-      </div>
-      <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
-        <div className="relative min-h-[128px]">
-          <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
-            <button
-              onClick={() => router.back()}
-              aria-label="Back"
-              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </button>
-          </div>
-          <HighlightCard
-            color="orange"
-            title="Pitch kit"
-            description="Ready-to-share sales materials aligned with your tier."
-            icon={<Sparkles className="h-5 w-5 text-siso-orange" />}
-            className="w-full pl-12"
-            hideDivider
-            titleClassName="uppercase tracking-[0.3em] text-white"
-            descriptionClassName="text-sm"
-          />
-        </div>
-
-        <SettingsGroupCallout
-          icon={<Layers className="h-4 w-4" />}
-          title="How to use"
-          subtitle="Three steps to send a winning pitch."
-          showChevron={false}
-        >
-          <div className="rounded-[18px] border border-white/8 bg-[#1F1F1F] p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)] space-y-3">
-            <ol className="space-y-2 text-xs text-siso-text-muted">
-              {guideSteps.map((step, index) => (
-                <li key={step} className="flex items-start gap-2">
-                  <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/20 text-[11px] font-semibold text-white">
-                    {index + 1}
-                  </span>
-                  <span>{step}</span>
-                </li>
-              ))}
-            </ol>
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/40 bg-emerald-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-emerald-200">
-              Updated weekly
-            </div>
-          </div>
-        </SettingsGroupCallout>
-
-        <SettingsGroupCallout
-          icon={<Filter className="h-4 w-4" />}
-          title="Search pitch kits"
-          subtitle="Find the industry you're trying to approach."
-          showChevron={false}
-        >
-          <div className="rounded-[18px] border border-white/8 bg-[#1F1F1F] p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)] space-y-2 siso-inner-card">
-            <label className="relative block">
-              <span className="sr-only">Search pitch kits</span>
-              <input
-                type="search"
-                placeholder="Search by industry, audience, or outcome"
-                className="w-full rounded-2xl border border-white/10 bg-black/25 px-4 py-3 text-sm text-white placeholder:text-siso-text-muted focus:border-siso-orange focus:outline-none"
-              />
-              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-siso-text-muted">
-                <LinkIcon className="h-4 w-4" />
-              </span>
-            </label>
-            <p className="text-xs text-siso-text-muted">Showing all pitch kits (search to narrow later).</p>
-          </div>
-        </SettingsGroupCallout>
-
-        <SettingsGroupCallout
-          icon={<ArrowRight className="h-4 w-4" />}
-          title="Assets"
-          subtitle="Copy, open, or share without leaving the page."
-          showChevron={false}
-        >
-          <div className="space-y-4">
-            {pitchAssets.map((asset) => (
-              <AssetCard key={asset.id} asset={asset} onCopy={handleCopy} />
-            ))}
-          </div>
-        </SettingsGroupCallout>
-
-        <SettingsGroupCallout
-          icon={<Sparkles className="h-4 w-4" />}
-          title="Need more social proof?"
-          subtitle="Jump to portfolio to pair your pitch with proof."
-          showChevron={false}
-        >
-          <div className="rounded-[18px] border border-white/8 bg-[#1F1F1F] p-4 shadow-[0_15px_40px_rgba(0,0,0,0.25)] space-y-3">
-            <div className="flex items-center justify-between">
-              <p className="text-xs text-siso-text-muted">Browse portfolio case studies and attach to your pitch.</p>
-              <Button variant="secondary" size="sm" onClick={() => router.push("/partners/academy/portfolio")}> 
-                View portfolio
-              </Button>
-            </div>
-          </div>
-        </SettingsGroupCallout>
-      </div>
-    </main>
   );
 }

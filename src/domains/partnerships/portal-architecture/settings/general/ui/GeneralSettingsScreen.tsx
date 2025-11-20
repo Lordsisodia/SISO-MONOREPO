@@ -118,7 +118,6 @@ export function GeneralSettingsScreen() {
 
   // Notification info state for bottom popup
   const [infoContent, setInfoContent] = useState<{
-    type: string;
     title: string;
     description: string;
     items: string[];
@@ -445,7 +444,7 @@ export function GeneralSettingsScreen() {
                           <InfoButton label="About language" content={settingsInfoData.language.description} side="bottom" />
                         </div>
                         <LanguageDropdown
-                          value={language.locale}
+                          value={language.language}
                           onChange={updateLocale}
                           className="w-full"
                         />
@@ -469,7 +468,7 @@ export function GeneralSettingsScreen() {
                         <CustomDropdown
                           options={timeOptions}
                           value={language.timeFormat}
-                          onChange={updateTimeFormat}
+                          onChange={(value) => updateTimeFormat(value as "12h" | "24h")}
                           searchable={false}
                         />
                       </div>
@@ -480,7 +479,7 @@ export function GeneralSettingsScreen() {
                         </div>
                         <CustomDropdown
                           options={currencyOptions}
-                          value={language.currencyFormat}
+                          value={language.currency}
                           onChange={updateCurrencyFormat}
                           searchable={false}
                         />

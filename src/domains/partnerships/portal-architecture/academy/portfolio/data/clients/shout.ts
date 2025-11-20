@@ -3,7 +3,7 @@
  * TODO: Fill in actual client data
  */
 
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 
 export const shout: PortfolioClient = {
   id: 'shout',

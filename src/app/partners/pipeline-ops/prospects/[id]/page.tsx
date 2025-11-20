@@ -7,11 +7,7 @@ import { Waves } from "@/components/ui/wave-background";
 import { getProspectById } from "@/domains/partnerships/portal-architecture/pipeline-ops/application/pipelineOpsService";
 import { ProspectDetailHydrator } from "@/app/partners/pipeline-ops/components/ProspectDetailHydrator.client";
 
-interface ProspectRecordPageProps {
-  params: Promise<{ id: string }>;
-}
-
-export default async function ProspectRecordPage({ params }: ProspectRecordPageProps) {
+export default async function ProspectRecordPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const prospect = await getProspectById(id);
 

@@ -3,7 +3,7 @@ export type Lesson = {
   title: string;
   duration: string;
   summary: string;
-  relatedAssets: { label: string; href: string }[];
+  relatedAssets?: { label: string; href: string }[];
 };
 
 export type CourseCategory =
@@ -26,7 +26,7 @@ export type Course = {
   focus: string;
   legend: string;
   lessons: Lesson[];
-  relatedAssets: { label: string; href: string }[];
+  relatedAssets?: { label: string; href: string }[];
   category: CourseCategory;
   order?: number;
   trending?: boolean;

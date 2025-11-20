@@ -1,4 +1,4 @@
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 export const nmConstruction: PortfolioClient = {
   id: 'nm-construction', name: 'NM Construction', industry: 'construction',
   tagline: 'Construction business operations and job tracking system',

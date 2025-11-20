@@ -2,7 +2,7 @@
  * Portfolio Domain - Industry Definitions
  */
 
-import { Industry, IndustryCategory } from '../types';
+import { Industry, IndustryCategory } from '../domain/types';
 import { 
   Palmtree,
   Wallet,

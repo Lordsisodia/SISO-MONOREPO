@@ -2,7 +2,7 @@
  * Portfolio Client Data - CryptoTrade Pro
  */
 
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 
 export const cryptoTradePro: PortfolioClient = {
   // Basic Info
@@ -19,7 +19,7 @@ export const cryptoTradePro: PortfolioClient = {
   caseStudyUrl: undefined,
 
   // Project Details
-  projectType: 'SaaS Platform',
+  projectType: 'SaaS',
   status: 'Live',
   launchDate: '2024-09-20',
 

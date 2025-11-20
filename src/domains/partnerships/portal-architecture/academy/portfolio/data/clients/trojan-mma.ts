@@ -1,4 +1,4 @@
-import { PortfolioClient } from '../../types';
+import { PortfolioClient } from '../../domain/types';
 export const trojanMma: PortfolioClient = {
   id: 'trojan-mma', name: 'Trojan MMA', industry: 'fitness-sports',
   tagline: 'MMA gym website and booking system',

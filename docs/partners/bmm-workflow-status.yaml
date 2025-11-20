@@ -1,0 +1,27 @@
+# Workflow Status - Bootstrapped without running workflow-init
+# Update via BMAD agents as you complete each workflow. Status values:
+#   required | optional | recommended | conditional | skipped | <path to output>
+# Replace placeholder statuses with generated artifact paths once done.
+
+generated: "2025-11-20T11:10:52Z"
+project: "SISO-MONOREPO"
+project_level: 4
+project_type: "Level 4 - Enterprise Scale"
+selected_track: "bmad-method"
+field_type: "brownfield"
+workflow_path: ".bmad/bmm/workflows/workflow-status/paths/method-brownfield.yaml"
+
+workflow_status:
+  document-project: conditional  # Run if existing artifacts are outdated or missing
+  brainstorm-project: optional
+  research: optional
+  product-brief: optional
+  prd: required
+  validate-prd: optional
+  create-design: conditional  # Only if new UI/UX required
+  create-architecture: recommended
+  create-epics-and-stories: required
+  test-design: recommended
+  validate-architecture: optional
+  implementation-readiness: required
+  sprint-planning: required
