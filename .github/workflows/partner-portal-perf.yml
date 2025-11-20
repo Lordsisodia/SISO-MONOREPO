@@ -1,0 +1,88 @@
+name: Partner Portal Performance Guard
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+      - 'src/**'
+      - 'docs/perf/**'
+      - '.github/workflows/partner-portal-perf.yml'
+      - 'scripts/perf/**'
+
+jobs:
+  perf-budget:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.18.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Enforce hydration heuristics
+        run: npm run perf:hydration
+
+      - name: Build with analyzer
+        run: ANALYZE=true npm run build
+
+      - name: Enforce bundle budgets
+        run: npm run perf:budgets
+
+      - name: Run Lighthouse smoke tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p lighthouse
+          PORT=4010 npm start > /tmp/next.log 2>&1 &
+          NEXT_PID=$!
+          cleanup() {
+            if kill -0 $NEXT_PID >/dev/null 2>&1; then
+              kill $NEXT_PID
+            fi
+          }
+          trap cleanup EXIT
+
+          for i in {1..60}; do
+            if curl -sf http://localhost:4010/partners >/dev/null; then
+              break
+            fi
+            if [ "$i" -eq 60 ]; then
+              echo "Next.js server failed to start" >&2
+              cat /tmp/next.log >&2 || true
+              exit 1
+            fi
+            sleep 1
+          done
+
+          for route in partners/academy partners/pipeline-ops partners/recruitment; do
+            tag=$(echo "$route" | tr '/' '-')
+            npx lighthouse "http://localhost:4010/$route" \
+              --preset=desktop \
+              --output=json --output=html \
+              --chrome-flags="--headless=new" \
+              --quiet \
+              --output-path="lighthouse/${tag}-desktop"
+            npx lighthouse "http://localhost:4010/$route" \
+              --output=json --output=html \
+              --chrome-flags="--headless=new" \
+              --quiet \
+              --output-path="lighthouse/${tag}-mobile"
+          done
+
+      - name: Enforce Lighthouse CWV budgets
+        run: npm run perf:lighthouse-budgets -- lighthouse
+
+      - name: Upload Lighthouse reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: lighthouse

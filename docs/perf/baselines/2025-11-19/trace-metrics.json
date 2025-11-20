@@ -1,0 +1,44 @@
+{
+  "capturedAt": "2025-11-19T21:05:48.205Z",
+  "baseUrl": "http://localhost:3003",
+  "routes": [
+    {
+      "name": "academy",
+      "path": "/partners/academy"
+    },
+    {
+      "name": "pipeline-ops",
+      "path": "/partners/pipeline-ops"
+    },
+    {
+      "name": "recruitment",
+      "path": "/partners/recruitment"
+    }
+  ],
+  "metrics": {
+    "academy": {
+      "url": "chrome-error://chromewebdata/",
+      "domContentLoaded": 34.30000001192093,
+      "loadEventEnd": 36.099999994039536,
+      "firstPaint": null,
+      "firstContentfulPaint": null,
+      "timestamp": "2025-11-19T21:05:47.837Z"
+    },
+    "pipeline-ops": {
+      "url": "chrome-error://chromewebdata/",
+      "domContentLoaded": 16.400000005960464,
+      "loadEventEnd": 25,
+      "firstPaint": null,
+      "firstContentfulPaint": null,
+      "timestamp": "2025-11-19T21:05:47.990Z"
+    },
+    "recruitment": {
+      "url": "chrome-error://chromewebdata/",
+      "domContentLoaded": 17.599999994039536,
+      "loadEventEnd": 26,
+      "firstPaint": null,
+      "firstContentfulPaint": null,
+      "timestamp": "2025-11-19T21:05:48.141Z"
+    }
+  }
+}

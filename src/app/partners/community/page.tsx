@@ -1,11 +1,7 @@
-"use client";
-
-import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
+import Link from "next/link";
+import { LazyPartnersPageShell } from "@/domains/partnerships/community/ui/LazyPartnersPageShell";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 const communityWidgets = [
   { title: "Messages", description: "Direct chats and threads with partners.", href: "/partners/community/messages" },
@@ -14,9 +10,8 @@ const communityWidgets = [
 ];
 
 export default function CommunityDashboardPage() {
-  const router = useRouter();
   return (
-    <PartnersPageShell>
+    <LazyPartnersPageShell>
       <div className="space-y-6 p-4 lg:p-8">
         <HighlightCard
           color="orange"
@@ -25,7 +20,7 @@ export default function CommunityDashboardPage() {
           metricValue="3"
           metricLabel="active threads"
           buttonText="Open General Chat"
-          onButtonClick={() => router.push("/partners/community/channels/general-chat")}
+          buttonHref="/partners/community/channels/general-chat"
           icon={<span className="text-xl">💬</span>}
           hideDivider
           titleClassName="uppercase tracking-[0.35em] text-white"
@@ -52,12 +47,15 @@ export default function CommunityDashboardPage() {
           <div className="text-xs text-siso-text-muted space-y-2">
             <p>Wins posted this week: 4</p>
             <p>Announcements: 2 unread</p>
-            <Button variant="outline" size="sm" className="border border-white/10">
-              <Link href="/partners/community/announcements">View announcements</Link>
-            </Button>
+            <Link
+              href="/partners/community/announcements"
+              className="inline-flex items-center rounded-full border border-white/10 px-3 py-1 text-xs text-white hover:border-white/40"
+            >
+              View announcements
+            </Link>
           </div>
         </SettingsGroupCallout>
       </div>
-    </PartnersPageShell>
+    </LazyPartnersPageShell>
   );
 }

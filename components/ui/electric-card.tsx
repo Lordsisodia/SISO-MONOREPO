@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useId } from "react";
 
 type Variant = "swirl" | "hue";
 
@@ -42,13 +42,14 @@ const ElectricCard = ({
   className = "",
 }: ElectricCardProps) => {
   // Make unique IDs so multiple components don't clash
+  const reactId = useId();
   const ids = useMemo(() => {
-    const key = Math.random().toString(36).slice(2, 8);
+    const safeId = reactId.replace(/[:]/g, "-");
     return {
-      swirl: `swirl-${key}`,
-      hue: `hue-${key}`,
+      swirl: `swirl-${safeId}`,
+      hue: `hue-${safeId}`,
     };
-  }, []);
+  }, [reactId]);
 
   // Map variant -> CSS var that points to the proper filter url(#...)
   const filterURL = variant === "hue" ? `url(#${ids.hue})` : `url(#${ids.swirl})`;
@@ -344,4 +345,3 @@ const ElectricCard = ({
 }
 
 export { ElectricCard };
-

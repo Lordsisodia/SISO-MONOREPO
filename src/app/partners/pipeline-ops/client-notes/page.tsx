@@ -1,5 +1,5 @@
-import { ClientNotesWorkspace } from "./ClientNotesWorkspace";
+import { ClientNotesHydrator } from "./ClientNotesHydrator.client";
 
 export default function ClientNotesPage() {
-  return <ClientNotesWorkspace />;
+  return <ClientNotesHydrator />;
 }

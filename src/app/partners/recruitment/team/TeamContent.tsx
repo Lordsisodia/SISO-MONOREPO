@@ -1,8 +1,6 @@
-"use client";
+import Link from "next/link";
 
-import { useRouter } from "next/navigation";
-
-import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
+import { LazyPartnersPageShell } from "@/domains/partnerships/community/ui/LazyPartnersPageShell";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { Badge } from "@/components/ui/badge";
@@ -66,10 +64,8 @@ const coverageGaps = [
 ];
 
 export function RecruitmentTeamContent() {
-  const router = useRouter();
-
   return (
-    <PartnersPageShell initialState={{ activeDrawerSection: "recruitment" }}>
+    <LazyPartnersPageShell initialState={{ activeDrawerSection: "recruitment" }}>
       <div className="space-y-6 p-4 lg:p-8">
         <div className="grid gap-4 lg:grid-cols-1">
           {teamHighlights.map((card) => (
@@ -81,7 +77,7 @@ export function RecruitmentTeamContent() {
               metricValue={card.metricValue}
               metricLabel={card.metricLabel}
               buttonText={card.buttonText}
-              onButtonClick={() => router.push(card.href)}
+              buttonHref={card.href}
               icon={card.icon}
               hideDivider
               showCornerIcon={false}
@@ -121,8 +117,8 @@ export function RecruitmentTeamContent() {
                   <Progress value={alert.progress} className="h-2" />
                 </div>
               ))}
-              <Button variant="ghost" size="sm" className="border border-white/10">
-                Open academy checklist
+              <Button asChild variant="outline" className="border-white/20 text-white hover:bg-white/10">
+                <Link href="/partners/academy/checklist">Open academy checklist</Link>
               </Button>
             </div>
           </SettingsGroupCallout>
@@ -136,13 +132,13 @@ export function RecruitmentTeamContent() {
                   <p className="text-xs text-white/60">Need: {gap.need}</p>
                 </div>
               ))}
-              <Button variant="ghost" size="sm" className="border border-white/10">
-                Log recruiting request
+              <Button asChild className="bg-siso-orange text-black hover:bg-orange-400">
+                <Link href="/partners/recruitment/requests">Log recruiting request</Link>
               </Button>
             </div>
           </SettingsGroupCallout>
         </div>
       </div>
-    </PartnersPageShell>
+    </LazyPartnersPageShell>
   );
 }

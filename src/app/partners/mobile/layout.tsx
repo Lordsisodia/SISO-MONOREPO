@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { MobileShell } from "@/domains/partnerships/mobile/ui/MobileShell";
+import { LazyMobileShell } from "@/domains/partnerships/mobile/ui/LazyMobileShell";
 
 export default function PartnersMobileLayout({ children }: { children: ReactNode }) {
-  return <MobileShell>{children}</MobileShell>;
+  return <LazyMobileShell>{children}</LazyMobileShell>;
 }

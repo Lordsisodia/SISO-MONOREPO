@@ -1,8 +1,6 @@
-"use client";
+import Link from "next/link";
 
-import { useRouter } from "next/navigation";
-
-import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
+import { LazyPartnersPageShell } from "@/domains/partnerships/community/ui/LazyPartnersPageShell";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { Badge } from "@/components/ui/badge";
@@ -41,10 +39,8 @@ const actions = [
 ];
 
 export function RecruitmentPerformanceContent() {
-  const router = useRouter();
-
   return (
-    <PartnersPageShell initialState={{ activeDrawerSection: "recruitment" }}>
+    <LazyPartnersPageShell initialState={{ activeDrawerSection: "recruitment" }}>
       <div className="space-y-6 p-4 lg:p-8">
         <div className="grid gap-4 lg:grid-cols-1">
           {performanceHighlights.map((card) => (
@@ -56,7 +52,7 @@ export function RecruitmentPerformanceContent() {
               metricValue={card.metricValue}
               metricLabel={card.metricLabel}
               buttonText={card.buttonText}
-              onButtonClick={() => router.push(card.href)}
+              buttonHref={card.href}
               icon={card.icon}
               hideDivider
               showCornerIcon={false}
@@ -94,9 +90,12 @@ export function RecruitmentPerformanceContent() {
                   <Badge className="bg-white/10 text-white">{row.payouts}</Badge>
                 </div>
               ))}
-              <Button variant="ghost" size="sm" className="border border-white/10">
+              <Link
+                href="/partners/recruitment/report"
+                className="inline-flex items-center rounded-full border border-white/10 px-3 py-1 text-sm text-white hover:border-white/40"
+              >
                 Export report
-              </Button>
+              </Link>
             </div>
           </SettingsGroupCallout>
 
@@ -108,13 +107,16 @@ export function RecruitmentPerformanceContent() {
                   <p className="text-xs text-white/60">{action.detail}</p>
                 </div>
               ))}
-              <Button variant="ghost" size="sm" className="border border-white/10">
+              <Link
+                href="/partners/recruitment/automation"
+                className="inline-flex items-center rounded-full border border-white/10 px-3 py-1 text-sm text-white hover:border-white/40"
+              >
                 Open automation center
-              </Button>
+              </Link>
             </div>
           </SettingsGroupCallout>
         </div>
       </div>
-    </PartnersPageShell>
+    </LazyPartnersPageShell>
   );
 }

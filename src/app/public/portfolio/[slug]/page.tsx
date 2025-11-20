@@ -1,12 +1,41 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getClientBySlug } from "@/domains/partnerships/portfolio/lib/get-client-by-slug";
 import { PublicPortfolioAssetView } from "./PublicPortfolioAssetView";
+import { getRequestBaseUrl } from "@/domains/shared/utils/request-base-url";
+import { fetchPortfolioClient } from "@/domains/partnerships/portfolio/server/data-source";
+import path from "node:path";
+import { promises as fs } from "node:fs";
 
-export const dynamic = "force-dynamic";
+type PageParams = {
+  params: {
+    slug: string;
+  };
+};
 
-export default function PublicPortfolioAssetPage({ params }: { params: { slug: string } }) {
-  const client = getClientBySlug(params.slug);
-  if (!client) return notFound();
-  return <PublicPortfolioAssetView client={client} />;
+const dataDir = path.join(process.cwd(), "public/data/portfolio-clients");
+
+type PortfolioIndexFile = {
+  clients: Array<{ slug?: string; id: string }>;
+};
+
+export async function generateStaticParams() {
+  const indexFile = await fs.readFile(path.join(dataDir, "index.json"), "utf-8");
+  const parsed = JSON.parse(indexFile) as PortfolioIndexFile;
+  return parsed.clients
+    .map((client) => client.slug ?? client.id)
+    .filter((maybeSlug): maybeSlug is string => typeof maybeSlug === "string" && maybeSlug.length > 0)
+    .map((slug) => ({ slug }));
+}
+
+export default async function PublicPortfolioAssetPage({ params }: PageParams) {
+  if (!params?.slug) {
+    notFound();
+  }
+  const baseUrl = getRequestBaseUrl();
+  try {
+    const client = await fetchPortfolioClient(baseUrl, params.slug);
+    return <PublicPortfolioAssetView client={client} />;
+  } catch (error) {
+    console.warn("Unable to load portfolio detail", error);
+    notFound();
+  }
 }

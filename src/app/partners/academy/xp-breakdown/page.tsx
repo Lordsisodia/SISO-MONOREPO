@@ -1,10 +1,7 @@
-"use client";
-
+import Link from "next/link";
 import { ArrowLeft, Clock3, ListFilter, Sparkles } from "lucide-react";
 import { HighlightCard } from "@/components/ui/card-5-static";
-import { Button } from "@/components/ui/button";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
-import { useRouter } from "next/navigation";
 import { Waves } from "@/components/ui/wave-background";
 
 type XPType = "Course" | "Engagement" | "Assessment" | "Onboarding";
@@ -26,8 +23,6 @@ const levelProgress = {
 };
 
 export default function XPBreakdownPage() {
-  const router = useRouter();
-
   return (
     <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen relative overflow-hidden">
       <div
@@ -39,13 +34,13 @@ export default function XPBreakdownPage() {
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
         <div className="relative min-h-[128px]">
           <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
-            <button
-              onClick={() => router.back()}
+            <Link
+              href="/partners/academy"
               aria-label="Back"
               className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
             >
               <ArrowLeft className="h-5 w-5" />
-            </button>
+            </Link>
           </div>
           <HighlightCard
             color="orange"
@@ -115,23 +110,19 @@ export default function XPBreakdownPage() {
             </div>
           </div>
 
-          <div className="mt-3 flex flex-wrap gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="border border-white/15 text-white/90"
-              onClick={() => router.push("/partners/academy/xp-rules")}
+          <div className="mt-3 flex flex-wrap gap-2 text-sm">
+            <Link
+              href="/partners/academy/xp-rules"
+              className="inline-flex items-center rounded-full border border-white/15 px-3 py-1 text-white/90 hover:border-white/40"
             >
               See XP rules →
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="border border-white/15 text-white/90"
-              onClick={() => router.push("/partners/academy/xp-breakdown")}
+            </Link>
+            <Link
+              href="/partners/academy/xp-breakdown?export=1"
+              className="inline-flex items-center rounded-full border border-white/15 px-3 py-1 text-white/80 hover:border-white/40"
             >
               Export summary
-            </Button>
+            </Link>
           </div>
         </SettingsGroupCallout>
 
@@ -145,14 +136,12 @@ export default function XPBreakdownPage() {
             <p>Courses and quizzes grant the most XP.</p>
             <p>Engagement (shares, saves) adds small boosts.</p>
             <p>Certificates and milestones may include bonus XP.</p>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="border border-white/10"
-              onClick={() => router.push("/partners/academy/xp-rules")}
+            <Link
+              href="/partners/academy/xp-rules"
+              className="inline-flex items-center rounded-full border border-white/10 px-3 py-1 text-sm text-white hover:border-white/40"
             >
               View XP rules
-            </Button>
+            </Link>
           </div>
         </SettingsGroupCallout>
       </div>

@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = 'force-dynamic';
-
 import { ElectricCard } from "@/components/ui/electric-card";
 
 export default function ElectricCardDemo() {

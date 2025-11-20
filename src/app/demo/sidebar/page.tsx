@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = 'force-dynamic';
-
 import Frame760 from "@/domains/partnerships/shared/ui/mobile/campus-sidebar/CampusSidebar";
 import { MobileNavigationProvider } from "@/domains/partnerships/mobile/application/navigation-store";
 

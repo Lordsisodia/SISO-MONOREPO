@@ -20,17 +20,16 @@
 
 | Route | File Location | Component Status | Content Status | Issues | Priority |
 |-------|---------------|------------------|----------------|--------|----------|
-| `/partners/recruitment/dashboard` | `src/app/partners/recruitment/dashboard/page.tsx` + `.../RecruitmentWorkspace.tsx` | 🔧 Built | 🔄 Mock data | Hard-coded stats/resources/team; no real data wiring | High |
+| `/partners/recruitment` | `src/app/partners/recruitment/page.tsx` + `DashboardContent.tsx` | 🔧 Built | 🔄 Mock data | Hero + tiles only; needs real KPIs + invite feed | High |
 | `/partners/recruitment/prospects` | `src/app/partners/recruitment/prospects/page.tsx` + `ProspectsContent.tsx` | 🔧 Built | 🔄 Mock data | Static table/filters; no Supabase integration or stage taxonomy | High |
 | `/partners/recruitment/team` | `src/app/partners/recruitment/team/page.tsx` + `TeamContent.tsx` | 🔧 Built | 🔄 Mock data | Static roster/training; no assignments or alerts from data | Medium |
 | `/partners/recruitment/performance` | `src/app/partners/recruitment/performance/page.tsx` + `PerformanceContent.tsx` | 🔧 Built | 🔄 Mock data | Static funnel/leaderboard/actions; no real KPIs | High |
-| `/partners/recruitment` | redirect to dashboard | ✅ Built | n/a | OK | Low |
 
 ### Planned State (draft targets)
 
 | Route | Target Components | Required Data | Success Metrics | Dependencies | Timeline |
 |-------|-------------------|---------------|-----------------|--------------|----------|
-| `/partners/recruitment/dashboard` | Hero KPI tiles, mini funnel, velocity chart, SLA/attention list, invite widget | stage counts, stage durations, invites, payouts, SLA breaches | +Conversion %, ↓time-to-activation, SLA breaches ↓ | Supabase tables + stage events, payouts | Week 1 draft |
+| `/partners/recruitment` | Hero KPI tiles, mini funnel, velocity chart, SLA/attention list, invite widget | stage counts, stage durations, invites, payouts, SLA breaches | +Conversion %, ↓time-to-activation, SLA breaches ↓ | Supabase tables + stage events, payouts | Week 1 draft |
 | `/partners/recruitment/prospects` | Table w/ stage chips, owner, age-in-stage, next action, score; bulk actions; detail side panel; saved views | recruits, stage events, owners, touchpoints, scores | Stage movement %, assignment coverage, response time | Recruits + assignments + touchpoints | Week 1–2 |
 | `/partners/recruitment/team` | Roster cards/table, training/compliance alerts, coverage gaps, coaching actions | assignments, certifications, coverage map, alerts from SLAs | % compliant, % ramped, coverage completeness | Links to Academy + compliance provider | Week 2 |
 | `/partners/recruitment/performance` | Funnel chart w/ drop-offs, velocity metrics, leaderboard, recommended actions, export | funnel counts/durations, payouts, owner stats | Funnel health, payout accuracy, action completion rate | Aggregations over recruits/payouts | Week 2–3 |

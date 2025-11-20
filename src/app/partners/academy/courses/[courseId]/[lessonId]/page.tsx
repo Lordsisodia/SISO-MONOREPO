@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { CourseLessonScreen } from "@/domains/partnerships/portal-architecture/academy/ui/courses/CourseLessonScreen";
 
-export async function generateMetadata({ params }: { params: { courseId: string; lessonId: string } }): Promise<Metadata> {
-  return {
-    title: `${params.lessonId.replace(/-/g, " ")} • SISO Lesson`,
-    description: "Lesson view with preview, assets, and actions.",
-  };
-}
+export const metadata: Metadata = {
+  title: "SISO Lesson • Partner Academy",
+  description: "Lesson view with preview, assets, and actions.",
+};
 
-export default function CourseLessonPage({ params }: { params: { courseId: string; lessonId: string } }) {
-  return <CourseLessonScreen courseId={params.courseId} lessonId={params.lessonId} />;
+type LessonParams = { courseId: string; lessonId: string };
+
+export default async function CourseLessonPage({ params }: { params: Promise<LessonParams> }) {
+  const { courseId, lessonId } = await params;
+  return <CourseLessonScreen courseId={courseId} lessonId={lessonId} />;
 }

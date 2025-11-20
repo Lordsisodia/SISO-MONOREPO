@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { MobileNavigationProvider, useMobileNavigation } from "@/domains/partnerships/mobile/application/navigation-store";
@@ -8,8 +8,8 @@ import type { NavigationState } from "@/domains/partnerships/mobile/types/naviga
 import { FloatingNavButton } from "@/domains/partnerships/shared/ui/mobile/FloatingNavButton";
 import { CampusSidebarContent } from "@/domains/partnerships/shared/ui/mobile/campus-sidebar/CampusSidebar";
 
-const CampusDrawer = dynamic(
-  () => import("@/domains/partnerships/shared/ui/mobile/campus-sidebar/CampusDrawer").then((m) => m.CampusDrawer),
+const CampusDrawerHydrator = dynamic(
+  () => import("@/domains/partnerships/shared/ui/mobile/campus-sidebar/CampusDrawerHydrator.client").then((m) => m.CampusDrawerHydrator),
   { ssr: false, loading: () => null },
 );
 
@@ -71,7 +71,9 @@ export function PartnersNavLayer({ children, showFloatingNavButton = true }: { c
 
   return (
     <>
-      <CampusDrawer />
+      <Suspense fallback={<div className="sr-only" aria-hidden="true" />}>
+        <CampusDrawerHydrator />
+      </Suspense>
       {showFloatingNavButton ? <FloatingNavButton /> : null}
       {children}
     </>

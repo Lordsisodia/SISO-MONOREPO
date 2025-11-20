@@ -1,10 +1,9 @@
-"use client";
-import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
+import Link from "next/link";
+import { LazyPartnersPageShell } from "@/domains/partnerships/community/ui/LazyPartnersPageShell";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { Button } from "@/components/ui/button";
 import { Waves } from "@/components/ui/wave-background";
-import Link from "next/link";
 import { ArrowUpRight, LifeBuoy, Send, Users2, CheckCircle2, Circle, Sparkles } from "lucide-react";
 
 const submitClientStats = {
@@ -64,7 +63,7 @@ const pipelineCallouts = [
 
 export default function PipelineOpsDashboardPage() {
   return (
-    <PartnersPageShell initialState={{ activeDrawerSection: "pipeline" }}>
+    <LazyPartnersPageShell initialState={{ activeDrawerSection: "pipeline" }}>
       <main className="relative min-h-screen overflow-hidden bg-siso-bg-primary text-siso-text-primary">
         <div className="pointer-events-none absolute inset-0 z-0" style={{ filter: "blur(5px)", opacity: 0.4, height: "120%" }}>
           <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="transparent" pointerSize={0.25} />
@@ -269,6 +268,6 @@ export default function PipelineOpsDashboardPage() {
           </Link>
         </div>
       </main>
-    </PartnersPageShell>
+    </LazyPartnersPageShell>
   );
 }

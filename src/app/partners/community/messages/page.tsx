@@ -1,5 +1,5 @@
-import { MobileShell } from "@/domains/partnerships/mobile/ui/MobileShell";
+import { LazyMobileShell } from "@/domains/partnerships/mobile/ui/LazyMobileShell";
 
 export default function PartnersCommunityMessagesPage() {
-  return <MobileShell initialTab="messages" initialImmersiveMode showFloatingNavButton={false} />;
+  return <LazyMobileShell initialTab="messages" initialImmersiveMode showFloatingNavButton={false} />;
 }

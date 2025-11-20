@@ -1,5 +1,5 @@
-import { MobileShell } from "@/domains/partnerships/mobile/ui/MobileShell";
+import { LazyMobileShell } from "@/domains/partnerships/mobile/ui/LazyMobileShell";
 
 export default function PartnersInboxPage() {
-  return <MobileShell initialTab="notifications" />;
+  return <LazyMobileShell initialTab="notifications" />;
 }

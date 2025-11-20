@@ -1,11 +1,7 @@
- "use client";
-
-import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
+import Link from "next/link";
+import { LazyPartnersPageShell } from "@/domains/partnerships/community/ui/LazyPartnersPageShell";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 const earningsWidgets = [
   { title: "Overview", description: "See payouts, commissions, and cashflow trends.", href: "/partners/earnings/overview" },
@@ -14,9 +10,8 @@ const earningsWidgets = [
 ];
 
 export default function EarningsDashboardPage() {
-  const router = useRouter();
   return (
-    <PartnersPageShell>
+    <LazyPartnersPageShell>
       <div className="space-y-6 p-4 lg:p-8">
         <HighlightCard
           color="orange"
@@ -25,7 +20,7 @@ export default function EarningsDashboardPage() {
           metricValue="$4,200"
           metricLabel="next payout"
           buttonText="Open wallet"
-          onButtonClick={() => router.push("/partners/earnings/wallet")}
+          buttonHref="/partners/earnings/wallet"
           icon={<span className="text-xl">💰</span>}
           hideDivider
           titleClassName="uppercase tracking-[0.35em] text-white"
@@ -61,6 +56,6 @@ export default function EarningsDashboardPage() {
           </div>
         </SettingsGroupCallout>
       </div>
-    </PartnersPageShell>
+    </LazyPartnersPageShell>
   );
 }

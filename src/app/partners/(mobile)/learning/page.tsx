@@ -1,5 +1,5 @@
-import { MobileShell } from "@/domains/partnerships/mobile/ui/MobileShell";
+import { LazyMobileShell } from "@/domains/partnerships/mobile/ui/LazyMobileShell";
 
 export default function PartnersLearningPage() {
-  return <MobileShell initialTab="learning" />;
+  return <LazyMobileShell initialTab="learning" />;
 }

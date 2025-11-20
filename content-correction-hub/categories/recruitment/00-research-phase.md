@@ -29,7 +29,7 @@ Create the discovery packet for the Recruitment section so we can later draft pa
 - Data hygiene risks: duplicate recruits, missing source, unclear owner, stale stages.
 
 ## Page Coverage (what each page must answer later)
-1) **Dashboard (`/partners/recruitment/dashboard`)**  
+1) **Dashboard (`/partners/recruitment`)**  
    - What KPIs belong in the hero row? (e.g., new recruits this week, activation rate, time-to-activate, pipeline value)  
    - Which trend charts and time buckets matter?  
    - Alerts: stalled recruits, missing owner, compliance docs pending.

@@ -1,8 +1,14 @@
 "use client";
 
-import { IconNavigation } from "./components/IconNavigation";
-import { DetailSidebar } from "./components/DetailSidebar";
+import { Suspense, lazy } from "react";
 import { useMobileNavigation } from "@/domains/partnerships/mobile/application/navigation-store";
+
+const LazyIconNavigation = lazy(() =>
+  import("./components/IconNavigation").then((mod) => ({ default: mod.IconNavigation })),
+);
+const LazyDetailSidebar = lazy(() =>
+  import("./components/DetailSidebar").then((mod) => ({ default: mod.DetailSidebar })),
+);
 
 interface CampusSidebarContentProps {
   heightClass?: string;
@@ -15,8 +21,27 @@ export function CampusSidebarContent({ heightClass = "h-[800px]", onNavigate }: 
 
   return (
     <div className="flex w-full h-full flex-row">
-      <IconNavigation activeSection={activeSection} onSectionChange={setActiveDrawerSection} heightClass={heightClass} />
-      <DetailSidebar activeSection={activeSection} heightClass={heightClass} onNavigate={onNavigate} />
+      <Suspense
+        fallback={
+          <div
+            className={`bg-black flex flex-col items-center overflow-hidden px-2 py-3 w-16 flex-shrink-0 ${heightClass} h-screen sticky top-0 border-r border-neutral-900 rounded-l-2xl`}
+          >
+            <div className="h-full w-full animate-pulse rounded-lg bg-neutral-900" aria-hidden="true" />
+          </div>
+        }
+      >
+        <LazyIconNavigation activeSection={activeSection} onSectionChange={setActiveDrawerSection} heightClass={heightClass} />
+      </Suspense>
+      <Suspense
+        fallback={
+          <div
+            className={`flex-1 min-w-0 ${heightClass} h-screen rounded-r-2xl border border-white/10 bg-white/5 animate-pulse`}
+            aria-hidden="true"
+          />
+        }
+      >
+        <LazyDetailSidebar activeSection={activeSection} heightClass={heightClass} onNavigate={onNavigate} />
+      </Suspense>
     </div>
   );
 }

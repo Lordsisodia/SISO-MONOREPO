@@ -1,17 +1,13 @@
- "use client";
-
+import Link from "next/link";
 import { demoChannelCategories } from "@/domains/partnerships/workspace/application/demo-channel-registry";
-import { WorkspaceDemoClient } from "@/domains/partnerships/workspace/ui/WorkspaceDemoClient";
-import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
+import { LazyPartnersPageShell } from "@/domains/partnerships/community/ui/LazyPartnersPageShell";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { WorkspaceDemoHydrator } from "./WorkspaceDemoHydrator.client";
 
 export default function PartnersWorkspacePage() {
-  const router = useRouter();
   return (
-    <PartnersPageShell initialState={{ activeDrawerSection: "workspace" }}>
+    <LazyPartnersPageShell initialState={{ activeDrawerSection: "workspace" }}>
       <div className="space-y-6 p-4 lg:p-8">
         <HighlightCard
           color="orange"
@@ -20,7 +16,7 @@ export default function PartnersWorkspacePage() {
           metricValue="2"
           metricLabel="urgent tasks"
           buttonText="Open calendar"
-          onButtonClick={() => router.push("/partners/workspace/calendar")}
+          buttonHref="/partners/workspace/calendar"
           icon={<span className="text-xl">🗓️</span>}
           hideDivider
           titleClassName="uppercase tracking-[0.35em] text-white"
@@ -35,8 +31,8 @@ export default function PartnersWorkspacePage() {
           </div>
         </SettingsGroupCallout>
 
-        <WorkspaceDemoClient categories={demoChannelCategories} />
+        <WorkspaceDemoHydrator categories={demoChannelCategories} />
       </div>
-    </PartnersPageShell>
+    </LazyPartnersPageShell>
   );
 }

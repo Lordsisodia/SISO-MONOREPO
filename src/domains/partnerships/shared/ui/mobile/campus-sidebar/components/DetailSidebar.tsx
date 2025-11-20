@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { Suspense, lazy, useState } from "react";
 import { Info as InfoIcon, Lock as LockIcon } from "lucide-react";
 
 import { GlowDivider } from "@/domains/shared/components/GlowDivider";
 
 import { softSpringEasing } from "../constants";
-import { PartnershipHubWidgets } from "./HubWidgets";
+const LazyPartnershipHubWidgets = lazy(() => import("./HubWidgets").then((mod) => ({ default: mod.PartnershipHubWidgets })));
 import { MenuSectionList } from "./MenuSections";
 import { SearchContainer } from "./SearchContainer";
 import { getSidebarContent } from "../config/sidebarContent";
@@ -58,7 +58,17 @@ export function DetailSidebar({ activeSection, heightClass = "h-[800px]", onNavi
     >
       <SectionTitle title={content.title} />
       <SearchContainer activeSection={activeSection} />
-      {activeSection === "home" && <PartnershipHubWidgets onNavigate={onNavigate} />}
+      {activeSection === "home" && (
+        <Suspense
+          fallback={
+            <div className="w-full rounded-2xl border border-white/10 bg-white/5 p-4 text-xs text-white/60 animate-pulse">
+              Loading partner hub…
+            </div>
+          }
+        >
+          <LazyPartnershipHubWidgets onNavigate={onNavigate} />
+        </Suspense>
+      )}
 
       <div
         className="flex flex-col w-full flex-1 min-h-0 overflow-y-auto transition-all duration-500 gap-4 items-start"

@@ -128,3 +128,26 @@ export interface PortfolioClient {
   // Metadata
   metadata: ProjectMetadata;
 }
+
+export interface PortfolioClientSummary {
+  id: string;
+  name: string;
+  industry: string;
+  tagline?: string;
+  description?: string;
+  projectType?: string;
+  metadata: PortfolioClient['metadata'];
+  coverImage?: string | null;
+  pricing?: {
+    currency: string | null;
+    min: number | null;
+    max: number | null;
+    sisoPrice: number | null;
+  };
+  timeline?: {
+    durationDays: number | null;
+  };
+  results?: {
+    clientSatisfaction: number | null;
+  };
+}

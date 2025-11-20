@@ -1,27 +1,33 @@
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
   openAnalyzer: false,
+  bundleAnalyzerConfig: {
+    server: {
+      analyzerMode: 'static',
+      reportFilename: '../analyze/nodejs.html',
+    },
+    browser: {
+      analyzerMode: 'static',
+      reportFilename: '../analyze/client.html',
+      generateStatsFile: true,
+      statsFilename: 'static/analyze/client.json',
+    },
+  },
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Temporarily disabled to reduce double effects/logs during dev
   reactStrictMode: false,
-  eslint: { ignoreDuringBuilds: true },
+  experimental: {
+    cacheComponents: false,
+  },
   typescript: { ignoreBuildErrors: true },
 
   env: {
     NEXT_PUBLIC_APP_NAME: 'SISO',
   },
 
-  // Ignore apps/ folder (reference only)
-  webpack: (config) => {
-    config.watchOptions = {
-      ...config.watchOptions,
-      ignored: ['**/apps/**', '**/node_modules/**'],
-    }
-    return config
-  },
   async rewrites() {
     return [
       // Preserve older single-partner prefix while moving to /partners

@@ -1,4 +1,4 @@
-import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
+import { LazyPartnersPageShell } from "@/domains/partnerships/community/ui/LazyPartnersPageShell";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { Button } from "@/components/ui/button";
@@ -6,7 +6,7 @@ import { Waves } from "@/components/ui/wave-background";
 
 export default function AppPlanGeneratorPage() {
   return (
-    <PartnersPageShell initialState={{ activeDrawerSection: "tools" }}>
+    <LazyPartnersPageShell initialState={{ activeDrawerSection: "tools" }}>
       <main className="relative min-h-screen overflow-hidden bg-siso-bg-primary pb-20 text-white">
         <div className="pointer-events-none absolute inset-0 h-full w-full" style={{ filter: "blur(6px)", opacity: 0.9 }}>
           <Waves className="h-full w-full" strokeColor="#7ad7ff" backgroundColor="#08090f" pointerSize={0.3} />
@@ -70,6 +70,6 @@ export default function AppPlanGeneratorPage() {
           </SettingsGroupCallout>
         </div>
       </main>
-    </PartnersPageShell>
+    </LazyPartnersPageShell>
   );
 }

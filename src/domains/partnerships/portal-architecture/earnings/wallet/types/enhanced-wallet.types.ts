@@ -200,6 +200,14 @@ export interface SecurityAlert {
   actions: SecurityAction[];
 }
 
+export interface SecurityAction {
+  id: string;
+  label: string;
+  description?: string;
+  href?: string;
+  type?: 'link' | 'cta' | 'acknowledge';
+}
+
 export interface TrustedDevice {
   id: string;
   name: string;

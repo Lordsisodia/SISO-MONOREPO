@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createNoise2D } from 'simplex-noise'
 
 interface Point {
@@ -29,6 +29,7 @@ export function Waves({
   backgroundColor = '#000000', // Black background
   pointerSize = 0.5,
 }: WavesProps) {
+  const [shouldAnimate, setShouldAnimate] = useState(true)
   const containerRef = useRef<HTMLDivElement>(null)
   const svgRef = useRef<SVGSVGElement>(null)
   const mouseRef = useRef({
@@ -50,6 +51,16 @@ export function Waves({
   const boundingRef = useRef<DOMRect | null>(null)
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const handleChange = () => setShouldAnimate(!media.matches)
+    handleChange()
+    media.addEventListener('change', handleChange)
+    return () => media.removeEventListener('change', handleChange)
+  }, [])
+
+  useEffect(() => {
+    if (!shouldAnimate) return
     if (!containerRef.current || !svgRef.current) return
 
     noiseRef.current = createNoise2D()
@@ -69,7 +80,17 @@ export function Waves({
       containerRef.current?.removeEventListener('touchmove', onTouchMove)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [shouldAnimate])
+
+  if (!shouldAnimate) {
+    return (
+      <div
+        ref={containerRef}
+        className={className}
+        style={{ background: 'linear-gradient(135deg, rgba(12,12,12,0.9), rgba(30,30,30,0.7))' }}
+      />
+    )
+  }
 
   const setSize = () => {
     if (!containerRef.current || !svgRef.current) return

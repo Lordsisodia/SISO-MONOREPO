@@ -2,8 +2,6 @@
 
 import { FallingPattern } from "@/domains/shared/components/falling-pattern";
 
-export const dynamic = "force-dynamic";
-
 export default function FallingPatternDemo() {
   return (
     <div className="relative min-h-screen w-full">

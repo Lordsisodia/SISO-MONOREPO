@@ -1,6 +1,3 @@
-"use client";
-
-import { useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { HighlightCard as GradientHighlightCard } from "@/components/ui/card-5-static";
@@ -125,9 +122,9 @@ const activityTimeline = [
 ];
 
 export function TasksWorkspaceScreen() {
-  const completionRate = useMemo(() => 78, []);
-  const overdueCount = useMemo(() => 2, []);
-  const slaRisk = useMemo(() => 1, []);
+  const completionRate = 78;
+  const overdueCount = 2;
+  const slaRisk = 1;
 
   return (
     <section className="min-h-screen bg-[#03040f] pb-24 text-white overflow-x-hidden">
@@ -139,7 +136,7 @@ export function TasksWorkspaceScreen() {
           metricValue={`${dueTodayTasks.length}`}
           metricLabel="tasks due today"
           buttonText="Open checklist"
-          onButtonClick={() => document?.getElementById("due-today")?.scrollIntoView({ behavior: "smooth" })}
+          buttonHref="#due-today"
           icon={<ClipboardList className="h-5 w-5" />}
           hideDivider
           hideFooter

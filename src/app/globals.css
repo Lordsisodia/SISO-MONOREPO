@@ -1,6 +1,5 @@
 @import "../domains/shared/styles/color-system.css";
-@import "tw-animate-css";
-
+@import "../domains/shared/styles/tw-animate.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -24,7 +23,7 @@
   /* Ensure readable text */
   .text-siso-text-primary, .text-siso-text-secondary, .text-siso-text-muted { color: #111 !important; }
   /* Avoid page breaks inside chips/lists */
-  ul, ol, li, .rounded-[26px], .rounded-3xl { break-inside: avoid; }
+ul, ol, li, .rounded-\[26px\], .rounded-3xl { break-inside: avoid; }
   /* Margins */
   @page { margin: 16mm; }
 }

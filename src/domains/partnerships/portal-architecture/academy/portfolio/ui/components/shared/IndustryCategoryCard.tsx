@@ -154,6 +154,9 @@ export function IndustryCategoryCard({ industry, className }: IndustryCategoryCa
                 src={industryData.headerImage}
                 alt={industryData.name}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                loading="lazy"
+                decoding="async"
+                fetchPriority="low"
               />
               {/* Gradient Overlay for better text contrast */}
               <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-siso-bg" />

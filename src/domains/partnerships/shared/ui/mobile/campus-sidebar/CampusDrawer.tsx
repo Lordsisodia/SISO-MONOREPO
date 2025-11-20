@@ -2,8 +2,14 @@
 
 import { cn } from "@/domains/shared/utils/cn";
 import { useMobileNavigation } from "@/domains/partnerships/mobile/application/navigation-store";
+import { Suspense } from "react";
+import dynamic from "next/dynamic";
 import { CampusSidebarSurface } from "@/domains/partnerships/shared/ui/mobile/campus-sidebar/CampusSidebar";
 import { useRouter } from "next/navigation";
+
+const LazySidebarSurface = dynamic(() => import("@/domains/partnerships/shared/ui/mobile/campus-sidebar/CampusSidebar").then((mod) => mod.CampusSidebarSurface), {
+  ssr: false,
+});
 
 export function CampusDrawer() {
   const { isDrawerOpen, closeDrawer } = useMobileNavigation();
@@ -23,7 +29,9 @@ export function CampusDrawer() {
       role="dialog"
       aria-modal="true"
     >
-      <CampusSidebarSurface onClose={closeDrawer} onNavigate={handleNavigate} />
+      <Suspense fallback={<div className="h-full w-full bg-[#050505]" role="presentation" />}> 
+        <LazySidebarSurface onClose={closeDrawer} onNavigate={handleNavigate} />
+      </Suspense>
     </aside>
   );
 }

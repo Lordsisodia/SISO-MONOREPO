@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Loader from "@/domains/partnerships/portal-architecture/settings/shared/loader-15";
-import { useEffect, useMemo } from "react";
+import { Suspense, useEffect, useMemo, type ReactNode } from "react";
 import { useMobileNavigation } from "../../application/navigation-store";
 import { settingsRouteRegistry } from "@/domains/partnerships/portal-architecture/settings/settings-route-registry";
 const Loading = () => <Loader />;
@@ -68,6 +68,12 @@ const GeneralSettingsScreen = dynamic(
 export function QuickActionsContent() {
   const { activeQuickAction } = useMobileNavigation();
 
+  const renderDeferred = (node: ReactNode) => (
+    <Suspense fallback={<Loading />}>
+      {node}
+    </Suspense>
+  );
+
   // Gentle prefetch for most-used settings when the hub is open
   useEffect(() => {
     if (activeQuickAction === "settings") {
@@ -85,9 +91,9 @@ export function QuickActionsContent() {
   }, [activeQuickAction]);
 
   // Non-settings quick actions remain as adapters
-  if (activeQuickAction === "checklist") return <ChecklistPanel />;
-  if (activeQuickAction === "wallet") return <WalletPanel />;
-  if (!activeQuickAction || activeQuickAction === "settings") return <SettingsPanel />;
+  if (activeQuickAction === "checklist") return renderDeferred(<ChecklistPanel />);
+  if (activeQuickAction === "wallet") return renderDeferred(<WalletPanel />);
+  if (!activeQuickAction || activeQuickAction === "settings") return renderDeferred(<SettingsPanel />);
 
   // Resolve settings views from the registry by quickActionId
   const target = useMemo(
@@ -98,7 +104,7 @@ export function QuickActionsContent() {
   if (!target) return <SettingsPanel />;
 
   if (target.status === "planned" || !target.component) {
-    return <ComingSoonView title={target.title} description={target.description} />;
+    return renderDeferred(<ComingSoonView title={target.title} description={target.description} />);
   }
 
   const LazyResolved = dynamic(async () => {
@@ -106,5 +112,5 @@ export function QuickActionsContent() {
     return mod;
   }, { loading: Loading });
 
-  return <LazyResolved />;
+  return renderDeferred(<LazyResolved />);
 }

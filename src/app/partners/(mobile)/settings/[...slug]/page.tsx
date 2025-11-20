@@ -4,13 +4,8 @@ import type { ComponentType } from "react";
 import { getLiveSettingsRoutes } from "@/domains/partnerships/portal-architecture/settings/settings-route-registry";
 import { renderSettingsRouteBySlug } from "@/domains/partnerships/portal-architecture/settings/route-renderers";
 
-type SettingsDynamicParams = { slug?: string[] };
 
-export async function generateStaticParams() {
-  return getLiveSettingsRoutes().map((route) => ({
-    slug: route.slug.split("/"),
-  }));
-}
+type SettingsDynamicParams = { slug?: string[] };
 
 async function SettingsRouteRenderer({ slug }: { slug: string }) {
   return renderSettingsRouteBySlug(slug);

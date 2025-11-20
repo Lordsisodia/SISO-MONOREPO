@@ -1,15 +1,14 @@
-import { Suspense } from "react";
 import { getActiveDeals } from "@/domains/partnerships/portal-architecture/pipeline-ops/application/pipelineOpsService";
-import { ActiveDealsWorkspace } from "./ActiveDealsWorkspace";
-import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
+import { LazyPartnersPageShell } from "@/domains/partnerships/community/ui/LazyPartnersPageShell";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { Waves } from "@/components/ui/wave-background";
+import { ActiveDealsHydrator } from "./ActiveDealsHydrator.client";
 
 export default async function PartnerActiveDealsPage() {
   const deals = await getActiveDeals();
 
   return (
-    <PartnersPageShell initialState={{ activeDrawerSection: "pipeline" }}>
+    <LazyPartnersPageShell initialState={{ activeDrawerSection: "pipeline" }}>
       <main className="relative min-h-screen overflow-hidden bg-siso-bg-primary pb-20 text-siso-text-primary">
         <div className="pointer-events-none absolute inset-0 h-full w-full" style={{ filter: "blur(6px)", opacity: 0.9 }}>
           <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="#0b0b0f" pointerSize={0.35} />
@@ -28,11 +27,9 @@ export default async function PartnerActiveDealsPage() {
             className="max-w-none"
           />
 
-          <Suspense fallback={<div className="p-10 text-white">Loading active deals…</div>}>
-            <ActiveDealsWorkspace initialDeals={deals} />
-          </Suspense>
+          <ActiveDealsHydrator deals={deals} />
         </div>
       </main>
-    </PartnersPageShell>
+    </LazyPartnersPageShell>
   );
 }

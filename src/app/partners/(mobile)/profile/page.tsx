@@ -1,5 +1,5 @@
-import { MobileShell } from "@/domains/partnerships/mobile/ui/MobileShell";
+import { LazyMobileShell } from "@/domains/partnerships/mobile/ui/LazyMobileShell";
 
 export default function PartnersProfilePage() {
-  return <MobileShell initialTab="quick-actions" initialQuickAction="profile" />;
+  return <LazyMobileShell initialTab="quick-actions" initialQuickAction="profile" />;
 }

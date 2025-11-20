@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
+import { LazyPartnersPageShell } from "@/domains/partnerships/community/ui/LazyPartnersPageShell";
 import { TasksWorkspaceScreen } from "@/domains/partnerships/portal-architecture/workspace/tasks/ui/TasksWorkspaceScreen";
 
 export const metadata: Metadata = {
@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 
 export default function PartnersWorkspaceTasksPage() {
   return (
-    <PartnersPageShell initialState={{ activeDrawerSection: "workspace" }}>
+    <LazyPartnersPageShell initialState={{ activeDrawerSection: "workspace" }}>
       <TasksWorkspaceScreen />
-    </PartnersPageShell>
+    </LazyPartnersPageShell>
   );
 }

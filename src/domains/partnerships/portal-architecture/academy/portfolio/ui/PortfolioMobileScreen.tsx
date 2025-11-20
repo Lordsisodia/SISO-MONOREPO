@@ -6,31 +6,29 @@ import { useMemo, useState } from "react";
 import { ArrowRight, Folder, Sparkles, ArrowLeft } from "lucide-react";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
-import { Button } from "@/components/ui/button";
-import { usePortfolioData } from "@/domains/partnerships/portfolio/hooks/use-portfolio-data";
 import { useRouter } from "next/navigation";
-import type { PortfolioClient } from "@/domains/partnerships/portfolio/types";
+import type { PortfolioClientSummary, PortfolioStats } from "@/domains/partnerships/portfolio/types";
 import { IndustrySelect } from "@/domains/partnerships/portfolio/ui/IndustrySelect";
 import { Waves } from "@/components/ui/wave-background";
 
 const DEFAULT_THUMB = "https://via.placeholder.com/512x320/111/fff?text=Portfolio";
 
-function getCover(client: PortfolioClient) {
-  const shots = client.media?.screenshots?.mobile?.length
-    ? client.media?.screenshots.mobile
-    : client.media?.screenshots?.desktop ?? [];
-  return shots?.[0] ?? DEFAULT_THUMB;
-}
+type PortfolioMobileScreenProps = {
+  clients: PortfolioClientSummary[];
+  stats: PortfolioStats;
+};
 
-export function PortfolioMobileScreen() {
-  const { clients, featured, stats } = usePortfolioData();
+export function PortfolioMobileScreen({ clients, stats }: PortfolioMobileScreenProps) {
+  const visibleClients = useMemo(() => clients.filter((c) => c.metadata?.showInPortfolio !== false), [clients]);
+  const featured = useMemo(() => visibleClients.filter((c) => c.metadata?.featured), [visibleClients]);
   const [activeIndustry, setActiveIndustry] = useState<string>("all");
   const router = useRouter();
 
   const filtered = useMemo(() => {
-    if (activeIndustry === "all") return clients;
-    return clients.filter((c) => c.industry === activeIndustry);
-  }, [activeIndustry, clients]);
+    if (activeIndustry === "all") return visibleClients;
+    return visibleClients.filter((c) => c.industry === activeIndustry);
+  }, [activeIndustry, visibleClients]);
+  const cards = filtered.length ? filtered : featured;
 
   return (
     <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen relative overflow-hidden">
@@ -87,8 +85,8 @@ export function PortfolioMobileScreen() {
           showChevron={false}
         >
           <div className="grid gap-3 sm:grid-cols-2">
-            {(filtered.length ? filtered : featured).map((client) => (
-              <PortfolioListCard key={client.id} client={client} />
+            {cards.map((client, index) => (
+              <PortfolioListCard key={client.id} client={client} priority={index === 0} />
             ))}
           </div>
         </SettingsGroupCallout>
@@ -97,22 +95,10 @@ export function PortfolioMobileScreen() {
   );
 }
 
-function IndustryPill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`rounded-full border px-3 py-1 text-xs transition ${
-        active ? "border-siso-orange text-white bg-siso-orange/20" : "border-white/10 text-siso-text-muted hover:border-white/30"
-      }`}
-    >
-      {label}
-    </button>
-  );
-}
-
-function PortfolioListCard({ client }: { client: PortfolioClient }) {
-  const cover = getCover(client);
+function PortfolioListCard({ client, priority = false }: { client: PortfolioClientSummary; priority?: boolean }) {
+  const cover = client.coverImage ?? DEFAULT_THUMB;
+  const loading = priority ? "eager" : "lazy";
+  const fetchPriority = priority ? "high" : "low";
   return (
     <Link
       href={`/public/portfolio/${client.id}`}
@@ -120,7 +106,14 @@ function PortfolioListCard({ client }: { client: PortfolioClient }) {
     >
       <div className="relative aspect-video w-full overflow-hidden bg-black/40">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={cover} alt={client.name} className="h-full w-full object-cover" loading="lazy" />
+        <img
+          src={cover}
+          alt={client.name}
+          className="h-full w-full object-cover"
+          loading={loading}
+          decoding="async"
+          fetchPriority={fetchPriority}
+        />
         <span className="absolute right-2 top-2 rounded-full bg-black/60 px-2 py-1 text-[11px] text-white">
           {client.projectType ?? "Project"}
         </span>

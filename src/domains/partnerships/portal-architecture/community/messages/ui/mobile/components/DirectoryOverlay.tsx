@@ -27,7 +27,7 @@ type DirectoryItem = {
 type DirectoryFilter = "all" | "unread" | "bots" | "leaders" | "drafts" | "submitted" | "needs-info";
 type DirectoryVariant = "messages" | "client-submissions";
 
-type DirectoryOverlayProps = {
+export type DirectoryOverlayProps = {
   isOpen: boolean;
   threads: ThreadOverview[];
   activeThreadId: string | null;

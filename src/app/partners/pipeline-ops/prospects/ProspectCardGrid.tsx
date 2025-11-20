@@ -1,5 +1,3 @@
-"use client";
-
 import type { ProspectSummary } from "@/domains/partnerships/portal-architecture/pipeline-ops/domain/types";
 import { ProspectCard } from "./ProspectCard";
 import { Sparkles } from "lucide-react";

@@ -1,14 +1,10 @@
-"use client";
-
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-
-import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
+import { LazyPartnersPageShell } from "@/domains/partnerships/community/ui/LazyPartnersPageShell";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calculator, Compass, Filter, Paperclip, SendHorizontal, Zap } from "lucide-react";
+import { Calculator, Compass, Paperclip, SendHorizontal, Zap } from "lucide-react";
 
 const pipelineHero = {
   title: "Recruitment pipeline",
@@ -75,10 +71,8 @@ const resourceLinks = [
 ];
 
 export function RecruitmentProspectsContent() {
-  const router = useRouter();
-
   return (
-    <PartnersPageShell initialState={{ activeDrawerSection: "recruitment" }}>
+    <LazyPartnersPageShell initialState={{ activeDrawerSection: "recruitment" }}>
       <div className="space-y-6 p-4 lg:p-8">
         <HighlightCard
           color="orange"
@@ -87,7 +81,7 @@ export function RecruitmentProspectsContent() {
           metricValue={pipelineHero.metricValue}
           metricLabel={pipelineHero.metricLabel}
           buttonText={pipelineHero.buttonText}
-          onButtonClick={() => router.push(pipelineHero.href)}
+          buttonHref={pipelineHero.href}
           icon={<Compass className="h-5 w-5" />}
           hideDivider
           showCornerIcon={false}
@@ -106,22 +100,21 @@ export function RecruitmentProspectsContent() {
               <p className="text-lg font-semibold text-siso-orange">{inviteSnapshot.conversion}</p>
             </div>
             <div className="flex-1 text-xs text-white/70">{inviteSnapshot.bottleneck}</div>
-            <Button variant="ghost" size="sm" className="border border-white/10" onClick={() => router.push("/partners/recruitment/team")}>
+            <Link
+              href="/partners/recruitment/team"
+              className="inline-flex items-center rounded-full border border-white/10 px-3 py-1 text-sm text-white hover:border-white/40"
+            >
               Review outreach
-            </Button>
+            </Link>
           </div>
         </SettingsGroupCallout>
 
         <SettingsGroupCallout icon={<Calculator className="h-4 w-4" />} title="Segment views" subtitle="Filter prospects by status, owner, or source." showChevron={false}>
           <div className="flex flex-wrap gap-2">
             {prospectFilters.map((filter) => (
-              <button
-                key={filter}
-                type="button"
-                className="rounded-full border border-white/15 bg-white/[0.05] px-4 py-2 text-xs font-semibold text-white/80 hover:border-siso-orange hover:text-white"
-              >
+              <span key={filter} className="rounded-full border border-white/15 bg-white/[0.05] px-4 py-2 text-xs font-semibold text-white/80">
                 {filter}
-              </button>
+              </span>
             ))}
             <Button variant="ghost" size="sm" className="border border-white/10">
               Create saved view
@@ -143,9 +136,7 @@ export function RecruitmentProspectsContent() {
                 <p className="font-semibold text-white">{prospect.name}</p>
                 <p className="text-xs text-white/60">{prospect.channel}</p>
               </div>
-              <Badge className="w-fit bg-white/10 uppercase tracking-widest text-[10px] text-white">
-                {prospect.stage}
-              </Badge>
+              <Badge className="w-fit bg-white/10 uppercase tracking-widest text-[10px] text-white">{prospect.stage}</Badge>
               <span>{prospect.owner}</span>
               <span className="font-semibold text-siso-orange">{prospect.score}</span>
               <div className="flex items-center justify-between gap-2 text-xs text-white/70">
@@ -190,6 +181,8 @@ export function RecruitmentProspectsContent() {
           </SettingsGroupCallout>
         </div>
       </div>
-    </PartnersPageShell>
+    </LazyPartnersPageShell>
   );
 }
+
+export default RecruitmentProspectsContent;

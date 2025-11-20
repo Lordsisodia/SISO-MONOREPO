@@ -1,5 +1,3 @@
-"use client";
-
 import Loader from "@/domains/partnerships/portal-architecture/settings/shared/loader-15";
 
 export default function PartnersCommunityMessagesLoading() {

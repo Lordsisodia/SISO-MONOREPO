@@ -1,26 +1,31 @@
 "use client";
 
-"use client";
-
-import { useEffect, useLayoutEffect, useMemo, useRef, type MouseEvent, type ReactNode } from "react";
+import { Suspense, useEffect, useLayoutEffect, useMemo, useRef, type MouseEvent, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { MobileNavigationProvider, useMobileNavigation } from "../application/navigation-store";
 import { QUICK_ACTION_PATH_LOOKUP, QUICK_ACTION_DEFAULT_PATH } from "../application/quick-action-routes";
 import { ScreenViewport } from "./components/ScreenViewport";
 import { QuickActionsContent } from "./quick-actions/QuickActionsContent";
 import { CampusHubScreen } from "@/domains/partnerships/workspace/ui/mobile";
-import dynamic from "next/dynamic";
-const CampusDrawer = dynamic(
-  () => import("@/domains/partnerships/shared/ui/mobile/campus-sidebar/CampusDrawer").then(m => m.CampusDrawer),
+const CampusDrawerHydrator = dynamic(
+  () => import("@/domains/partnerships/shared/ui/mobile/campus-sidebar/CampusDrawerHydrator.client").then((m) => m.CampusDrawerHydrator),
   { ssr: false, loading: () => null },
 );
-import { LearningHubResponsive } from "@/domains/partnerships/portal-architecture/academy/ui";
+const LearningHubResponsive = dynamic(
+  () => import("@/domains/partnerships/portal-architecture/academy/ui").then((m) => m.LearningHubResponsive),
+  { ssr: false },
+);
+const LazyNotificationsScreen = dynamic(
+  () => import("@/domains/partnerships/notifications/ui/mobile").then((m) => m.NotificationsScreen),
+  { ssr: false, loading: () => <NotificationsFallback /> },
+);
 import { MessagesScreen } from "@/domains/partnerships/communications/ui/mobile";
-import { NotificationsScreen } from "@/domains/partnerships/notifications/ui/mobile";
 import { LimelightNav, type NavItem } from "@/components/ui/limelight-nav";
 import { Home, GraduationCap, Bell, MessagesSquare, MoreHorizontal } from "lucide-react";
 import type { MobileTabId, QuickActionId } from "../types/navigation";
 import { FloatingNavButton } from "@/domains/partnerships/shared/ui/mobile/FloatingNavButton";
+import { useHydrateOnView } from "@/domains/shared/hooks/useHydrateOnView";
 
 const MESSAGES_CANONICAL_PATH = "/partners/community/messages";
 const LEGACY_MESSAGES_PATH = "/partners/messages";
@@ -203,9 +208,13 @@ function ShellContent({
       case "campus":
         return <CampusHubScreen />;
       case "learning":
-        return <LearningHubResponsive />;
+        return (
+          <Suspense fallback={<LearningTabFallback />}>
+            <LearningHubResponsive />
+          </Suspense>
+        );
       case "notifications":
-        return <NotificationsScreen />;
+        return <NotificationsTab />;
       case "messages":
         return <MessagesScreen />;
       case "quick-actions":
@@ -219,7 +228,11 @@ function ShellContent({
 
   return (
     <>
-      {isDrawerOpen ? <CampusDrawer /> : null}
+      {isDrawerOpen ? (
+        <Suspense fallback={<DrawerFallback />}>
+          <CampusDrawerHydrator />
+        </Suspense>
+      ) : null}
       {showFloatingNavButton ? <FloatingNavButton /> : null}
       {shouldRenderViewport ? (
         <ScreenViewport isImmersive={isImmersiveMode} hasBottomNav={shouldShowNav}>
@@ -268,5 +281,56 @@ export function MobileShell({
         {children}
       </ShellContent>
     </MobileNavigationProvider>
+  );
+}
+
+function NotificationsTab() {
+  const options = useMemo<IntersectionObserverInit>(() => ({ rootMargin: "200px 0px 0px 0px" }), []);
+  const { ref, hydrated } = useHydrateOnView<HTMLDivElement>(options);
+  return (
+    <div ref={ref} className="min-h-[60vh]">
+      {hydrated ? (
+        <Suspense fallback={<NotificationsFallback />}>
+          <LazyNotificationsScreen />
+        </Suspense>
+      ) : (
+        <NotificationsFallback />
+      )}
+    </div>
+  );
+}
+
+function NotificationsFallback() {
+  return (
+    <div className="flex min-h-[60vh] flex-col gap-6 px-4 py-10 text-siso-text-secondary">
+      <div className="rounded-[24px] border border-white/10 bg-white/5 p-5 shadow-inner shadow-black/40 animate-pulse space-y-3">
+        <div className="h-5 w-32 rounded-full bg-white/20" />
+        <div className="h-3 w-48 rounded-full bg-white/10" />
+        <div className="h-3 w-24 rounded-full bg-white/10" />
+      </div>
+      {[0, 1].map((idx) => (
+        <div
+          key={`notify-skel-${idx}`}
+          className="rounded-[20px] border border-white/10 bg-white/5 p-4 shadow-inner shadow-black/30 animate-pulse space-y-3"
+        >
+          <div className="h-4 w-1/2 rounded-full bg-white/15" />
+          <div className="h-3 w-3/4 rounded-full bg-white/10" />
+          <div className="h-3 w-2/5 rounded-full bg-white/10" />
+          <div className="h-12 rounded-2xl bg-white/5" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function DrawerFallback() {
+  return <div className="sr-only" aria-hidden="true" />;
+}
+
+function LearningTabFallback() {
+  return (
+    <div className="min-h-[60vh] rounded-3xl border border-white/10 bg-white/5 p-6 text-white/70">
+      Loading learning hub…
+    </div>
   );
 }

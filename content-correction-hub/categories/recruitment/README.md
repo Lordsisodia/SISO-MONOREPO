@@ -7,7 +7,7 @@ Use `../templates/page-template.md` for the question prompts.
 ## Page inventory
 | Page | Route | File | Notes / next action |
 | --- | --- | --- | --- |
-| Recruitment dashboard | `/partners/recruitment/dashboard` | `src/app/partners/recruitment/dashboard/page.tsx` | Primary metrics (referred clients, active seats, etc.) are mocked; define the real KPIs, hallmarks for “active” vs “dormant” partners, and CTA copy for inviting team members. |
+| Recruitment dashboard | `/partners/recruitment` | `src/app/partners/recruitment/page.tsx` | Primary metrics (referred clients, active seats, etc.) are mocked; define the real KPIs, hallmarks for “active” vs “dormant” partners, and CTA copy for inviting team members. |
 | Prospects | `/partners/recruitment/prospects` | `.../prospects/page.tsx` | Showcase the pipeline of recruits—inventory the fields (source, status, next action) and update the placeholder table with the actual statuses we will show. |
 | Active sales team | `/partners/recruitment/team` | `.../team/page.tsx` | Should surface team roster, roles, and any quota/production numbers; decide what data to show and whether to include contextual help copy. |
 | Referral performance | `/partners/recruitment/performance` | `.../performance/page.tsx` | Focused on referral payouts, conversion rates, and triggers; identify the metrics and microcopy that explain how the numbers are calculated. |

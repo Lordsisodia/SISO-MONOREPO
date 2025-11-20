@@ -326,7 +326,7 @@
         {
           "id": "dashboard",
           "label": "Dashboard",
-          "path": "/partners/recruitment/dashboard",
+          "path": "/partners/recruitment",
           "tierRequired": "starter",
           "hasHashtag": false,
           "description": "Invite and track sales members you recruit",

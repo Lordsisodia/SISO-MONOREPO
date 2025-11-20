@@ -1,14 +1,20 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { mockThreads } from "../fixtures/message-fixtures";
 import { mockConversation } from "../fixtures/conversation-fixtures";
 import { useMobileNavigation } from "@/domains/partnerships/mobile/application/navigation-store";
-import { DirectoryOverlay } from "../components/DirectoryOverlay";
+import { DirectoryOverlayHydrator } from "../components/DirectoryOverlayHydrator.client";
 import { ChatViewport } from "../components/ChatViewport";
-import { ComposerBar } from "../components/ComposerBar";
 import { ConversationTimeline } from "../components/conversation/ConversationTimeline";
 import { FallingPattern } from "@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern";
+import { useHydrateOnView } from "@/domains/shared/hooks/useHydrateOnView";
+
+const LazyComposerBar = dynamic(
+  () => import("../components/ComposerBar").then((mod) => ({ default: mod.ComposerBar })),
+  { ssr: false, loading: () => null },
+);
 
 interface MessagesScreenProps {
   initialThreadId?: string;
@@ -21,6 +27,8 @@ export function MessagesScreen({ initialThreadId }: MessagesScreenProps = {}) {
   const [navHeight, setNavHeight] = useState(0);
   const [isThreadInfoOpen, setIsThreadInfoOpen] = useState(false);
   const { setImmersiveMode, setActiveTab, isImmersiveMode, openDrawer } = useMobileNavigation();
+  const { ref: composerRef, hydrated: composerHydrated } = useHydrateOnView<HTMLDivElement>({ rootMargin: "160px 0px" });
+  const fallbackComposerHeight = 96;
 
   useEffect(() => {
     setActiveTab("messages", { immersive: true });
@@ -149,6 +157,9 @@ export function MessagesScreen({ initialThreadId }: MessagesScreenProps = {}) {
     return () => cancelAnimationFrame(raf);
   }, [isImmersiveMode, isDirectoryOpen]);
 
+  const showComposer = !isDirectoryOpen;
+  const effectiveComposerHeight = showComposer ? (composerHydrated ? composerHeight : fallbackComposerHeight) : 0;
+
   return (
     <section className="relative flex flex-1 flex-col px-3 pt-1.5 pb-0 font-sans">
       <div className="pointer-events-none absolute inset-0 z-0">
@@ -161,7 +172,7 @@ export function MessagesScreen({ initialThreadId }: MessagesScreenProps = {}) {
           threadName={activeThreadData?.name ?? "SISO Agency"}
           threadStatus="Active now"
           avatarLabel={avatarLabel}
-          contentOffset={composerHeight + navHeight + 6}
+          contentOffset={effectiveComposerHeight + navHeight + 6}
           onToggleThreadInfo={() => setIsThreadInfoOpen((prev) => !prev)}
           isThreadInfoOpen={isThreadInfoOpen}
           threadInfo={currentThreadInfo}
@@ -176,9 +187,20 @@ export function MessagesScreen({ initialThreadId }: MessagesScreenProps = {}) {
           <ConversationTimeline messages={mockConversation} />
         </ChatViewport>
 
-        {!isDirectoryOpen && (
-          <ComposerBar onHeightChange={setComposerHeight} bottomOffset={navHeight} />
-        )}
+        {showComposer ? (
+          <div ref={composerRef} aria-live="polite">
+            {composerHydrated ? (
+              <LazyComposerBar onHeightChange={setComposerHeight} bottomOffset={navHeight} />
+            ) : (
+              <div
+                className="rounded-3xl border border-white/10 bg-white/5 p-4 text-center text-[11px] uppercase tracking-[0.3em] text-white/50"
+                style={{ minHeight: fallbackComposerHeight }}
+              >
+                Preparing composer…
+              </div>
+            )}
+          </div>
+        ) : null}
 
         {currentThreadInfo && isThreadInfoOpen && (
           <div
@@ -233,7 +255,7 @@ export function MessagesScreen({ initialThreadId }: MessagesScreenProps = {}) {
           </div>
         )}
 
-        <DirectoryOverlay
+        <DirectoryOverlayHydrator
           isOpen={isDirectoryOpen}
           onClose={closeDirectory}
           threads={mockThreads}

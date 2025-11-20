@@ -145,6 +145,9 @@ export function ClientDetail() {
                   src={project.media.logo}
                   alt={`${project.name} logo`}
                   className="w-16 h-16 rounded-lg object-contain bg-white/5 p-2"
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
                 />
               )}
 

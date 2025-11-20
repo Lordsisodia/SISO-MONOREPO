@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import { CourseProgramScreen } from "@/domains/partnerships/portal-architecture/academy/ui/courses/CourseProgramScreen";
 
-export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "SISO Partner Academy • Course",
+};
 
-export function generateMetadata({ params }: { params: { courseId: string } }): Metadata {
-  return {
-    title: `${params.courseId.replace(/-/g, " ")} • SISO Partner Academy`,
-  };
-}
+type CourseParams = { courseId: string };
 
-export default function CourseProgramPage({ params }: { params: { courseId: string } }) {
-  return <CourseProgramScreen courseId={params.courseId} />;
+export default async function CourseProgramPage({ params }: { params: Promise<CourseParams> }) {
+  const { courseId } = await params;
+  return <CourseProgramScreen courseId={courseId} />;
 }

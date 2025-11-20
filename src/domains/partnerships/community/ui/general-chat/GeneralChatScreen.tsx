@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { ChatViewport } from "@/domains/partnerships/portal-architecture/community/messages/ui/mobile/components/ChatViewport";
-import { ComposerBar } from "@/domains/partnerships/portal-architecture/community/messages/ui/mobile/components/ComposerBar";
 import { ConversationTimeline } from "@/domains/partnerships/portal-architecture/community/messages/ui/mobile/components/conversation/ConversationTimeline";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { CommunityNavLayer } from "@/domains/partnerships/community/ui/CommunityPageShell";
@@ -18,6 +17,15 @@ import type { ConversationMessage } from "@/domains/partnerships/portal-architec
 import { ExternalLink, Megaphone, UsersRound, ListChecks, Bookmark } from "lucide-react";
 import Link from "next/link";
 import { MobileNavigationProvider, useMobileNavigation } from "@/domains/partnerships/mobile/application/navigation-store";
+import { useHydrateOnView } from "@/domains/shared/hooks/useHydrateOnView";
+
+const LazyComposerBar = dynamic(
+  () =>
+    import("@/domains/partnerships/portal-architecture/community/messages/ui/mobile/components/ComposerBar").then(
+      (mod) => ({ default: mod.ComposerBar }),
+    ),
+  { ssr: false, suspense: true },
+);
 
 const localeFormatter = new Intl.DateTimeFormat("en-US", {
   hour: "numeric",
@@ -27,9 +35,20 @@ const localeFormatter = new Intl.DateTimeFormat("en-US", {
 
 const formatTimestamp = (iso: string): string => localeFormatter.format(new Date(iso));
 
-const CampusDrawer = dynamic(
-  () => import("@/domains/partnerships/shared/ui/mobile/campus-sidebar/CampusDrawer").then((m) => m.CampusDrawer),
-  { ssr: false, loading: () => null },
+function ComposerBarFallback({ minHeight }: { minHeight: number }) {
+  return (
+    <div
+      className="rounded-2xl border border-white/10 bg-white/5 p-4 text-xs uppercase tracking-[0.3em] text-white/50"
+      style={{ minHeight }}
+    >
+      Preparing composer…
+    </div>
+  );
+}
+
+const CampusDrawerHydrator = dynamic(
+  () => import("@/domains/partnerships/shared/ui/mobile/campus-sidebar/CampusDrawerHydrator.client").then((m) => m.CampusDrawerHydrator),
+  { ssr: false, suspense: true },
 );
 
 const toConversationMessages = (channel: CommunityChannelPreset): ConversationMessage[] =>
@@ -107,26 +126,33 @@ function ChannelView({ channel, config }: ChannelViewProps) {
   const [composerHeight, setComposerHeight] = useState(0);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const { openDrawer, isDrawerOpen } = useMobileNavigation();
+  const { ref: composerRef, hydrated: composerHydrated } = useHydrateOnView<HTMLDivElement>({ rootMargin: "160px 0px" });
 
   const mappedConversation = useMemo(() => toConversationMessages(channel), [channel]);
   const threadStatus = channel.highlights[0]?.value ?? "Active now";
+  const fallbackComposerHeight = config.composerMode === "enabled" ? 96 : 72;
+  const effectiveComposerHeight = composerHydrated ? composerHeight : fallbackComposerHeight;
 
   return (
     <>
-      {isDrawerOpen ? <CampusDrawer /> : null}
+      {isDrawerOpen ? (
+        <Suspense fallback={null}>
+          <CampusDrawerHydrator />
+        </Suspense>
+      ) : null}
       <section className="relative flex min-h-screen flex-col bg-siso-bg-primary text-siso-text-primary">
         <div className="pointer-events-none absolute inset-0 z-0">
           <FallingPattern className="h-full [mask-image:radial-gradient(ellipse_at_center,transparent,var(--background))]" />
         </div>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-md flex-1 flex-col px-3 pt-1.5">
+        <div className="relative z-10 mx-auto flex w-full max-w-md flex-1 flex-col px-3 pt-1.5">
         <ChatViewport
           isDirectoryOpen={isDetailsOpen}
           onOpenDirectory={() => setIsDetailsOpen(true)}
           threadName={config.threadName}
           threadStatus={threadStatus}
           avatarLabel={config.avatarLabel}
-          contentOffset={composerHeight + 24}
+          contentOffset={effectiveComposerHeight + 24}
           onOpenAppDrawer={openDrawer}
         >
           <SettingsGroupCallout
@@ -147,15 +173,23 @@ function ChannelView({ channel, config }: ChannelViewProps) {
           <ConversationTimeline messages={mappedConversation} />
         </ChatViewport>
 
-        {config.composerMode === "enabled" ? (
-          <ComposerBar onHeightChange={setComposerHeight} />
-        ) : (
-          <ReadOnlyComposerNotice
-            message={channel.composer.lockedCopy ?? "Only SISO staff can post here."}
-            helperText={channel.composer.helperText}
-            onHeightChange={setComposerHeight}
-          />
-        )}
+        <div ref={composerRef} aria-live="polite">
+          {composerHydrated ? (
+            config.composerMode === "enabled" ? (
+              <Suspense fallback={<ComposerBarFallback minHeight={fallbackComposerHeight} />}>
+                <LazyComposerBar onHeightChange={setComposerHeight} />
+              </Suspense>
+            ) : (
+              <ReadOnlyComposerNotice
+                message={channel.composer.lockedCopy ?? "Only SISO staff can post here."}
+                helperText={channel.composer.helperText}
+                onHeightChange={setComposerHeight}
+              />
+            )
+          ) : (
+            <ComposerBarFallback minHeight={fallbackComposerHeight} />
+          )}
+        </div>
       </div>
 
         <ChannelDetailsOverlay

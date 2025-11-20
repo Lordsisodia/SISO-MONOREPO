@@ -301,6 +301,9 @@ export function IntegrationsSettingsScreen() {
                         src={integrationLogos[integration.id as IntegrationLogoKey]}
                         alt=""
                         className="h-5 w-5 object-contain"
+                        loading="lazy"
+                        decoding="async"
+                        fetchPriority="low"
                       />
                     </div>
                     <div className="min-w-0 flex-1">
@@ -418,6 +421,9 @@ export function IntegrationsSettingsScreen() {
                       src={integrationLogos[selectedIntegration.id as IntegrationLogoKey]}
                       alt=""
                       className="h-5 w-5 object-contain"
+                      loading="lazy"
+                      decoding="async"
+                      fetchPriority="low"
                     />
                   </div>
                   <div className="flex-1">

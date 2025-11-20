@@ -1,13 +1,18 @@
-"use client";
-
 import type { ReactNode } from "react";
-import { MobileShell } from "@/domains/partnerships/mobile/ui/MobileShell";
-import { LearningHubResponsive } from "@/domains/partnerships/portal-architecture/academy/ui/LearningHubResponsive";
+import { Suspense } from "react";
+import { AcademyShell } from "./AcademyShell.client";
 
 export default function PartnersAcademyLayout({ children }: { children: ReactNode }) {
   return (
-    <MobileShell initialTab="learning" renderViewportContent={() => null}>
+    <>
       {children}
-    </MobileShell>
+      <Suspense fallback={<NavHydratorFallback />}>
+        <AcademyShell />
+      </Suspense>
+    </>
   );
+}
+
+function NavHydratorFallback() {
+  return <div className="sr-only" aria-hidden="true" />;
 }

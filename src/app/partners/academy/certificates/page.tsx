@@ -1,11 +1,8 @@
-"use client";
-
+import Link from "next/link";
 import { Sparkles, Award, ArrowLeft, Info } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { Awards } from "@/components/ui/award";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { Waves } from "@/components/ui/wave-background";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 
@@ -15,8 +12,6 @@ const certificates = [
 ];
 
 export default function CertificatesPage() {
-  const router = useRouter();
-
   return (
     <main className="bg-siso-bg-primary text-siso-text-primary min-h-screen relative overflow-hidden">
       <div
@@ -28,13 +23,13 @@ export default function CertificatesPage() {
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 lg:py-12">
         <div className="relative min-h-[128px]">
           <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
-            <button
-              onClick={() => router.back()}
-              aria-label="Back"
+            <Link
+              href="/partners/academy"
+              aria-label="Back to Academy hub"
               className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
             >
               <ArrowLeft className="h-5 w-5" />
-            </button>
+            </Link>
           </div>
           <HighlightCard
             color="orange"
@@ -95,16 +90,11 @@ export default function CertificatesPage() {
               <li>Bring in qualified recruits to satisfy certain program requirements.</li>
             </ul>
             <div className="flex flex-wrap gap-2">
-              <Button size="sm" className="rounded-2xl px-4" onClick={() => router.push("/partners/academy/courses")}>
-                Browse courses
+              <Button size="sm" className="rounded-2xl px-4" asChild>
+                <Link href="/partners/academy/courses">Browse courses</Link>
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="border border-white/15 rounded-2xl px-4"
-                onClick={() => router.push("/partners/earnings/tier-progression")}
-              >
-                View tier paths
+              <Button variant="ghost" size="sm" className="border border-white/15 rounded-2xl px-4" asChild>
+                <Link href="/partners/earnings/tier-progression">View tier paths</Link>
               </Button>
             </div>
           </div>

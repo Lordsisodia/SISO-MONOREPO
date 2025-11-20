@@ -1,0 +1,560 @@
+{
+  "stats": {
+    "totalProjects": 17,
+    "industriesServed": 10,
+    "avgDeliveryDays": 14,
+    "totalValueDelivered": 49000,
+    "clientSatisfaction": 5
+  },
+  "clients": [
+    {
+      "id": "test-client",
+      "name": "Acme Fitness Studio",
+      "industry": "fitness-sports",
+      "tagline": "AI-powered fitness booking and membership management platform",
+      "description": "Complete fitness studio management system featuring class booking, membership management, personal training scheduling, and member engagement tools. Built to handle 500+ active members with real-time availability and automated billing.",
+      "projectType": "SaaS",
+      "metadata": {
+        "featured": true,
+        "showInPortfolio": true,
+        "seoTitle": "Acme Fitness Studio - Complete Gym Management Platform | SISO Portfolio",
+        "seoDescription": "AI-powered fitness booking and membership management system. Built in 14 days, saving 68% vs traditional agencies. Real-time booking, automated billing, member engagement.",
+        "tags": [
+          "fitness",
+          "gym",
+          "booking",
+          "membership",
+          "saas",
+          "wellness",
+          "class-management"
+        ]
+      },
+      "coverImage": "https://via.placeholder.com/375x667/1a1a1a/FF6B35?text=Mobile+Home",
+      "pricing": {
+        "currency": "GBP",
+        "min": null,
+        "max": null,
+        "sisoPrice": 8000
+      },
+      "timeline": {
+        "durationDays": 14
+      },
+      "results": {
+        "clientSatisfaction": 5
+      }
+    },
+    {
+      "id": "mayorker",
+      "name": "Mayorker Activities",
+      "industry": "tourism-activities",
+      "tagline": "Complete activity booking platform for Majorca tourism",
+      "description": "Multi-activity booking and rental management system for bike rentals, boat trips, and tour guides in Majorca, Spain. Built to handle multiple activity types with real-time availability.",
+      "projectType": "Web App",
+      "metadata": {
+        "featured": true,
+        "showInPortfolio": true,
+        "seoTitle": "Mayorker Activities - Tourism Booking Platform | SISO Portfolio",
+        "seoDescription": "Complete activity booking system for bike rentals, boat trips, and tours in Majorca. Built in 14 days with AI-powered development.",
+        "tags": [
+          "booking",
+          "tourism",
+          "activities",
+          "rental",
+          "PWA",
+          "Majorca"
+        ]
+      },
+      "coverImage": "/portfolio/mayorker/mobile/home.png",
+      "pricing": {
+        "currency": "GBP",
+        "min": null,
+        "max": null,
+        "sisoPrice": 5000
+      },
+      "timeline": {
+        "durationDays": 14
+      },
+      "results": {
+        "clientSatisfaction": 5
+      }
+    },
+    {
+      "id": "golden-spoon-restaurant",
+      "name": "The Golden Spoon",
+      "industry": "food-beverage",
+      "tagline": "Modern restaurant website with online ordering and reservations",
+      "description": "Complete restaurant website featuring online menu, table reservations, and integrated online ordering system. Built with mobile-first design for customers browsing on their phones, with a powerful admin dashboard for staff to manage bookings and orders in real-time.",
+      "projectType": "Website",
+      "metadata": {
+        "featured": true,
+        "showInPortfolio": true,
+        "seoTitle": "The Golden Spoon - Restaurant Website Case Study | SISO Portfolio",
+        "seoDescription": "Modern restaurant website with online ordering and reservations. Built in 10 days with AI-powered development.",
+        "tags": [
+          "restaurant",
+          "online ordering",
+          "reservations",
+          "food",
+          "dining"
+        ]
+      },
+      "coverImage": "https://via.placeholder.com/375x812/0A0A0A/FF5722?text=Mobile+Home",
+      "pricing": {
+        "currency": "GBP",
+        "min": 3000,
+        "max": 6000,
+        "sisoPrice": null
+      },
+      "timeline": {
+        "durationDays": 10
+      },
+      "results": {
+        "clientSatisfaction": 5
+      }
+    },
+    {
+      "id": "cryptotrade-pro",
+      "name": "CryptoTrade Pro",
+      "industry": "fintech-crypto",
+      "tagline": "Secure cryptocurrency trading platform with real-time market data",
+      "description": "Professional-grade cryptocurrency trading platform featuring real-time market data, portfolio tracking, and secure wallet management. Built with enterprise-level security and compliance in mind, handling thousands of trades per day with institutional-grade infrastructure.",
+      "projectType": "SaaS Platform",
+      "metadata": {
+        "featured": true,
+        "showInPortfolio": true,
+        "seoTitle": "CryptoTrade Pro - Crypto Trading Platform | SISO Portfolio",
+        "seoDescription": "Secure cryptocurrency trading platform with real-time data and portfolio tracking. Built in 20 days with AI-powered development.",
+        "tags": [
+          "crypto",
+          "trading",
+          "fintech",
+          "blockchain",
+          "SaaS"
+        ]
+      },
+      "coverImage": "https://via.placeholder.com/375x812/0A0A0A/00C853?text=Mobile+Trading",
+      "pricing": {
+        "currency": "GBP",
+        "min": 8000,
+        "max": 15000,
+        "sisoPrice": null
+      },
+      "timeline": {
+        "durationDays": 20
+      },
+      "results": {
+        "clientSatisfaction": 5
+      }
+    },
+    {
+      "id": "creative-hub-agency",
+      "name": "CreativeHub Agency",
+      "industry": "saas",
+      "tagline": "Portfolio showcase platform for creative agencies",
+      "description": "Modern portfolio and project showcase platform for creative agencies to display their work, manage client projects, and win new business. Features interactive portfolio galleries, client testimonials, case study templates, and integrated contact forms with CRM capabilities.",
+      "projectType": "Website + CMS",
+      "metadata": {
+        "featured": true,
+        "showInPortfolio": true,
+        "seoTitle": "CreativeHub Agency - Portfolio Platform Case Study | SISO Portfolio",
+        "seoDescription": "Custom portfolio platform for creative agencies with CMS integration. Built in 15 days with AI-powered development.",
+        "tags": [
+          "agency",
+          "portfolio",
+          "CMS",
+          "creative",
+          "showcase"
+        ]
+      },
+      "coverImage": "https://via.placeholder.com/375x812/0A0A0A/2196F3?text=Mobile+Home",
+      "pricing": {
+        "currency": "GBP",
+        "min": 5000,
+        "max": 10000,
+        "sisoPrice": null
+      },
+      "timeline": {
+        "durationDays": 15
+      },
+      "results": {
+        "clientSatisfaction": 5
+      }
+    },
+    {
+      "id": "uber-crypt",
+      "name": "Uber Crypt",
+      "industry": "fintech-crypto",
+      "tagline": "Cryptocurrency trading and wallet application",
+      "description": "Secure crypto wallet and trading platform with real-time market data.",
+      "projectType": "Web App",
+      "metadata": {
+        "featured": false,
+        "showInPortfolio": true,
+        "seoTitle": "Uber Crypt - Crypto Trading App | SISO Portfolio",
+        "seoDescription": "Cryptocurrency trading and wallet management platform.",
+        "tags": [
+          "crypto",
+          "fintech",
+          "trading",
+          "blockchain"
+        ]
+      },
+      "coverImage": "/portfolio/uber-crypt/mobile/home.png",
+      "pricing": {
+        "currency": "GBP",
+        "min": null,
+        "max": null,
+        "sisoPrice": 6000
+      },
+      "timeline": {
+        "durationDays": 15
+      },
+      "results": {
+        "clientSatisfaction": null
+      }
+    },
+    {
+      "id": "shout",
+      "name": "Shout",
+      "industry": "health-wellness",
+      "tagline": "Cold shower habit tracking app",
+      "description": "TODO: Add description",
+      "projectType": "Web App",
+      "metadata": {
+        "featured": false,
+        "showInPortfolio": true,
+        "seoTitle": "Shout - Cold Shower Tracker | SISO Portfolio",
+        "seoDescription": "Habit tracking app for cold shower enthusiasts",
+        "tags": [
+          "health",
+          "wellness",
+          "habits"
+        ]
+      },
+      "coverImage": "/portfolio/shout/mobile/home.png",
+      "pricing": {
+        "currency": "GBP",
+        "min": null,
+        "max": null,
+        "sisoPrice": 2000
+      },
+      "timeline": {
+        "durationDays": 10
+      },
+      "results": {
+        "clientSatisfaction": null
+      }
+    },
+    {
+      "id": "optimal",
+      "name": "Optimal Building Maintenance",
+      "industry": "construction",
+      "tagline": "Construction company management and operations system",
+      "description": "Complete project management and client portal for construction operations.",
+      "projectType": "Platform",
+      "metadata": {
+        "featured": false,
+        "showInPortfolio": true,
+        "seoTitle": "Optimal Building Maintenance | SISO Portfolio",
+        "seoDescription": "Construction management system",
+        "tags": [
+          "construction",
+          "management"
+        ]
+      },
+      "coverImage": "/portfolio/optimal/mobile/home.png",
+      "pricing": {
+        "currency": "GBP",
+        "min": null,
+        "max": null,
+        "sisoPrice": 4000
+      },
+      "timeline": {
+        "durationDays": 16
+      },
+      "results": {
+        "clientSatisfaction": null
+      }
+    },
+    {
+      "id": "nm-construction",
+      "name": "NM Construction",
+      "industry": "construction",
+      "tagline": "Construction business operations and job tracking system",
+      "description": "Business management system for construction company operations.",
+      "projectType": "Platform",
+      "metadata": {
+        "featured": false,
+        "showInPortfolio": true,
+        "seoTitle": "NM Construction | SISO Portfolio",
+        "seoDescription": "Construction operations system",
+        "tags": [
+          "construction",
+          "operations"
+        ]
+      },
+      "coverImage": "/portfolio/nm-construction/mobile/home.png",
+      "pricing": {
+        "currency": "GBP",
+        "min": null,
+        "max": null,
+        "sisoPrice": 4000
+      },
+      "timeline": {
+        "durationDays": 17
+      },
+      "results": {
+        "clientSatisfaction": null
+      }
+    },
+    {
+      "id": "lets-go",
+      "name": "Let's Go",
+      "industry": "saas",
+      "tagline": "Student housing matchmaking platform",
+      "description": "University student housemate finder with profile matching and messaging.",
+      "projectType": "Web App",
+      "metadata": {
+        "featured": false,
+        "showInPortfolio": true,
+        "seoTitle": "lets go | SISO Portfolio",
+        "seoDescription": "TODO: Add SEO description",
+        "tags": [
+          "TODO"
+        ]
+      },
+      "coverImage": "/portfolio/lets-go/mobile/home.png",
+      "pricing": {
+        "currency": "GBP",
+        "min": null,
+        "max": null,
+        "sisoPrice": 3000
+      },
+      "timeline": {
+        "durationDays": 14
+      },
+      "results": {
+        "clientSatisfaction": null
+      }
+    },
+    {
+      "id": "siso-internal",
+      "name": "SISO Internal",
+      "industry": "internal-tools",
+      "tagline": "Internal task tracker and daily life manager for SISO agency",
+      "description": "Complete task management and team coordination platform for internal agency use.",
+      "projectType": "Internal Tool",
+      "metadata": {
+        "featured": true,
+        "showInPortfolio": true,
+        "seoTitle": "SISO Internal - Task Manager | SISO Portfolio",
+        "seoDescription": "Internal task and project management system",
+        "tags": [
+          "internal",
+          "productivity",
+          "task-manager"
+        ]
+      },
+      "coverImage": "/portfolio/siso-internal/mobile/home.png",
+      "pricing": {
+        "currency": "GBP",
+        "min": null,
+        "max": null,
+        "sisoPrice": 0
+      },
+      "timeline": {
+        "durationDays": 17
+      },
+      "results": {
+        "clientSatisfaction": null
+      }
+    },
+    {
+      "id": "mooshin",
+      "name": "Mooshin",
+      "industry": "elearning",
+      "tagline": "Martial arts course selling platform",
+      "description": "Online course marketplace for martial arts instruction with payment processing.",
+      "projectType": "Platform",
+      "metadata": {
+        "featured": false,
+        "showInPortfolio": true,
+        "seoTitle": "Mooshin - Martial Arts Courses | SISO Portfolio",
+        "seoDescription": "Martial arts online course platform",
+        "tags": [
+          "elearning",
+          "courses",
+          "martial-arts"
+        ]
+      },
+      "coverImage": "/portfolio/mooshin/mobile/home.png",
+      "pricing": {
+        "currency": "GBP",
+        "min": null,
+        "max": null,
+        "sisoPrice": 5000
+      },
+      "timeline": {
+        "durationDays": 17
+      },
+      "results": {
+        "clientSatisfaction": null
+      }
+    },
+    {
+      "id": "gritness",
+      "name": "Gritness Gym",
+      "industry": "fitness-sports",
+      "tagline": "Gym management and member application",
+      "description": "Complete gym management platform with class booking and membership management.",
+      "projectType": "Web App",
+      "metadata": {
+        "featured": false,
+        "showInPortfolio": true,
+        "seoTitle": "gritness | SISO Portfolio",
+        "seoDescription": "TODO: Add SEO description",
+        "tags": [
+          "TODO"
+        ]
+      },
+      "coverImage": "/portfolio/gritness/mobile/home.png",
+      "pricing": {
+        "currency": "GBP",
+        "min": null,
+        "max": null,
+        "sisoPrice": 3000
+      },
+      "timeline": {
+        "durationDays": 14
+      },
+      "results": {
+        "clientSatisfaction": null
+      }
+    },
+    {
+      "id": "trojan-mma",
+      "name": "Trojan MMA",
+      "industry": "fitness-sports",
+      "tagline": "MMA gym website and booking system",
+      "description": "Professional MMA gym website with class schedules and membership signup.",
+      "projectType": "Website",
+      "metadata": {
+        "featured": false,
+        "showInPortfolio": true,
+        "seoTitle": "Trojan MMA | SISO Portfolio",
+        "seoDescription": "MMA gym website",
+        "tags": [
+          "mma",
+          "fitness",
+          "sports"
+        ]
+      },
+      "coverImage": "/portfolio/trojan-mma/mobile/home.png",
+      "pricing": {
+        "currency": "GBP",
+        "min": null,
+        "max": null,
+        "sisoPrice": 3000
+      },
+      "timeline": {
+        "durationDays": 14
+      },
+      "results": {
+        "clientSatisfaction": null
+      }
+    },
+    {
+      "id": "five-star-hire",
+      "name": "Five Star Car Hire",
+      "industry": "transportation",
+      "tagline": "Car rental booking platform",
+      "description": "Vehicle rental booking system with catalog, pricing calculator, and reservations.",
+      "projectType": "Web App",
+      "metadata": {
+        "featured": false,
+        "showInPortfolio": true,
+        "seoTitle": "Five Star Car Hire | SISO Portfolio",
+        "seoDescription": "Car rental platform",
+        "tags": [
+          "rental",
+          "transportation"
+        ]
+      },
+      "coverImage": "/portfolio/five-star-hire/mobile/home.png",
+      "pricing": {
+        "currency": "GBP",
+        "min": null,
+        "max": null,
+        "sisoPrice": 3500
+      },
+      "timeline": {
+        "durationDays": 14
+      },
+      "results": {
+        "clientSatisfaction": null
+      }
+    },
+    {
+      "id": "elementary",
+      "name": "Elementary",
+      "industry": "food-beverage",
+      "tagline": "Restaurant website and reservation system",
+      "description": "Modern restaurant website with menu showcase and online reservations.",
+      "projectType": "Website",
+      "metadata": {
+        "featured": false,
+        "showInPortfolio": true,
+        "seoTitle": "Elementary Restaurant | SISO Portfolio",
+        "seoDescription": "Restaurant website and reservations",
+        "tags": [
+          "restaurant",
+          "food"
+        ]
+      },
+      "coverImage": "/portfolio/elementary/mobile/home.png",
+      "pricing": {
+        "currency": "GBP",
+        "min": null,
+        "max": null,
+        "sisoPrice": 2500
+      },
+      "timeline": {
+        "durationDays": 11
+      },
+      "results": {
+        "clientSatisfaction": null
+      }
+    },
+    {
+      "id": "team-apollo",
+      "name": "Team Apollo",
+      "industry": "internal-tools",
+      "tagline": "Internal team collaboration tool",
+      "description": "Team collaboration and project coordination platform for internal use.",
+      "projectType": "Internal Tool",
+      "metadata": {
+        "featured": false,
+        "showInPortfolio": true,
+        "seoTitle": "Team Apollo | SISO Portfolio",
+        "seoDescription": "Team collaboration tool",
+        "tags": [
+          "internal",
+          "collaboration"
+        ]
+      },
+      "coverImage": "/portfolio/team-apollo/mobile/home.png",
+      "pricing": {
+        "currency": "GBP",
+        "min": null,
+        "max": null,
+        "sisoPrice": 0
+      },
+      "timeline": {
+        "durationDays": 14
+      },
+      "results": {
+        "clientSatisfaction": null
+      }
+    }
+  ]
+}

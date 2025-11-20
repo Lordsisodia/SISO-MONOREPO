@@ -1,15 +1,13 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
-import { notFound, useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Download, ExternalLink, Link as LinkIcon, Share2, Sparkles, Check } from "lucide-react";
+import { notFound } from "next/navigation";
+import { ArrowLeft, ArrowRight, Download, ExternalLink, Share2, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { pitchKitDetails } from "@/domains/partnerships/portal-architecture/academy/ui/pitch-kit/data";
 import { Waves } from "@/components/ui/wave-background";
+import { CopyShareButton } from "../../components/CopyShareButton.client";
 
 export default function PitchKitDetailPage({ params }: { params: { type: string; slug: string } }) {
   const key = `${params.type}/${params.slug}`;
@@ -18,20 +16,6 @@ export default function PitchKitDetailPage({ params }: { params: { type: string;
   if (!kit) return notFound();
 
   const shareUrl = kit.link;
-  const [copied, setCopied] = useState(false);
-  const router = useRouter();
-
-  const handleCopy = async () => {
-    if (typeof navigator !== "undefined" && navigator.clipboard) {
-      try {
-        await navigator.clipboard.writeText(shareUrl);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 1600);
-      } catch {
-        setCopied(false);
-      }
-    }
-  };
 
   return (
     <main className="relative bg-siso-bg-primary text-siso-text-primary min-h-screen overflow-hidden">
@@ -49,13 +33,13 @@ export default function PitchKitDetailPage({ params }: { params: { type: string;
       <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-6 px-4 py-10 lg:py-12">
         <div className="relative min-h-[128px]">
           <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
-            <button
-              onClick={() => router.push("/partners/academy/pitch-kit")}
+            <Link
+              href="/partners/academy/pitch-kit"
               aria-label="Back to pitch kit hub"
               className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center text-white transition hover:text-white/80"
             >
               <ArrowLeft className="h-5 w-5" />
-            </button>
+            </Link>
           </div>
           <HighlightCard
             color="orange"
@@ -80,10 +64,7 @@ export default function PitchKitDetailPage({ params }: { params: { type: string;
         </div>
 
         <section className="grid gap-3 sm:grid-cols-2">
-          <Button variant="secondary" size="lg" onClick={handleCopy} className="flex items-center justify-center gap-2">
-            {copied ? <Check className="h-4 w-4" /> : <LinkIcon className="h-4 w-4" />}
-            {copied ? "Link copied" : "Copy share link"}
-          </Button>
+          <CopyShareButton shareUrl={shareUrl} />
           <Button variant="outline" size="lg">
             <Download className="h-4 w-4" />
             <span className="ml-2">Download PDF</span>

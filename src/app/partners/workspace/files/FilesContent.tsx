@@ -1,10 +1,7 @@
-"use client";
-
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Folder, Box, FileText, Upload } from "lucide-react";
+import { Box, FileText, Upload } from "lucide-react";
 
-import { PartnersPageShell } from "@/domains/partnerships/community/ui/CommunityPageShell";
+import { LazyPartnersPageShell } from "@/domains/partnerships/community/ui/LazyPartnersPageShell";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { Badge } from "@/components/ui/badge";
@@ -53,16 +50,9 @@ const recentActivity = [
 ];
 
 export function WorkspaceFilesContent() {
-  const router = useRouter();
-  const scrollToMyFiles = () => {
-    if (typeof document !== "undefined") {
-      document.getElementById("my-files")?.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
-    <PartnersPageShell initialState={{ activeDrawerSection: "workspace" }}>
-      <div className="space-y-6 p-4 text-white lg:p-8">
+    <LazyPartnersPageShell initialState={{ activeDrawerSection: "workspace" }}>
+      <div className="space-y-6 p-4 text-white lg:p-8 scroll-smooth">
         <HighlightCard
           color="orange"
           title="Workspace files hub"
@@ -70,7 +60,7 @@ export function WorkspaceFilesContent() {
           metricValue="3"
           metricLabel="spaces unified"
           buttonText="Upload file"
-          onButtonClick={scrollToMyFiles}
+          buttonHref="#my-files"
           icon={<Upload className="h-5 w-5" />}
           hideDivider
           showCornerIcon={false}
@@ -108,7 +98,7 @@ export function WorkspaceFilesContent() {
           </div>
         </SettingsGroupCallout>
       </div>
-    </PartnersPageShell>
+    </LazyPartnersPageShell>
   );
 }
 

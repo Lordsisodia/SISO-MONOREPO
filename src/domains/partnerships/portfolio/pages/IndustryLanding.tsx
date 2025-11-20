@@ -128,6 +128,9 @@ export function IndustryLanding() {
                 src={industry.headerImage}
                 alt={`${industry.name} header`}
                 className="w-full h-full object-cover"
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
               />
               {/* Dark Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30" />

@@ -47,6 +47,7 @@ export function CourseLessonScreen({ courseId, lessonId }: { courseId: string; l
               <ArrowLeft className="h-5 w-5" />
             </Link>
           </div>
+        </div>
         <SettingsGroupCallout
           icon={<Play className="h-4 w-4" />}
           title={lesson.title}
