@@ -67,6 +67,10 @@ const GeneralSettingsScreen = dynamic(
 
 export function QuickActionsContent() {
   const { activeQuickAction } = useMobileNavigation();
+  const target = useMemo(
+    () => settingsRouteRegistry.find((r) => r.quickActionId === activeQuickAction),
+    [activeQuickAction],
+  );
 
   const renderDeferred = (node: ReactNode) => (
     <Suspense fallback={<Loading />}>
@@ -94,12 +98,6 @@ export function QuickActionsContent() {
   if (activeQuickAction === "checklist") return renderDeferred(<ChecklistPanel />);
   if (activeQuickAction === "wallet") return renderDeferred(<WalletPanel />);
   if (!activeQuickAction || activeQuickAction === "settings") return renderDeferred(<SettingsPanel />);
-
-  // Resolve settings views from the registry by quickActionId
-  const target = useMemo(
-    () => settingsRouteRegistry.find((r) => r.quickActionId === activeQuickAction),
-    [activeQuickAction],
-  );
 
   if (!target) return <SettingsPanel />;
 

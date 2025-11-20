@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import ReactFlow, { Background, Controls } from 'reactflow'
 import 'reactflow/dist/style.css'
 
@@ -14,8 +14,6 @@ export function PortfolioSitemapGraph({ pages = [], pageLinks = [] }: Props) {
   if (!pages.length) {
     return <p className="text-sm text-siso-text-muted">Page map coming soon.</p>
   }
-
-  const byId = useMemo(() => new Map(pages.map(p => [p.id, p])), [pages])
 
   const nodes = pages.map((p, i) => ({
     id: p.id,

@@ -71,6 +71,8 @@ export function ClientDetail() {
   const industry = getIndustryBySlug(industrySlug || '');
   const project = clients.find(c => c.id === clientId);
 
+  const [tab, setTab] = useState<'overview'|'walkthrough'|'pricing'|'timeline'|'testimonial'>('overview');
+
   // Handle 404
   if (!industry || !project) {
     return (
@@ -98,7 +100,6 @@ export function ClientDetail() {
     .filter(c => c.industry === project.industry && c.id !== project.id)
     .slice(0, 3);
 
-  const [tab, setTab] = useState<'overview'|'walkthrough'|'pricing'|'timeline'|'testimonial'>('overview');
   const navItems = [
     { name: 'Overview', url: 'overview', icon: LayoutGrid },
     { name: 'Guided', url: 'walkthrough', icon: PlayCircle },
