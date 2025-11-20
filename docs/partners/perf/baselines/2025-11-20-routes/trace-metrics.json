@@ -1,0 +1,104 @@
+{
+  "capturedAt": "2025-11-20T17:10:45.203Z",
+  "baseUrl": "http://localhost:3003",
+  "routes": [
+    {
+      "name": "academy",
+      "path": "/partners/academy"
+    },
+    {
+      "name": "pipeline-ops",
+      "path": "/partners/pipeline-ops"
+    },
+    {
+      "name": "recruitment",
+      "path": "/partners/recruitment"
+    },
+    {
+      "name": "community",
+      "path": "/partners/community"
+    },
+    {
+      "name": "messages",
+      "path": "/partners/community/messages"
+    },
+    {
+      "name": "settings",
+      "path": "/partners/settings"
+    },
+    {
+      "name": "settings-notifications",
+      "path": "/partners/settings/account/notifications"
+    },
+    {
+      "name": "workspace",
+      "path": "/partners/workspace"
+    }
+  ],
+  "metrics": {
+    "academy": {
+      "url": "http://localhost:3003/partners/academy",
+      "domContentLoaded": 2995.5999999940395,
+      "loadEventEnd": 3361,
+      "firstPaint": 2984,
+      "firstContentfulPaint": 3484,
+      "timestamp": "2025-11-20T17:09:52.437Z"
+    },
+    "pipeline-ops": {
+      "url": "http://localhost:3003/partners/pipeline-ops",
+      "domContentLoaded": 1817,
+      "loadEventEnd": 2118.4000000059605,
+      "firstPaint": 1800,
+      "firstContentfulPaint": 2200,
+      "timestamp": "2025-11-20T17:10:02.132Z"
+    },
+    "recruitment": {
+      "url": "http://localhost:3003/partners/recruitment",
+      "domContentLoaded": 810.0999999940395,
+      "loadEventEnd": 1060.5,
+      "firstPaint": 824,
+      "firstContentfulPaint": 1140,
+      "timestamp": "2025-11-20T17:10:09.059Z"
+    },
+    "community": {
+      "url": "http://localhost:3003/partners/community",
+      "domContentLoaded": 556.0999999940395,
+      "loadEventEnd": 822.5,
+      "firstPaint": 576,
+      "firstContentfulPaint": 892,
+      "timestamp": "2025-11-20T17:10:14.864Z"
+    },
+    "messages": {
+      "url": "http://localhost:3003/partners/community/messages",
+      "domContentLoaded": 1736.300000011921,
+      "loadEventEnd": 2000,
+      "firstPaint": 1764,
+      "firstContentfulPaint": 2064,
+      "timestamp": "2025-11-20T17:10:23.275Z"
+    },
+    "settings": {
+      "url": "http://localhost:3003/partners/settings",
+      "domContentLoaded": 1016.4000000059605,
+      "loadEventEnd": 1281.9000000059605,
+      "firstPaint": 1048,
+      "firstContentfulPaint": 1380,
+      "timestamp": "2025-11-20T17:10:30.869Z"
+    },
+    "settings-notifications": {
+      "url": "http://localhost:3003/partners/settings/account/notifications",
+      "domContentLoaded": 1248.7000000178814,
+      "loadEventEnd": 1524.800000011921,
+      "firstPaint": 1268,
+      "firstContentfulPaint": 1604,
+      "timestamp": "2025-11-20T17:10:38.514Z"
+    },
+    "workspace": {
+      "url": "http://localhost:3003/partners/workspace",
+      "domContentLoaded": 762.3000000119209,
+      "loadEventEnd": 1004.1999999880791,
+      "firstPaint": 792,
+      "firstContentfulPaint": 1076,
+      "timestamp": "2025-11-20T17:10:45.117Z"
+    }
+  }
+}

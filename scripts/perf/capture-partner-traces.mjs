@@ -8,7 +8,12 @@ const outputDir = path.resolve(`docs/partners/perf/baselines/${baselineSlug}`);
 const routes = [
   { name: 'academy', path: '/partners/academy' },
   { name: 'pipeline-ops', path: '/partners/pipeline-ops' },
-  { name: 'recruitment', path: '/partners/recruitment' }
+  { name: 'recruitment', path: '/partners/recruitment' },
+  { name: 'community', path: '/partners/community' },
+  { name: 'messages', path: '/partners/community/messages' },
+  { name: 'settings', path: '/partners/settings' },
+  { name: 'settings-notifications', path: '/partners/settings/account/notifications' },
+  { name: 'workspace', path: '/partners/workspace' }
 ];
 
 async function main() {

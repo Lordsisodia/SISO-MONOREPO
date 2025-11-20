@@ -5,15 +5,14 @@ import { useMobileNavigation } from "@/domains/partnerships/mobile/application/n
 import { cn } from "@/domains/shared/utils/cn";
 
 export function FloatingNavButton({ className }: { className?: string }) {
-  const { openDrawer, isDrawerOpen } = useMobileNavigation();
+  const { openDrawer } = useMobileNavigation();
   return (
     <button
       type="button"
       onClick={openDrawer}
       aria-label="Open navigation"
       className={cn(
-        "fixed right-5 top-6 inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/40 bg-black/50 text-white shadow-lg backdrop-blur transition hover:border-white hover:bg-black/70 pointer-events-auto",
-        isDrawerOpen ? "z-40 opacity-0 pointer-events-none" : "z-[999]",
+        "fixed right-5 top-6 inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/40 bg-black/50 text-white shadow-lg backdrop-blur transition hover:border-white hover:bg-black/70 pointer-events-auto z-[999]",
         className,
       )}
     >

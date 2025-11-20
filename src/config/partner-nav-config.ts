@@ -1,4 +1,6 @@
-import rawConfig from "../../docs/partners/partnership-navigation-config.json";
+import rawConfig from "./data/partner-nav-config.json";
+// NOTE: This JSON mirrors docs/partners/architecture/partnership-navigation-config.json
+// to keep runtime imports inside the src tree for Next.js bundling.
 
 export type TierId = "starter" | "active" | "performer" | "elite";
 

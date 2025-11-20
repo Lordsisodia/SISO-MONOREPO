@@ -3,15 +3,11 @@
 import { Suspense, useEffect, useLayoutEffect, useMemo, useRef, type MouseEvent, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { MobileNavigationProvider, useMobileNavigation } from "../application/navigation-store";
+import { useMobileNavigation } from "../application/navigation-store";
 import { QUICK_ACTION_PATH_LOOKUP, QUICK_ACTION_DEFAULT_PATH } from "../application/quick-action-routes";
 import { ScreenViewport } from "./components/ScreenViewport";
 import { QuickActionsContent } from "./quick-actions/QuickActionsContent";
 import { CampusHubScreen } from "@/domains/partnerships/workspace/ui/mobile";
-const CampusDrawerHydrator = dynamic(
-  () => import("@/domains/partnerships/shared/ui/mobile/campus-sidebar/CampusDrawerHydrator.client").then((m) => m.CampusDrawerHydrator),
-  { ssr: false, loading: () => null },
-);
 const LearningHubResponsive = dynamic(
   () => import("@/domains/partnerships/portal-architecture/academy/ui").then((m) => m.LearningHubResponsive),
   { ssr: false },
@@ -24,7 +20,6 @@ import { MessagesScreen } from "@/domains/partnerships/communications/ui/mobile"
 import { LimelightNav, type NavItem } from "@/components/ui/limelight-nav";
 import { Home, GraduationCap, Bell, MessagesSquare, MoreHorizontal } from "lucide-react";
 import type { MobileTabId, QuickActionId } from "../types/navigation";
-import { FloatingNavButton } from "@/domains/partnerships/shared/ui/mobile/FloatingNavButton";
 import { useHydrateOnView } from "@/domains/shared/hooks/useHydrateOnView";
 
 const MESSAGES_CANONICAL_PATH = "/partners/community/messages";
@@ -228,12 +223,6 @@ function ShellContent({
 
   return (
     <>
-      {isDrawerOpen ? (
-        <Suspense fallback={<DrawerFallback />}>
-          <CampusDrawerHydrator />
-        </Suspense>
-      ) : null}
-      {showFloatingNavButton ? <FloatingNavButton /> : null}
       {shouldRenderViewport ? (
         <ScreenViewport isImmersive={isImmersiveMode} hasBottomNav={shouldShowNav}>
           {viewportContent}
@@ -260,27 +249,24 @@ export function MobileShell({
   showFloatingNavButton = true,
   renderViewportContent,
 }: MobileShellProps) {
-  const initialState = useMemo(
-    () => ({
-      activeTab: initialTab,
-      previousTab: initialTab,
-      isQuickActionsOpen: initialTab === "quick-actions" && Boolean(initialQuickAction),
-      isDrawerOpen: false,
-      activeQuickAction: initialQuickAction,
-      isImmersiveMode: initialImmersiveMode ?? (initialTab === "messages"),
-    }),
-    [initialImmersiveMode, initialQuickAction, initialTab],
-  );
+  const { setActiveTab, selectQuickAction, closeQuickActions, setImmersiveMode } = useMobileNavigation();
+
+  useEffect(() => {
+    setActiveTab(initialTab, { immersive: initialImmersiveMode ?? (initialTab === "messages") });
+    if (initialQuickAction) {
+      selectQuickAction(initialQuickAction);
+    } else {
+      closeQuickActions();
+    }
+    if (typeof initialImmersiveMode === "boolean") {
+      setImmersiveMode(initialImmersiveMode);
+    }
+  }, [initialTab, initialQuickAction, initialImmersiveMode, setActiveTab, selectQuickAction, closeQuickActions, setImmersiveMode]);
 
   return (
-    <MobileNavigationProvider initialState={initialState}>
-      <ShellContent
-        showFloatingNavButton={showFloatingNavButton}
-        renderViewportContent={renderViewportContent}
-      >
-        {children}
-      </ShellContent>
-    </MobileNavigationProvider>
+    <ShellContent showFloatingNavButton={showFloatingNavButton} renderViewportContent={renderViewportContent}>
+      {children}
+    </ShellContent>
   );
 }
 
@@ -321,10 +307,6 @@ function NotificationsFallback() {
       ))}
     </div>
   );
-}
-
-function DrawerFallback() {
-  return <div className="sr-only" aria-hidden="true" />;
 }
 
 function LearningTabFallback() {

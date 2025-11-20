@@ -9,40 +9,25 @@
 
 ## 📚 What You Have
 
-### **Complete Documentation Set:**
+### **Complete Documentation Set (current)**
 
-1. **MASTER-PRD-PARTNERSHIPS-PWA.md** ⭐
-   - Discord-style mobile PWA vision
-   - 4-tier progressive system
-   - Complete feature breakdown
-   - Database schema
-   - API endpoints
-   - User journeys
+1. **Partner Portal Master Spec** (`docs/partners/pdr/partner-portal-master.md`)  
+   - Combined PRD, page audit, and feature breakdown.  
+   - Includes UX intents, navigation, and tier requirements.
 
-2. **DEFINITIVE-ARCHITECTURE-BLUEPRINT.md**
-   - Islands Architecture pattern
-   - Feature-Sliced Design + Vertical Slices
-   - State management (TanStack Query + Zustand)
-   - PWA offline-first patterns
-   - Mobile-first patterns
-   - Based on 20+ production app research
+2. **Architecture Blueprint** (`docs/partners/architecture/architecture.md`)  
+   - Real file tree, providers, runtime services, and TODOs.  
+   - Updated whenever `apps/partners` changes.
 
-3. **ARCHITECTURE-GAPS-ANALYSIS.md** 🚨
-   - **32 critical gaps identified**
-   - All have solutions
-   - Prioritized by severity
-   - Would have caused production failures
+3. **Integration & Schema Contracts** (`docs/partners/architecture/integration-points.md`)  
+   - Supabase tables + RLS, cross-app touchpoints, shared libs.  
+   - Use this when adjusting schemas or packages.
 
-4. **COMPLETE-IMPLEMENTATION-GUIDE.md** 📋
-   - Step-by-step 10-week plan
-   - All 32 gaps addressed
-   - Code examples for everything
-   - Security-first approach
+4. **Product + Tier Vision** (`docs/partners/notes/product-vision.md` + `docs/partners/notes/progressive-unlock-plan.md`)  
+   - Condensed KPIs, tier math, unlock rules, and roadmap risks.
 
-5. **THIS FILE (START-HERE.md)**
-   - Quick reference
-   - What to do next
-   - Decision tree
+5. **THIS FILE (START-HERE.md)**  
+   - Quick reference, next steps, and decision tree.
 
 ---
 

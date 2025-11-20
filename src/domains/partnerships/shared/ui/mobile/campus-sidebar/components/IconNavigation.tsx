@@ -118,7 +118,11 @@ interface IconNavigationProps {
   heightClass?: string;
 }
 
-export function IconNavigation({ activeSection, onSectionChange, heightClass = "h-[800px]" }: IconNavigationProps) {
+export function IconNavigation({
+  activeSection,
+  onSectionChange,
+  heightClass = "h-[800px]",
+}: IconNavigationProps) {
   const router = useRouter();
   const { openQuickActionsWith, closeDrawer } = useMobileNavigation();
   const summaries = getTopLevelIconSummaries();
@@ -132,7 +136,7 @@ export function IconNavigation({ activeSection, onSectionChange, heightClass = "
     community: "dot",
   };
 
-  const navItems = summaries.map((summary) => {
+const navItems = summaries.map((summary) => {
     const IconCmp = getIconComponent(summary.icon);
     const fallback = (
       <div className="rounded bg-neutral-800 text-neutral-200 px-1 text-[10px] leading-none">
@@ -172,11 +176,10 @@ export function IconNavigation({ activeSection, onSectionChange, heightClass = "
             key={item.id}
             isActive={activeSection === item.id}
             onClick={() => {
+              onSectionChange(item.id);
               if (item.id === "settings") {
                 router.push("/partners/settings");
                 closeDrawer();
-              } else {
-                onSectionChange(item.id);
               }
             }}
             badge={item.badge}

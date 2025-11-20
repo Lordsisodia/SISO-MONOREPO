@@ -21,17 +21,34 @@ export function CampusDrawer() {
   };
 
   return (
-    <aside
+    <div
       className={cn(
-        "fixed inset-y-0 left-0 z-50 w-full transform bg-transparent p-0 shadow-siso transition-transform duration-200",
-        isDrawerOpen ? "translate-x-0" : "-translate-x-full",
+        "fixed inset-0 z-50 transition-opacity duration-200",
+        isDrawerOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
       )}
-      role="dialog"
-      aria-modal="true"
+      aria-hidden={!isDrawerOpen}
+      onClick={closeDrawer}
     >
-      <Suspense fallback={<div className="h-full w-full bg-[#050505]" role="presentation" />}> 
-        <LazySidebarSurface onClose={closeDrawer} onNavigate={handleNavigate} />
-      </Suspense>
-    </aside>
+      <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-0 flex" role="dialog" aria-modal="true">
+        <aside
+          className={cn(
+            "h-full max-w-[420px] w-[88%] transform transition-transform duration-200",
+            isDrawerOpen ? "translate-x-0" : "-translate-x-full",
+          )}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Suspense fallback={<div className="h-full w-full bg-[#050505]" role="presentation" />}>
+            <LazySidebarSurface onClose={closeDrawer} onNavigate={handleNavigate} />
+          </Suspense>
+        </aside>
+        <button
+          type="button"
+          aria-label="Dismiss campus navigation"
+          onClick={closeDrawer}
+          className="flex-1 h-full"
+        />
+      </div>
+    </div>
   );
 }

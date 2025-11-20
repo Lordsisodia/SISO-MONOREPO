@@ -48,8 +48,33 @@ Use this as the living tracker for driving partner surfaces to <0.5 s TTI. Eac
 ## Phase 5 – Sub-500 ms TTI Push (new)
 Reasoning: we’re consistently under ~1–1.5 s after cacheComponents, but traces show /partners/academy still spends ~3.5 s to LCP in dev due to server prep and JS weight. These tasks lock in the final 0.5 s budget by attacking TTFB, payload size, and edge caching with the latest Next.js guidance.
 
-- [ ] **Prod-grade trace run:** capture Chrome traces + Lighthouse (desktop + mobile) against a production build (`next start --port 3003` or a Vercel preview). Store results under `docs/partners/perf/baselines/2025-11-20-prod/` so TTFB reflects Full Route Cache + CDN behavior.
-- [ ] **≤80 KB parsed goal:** from the latest `.next/analyze/client.json`, list the top 5 `/partners/**` routes over 80 KB parsed. For each, strip optional UI into Suspense + `next/dynamic` hydrators (per cacheComponents best practices) until the parsed payload drops below 80 KB.
-- [ ] **Edge cache rules:** add cache-control headers or Vercel middleware that caches `/partners/academy`, `/partners/pipeline-ops`, and `/partners/recruitment` at the edge (`s-maxage` + `stale-while-revalidate`). Document the policy in `partners-portal-perf.md` so every deploy keeps TTFB <100 ms once warm.
-- [ ] **Critical media trim:** audit hero media on the three benchmark routes; keep only one `fetchpriority="high"` asset per page and lazy-load all secondary imagery/video via aspect-ratio placeholders to keep LCP under 500 ms.
-- [ ] **Adaptive metrics CI:** extend `npm run perf:hydration` / `perf:budgets` (or add a `perf:tti` script) so cached prod traces that exceed 500 ms DCL/load cause CI to fail. This keeps the sub-0.5 s target enforced automatically.
+- [ ] **Prod-grade trace run:** capture Chrome traces + Lighthouse (desktop + mobile) against a production build (`next start --port 3003` or a Vercel preview). Store results under `docs/partners/perf/baselines/2025-11-20-prod/` so TTFB reflects Full Route Cache + CDN behavior.  
+  *Sub-steps (est. 2–2.5 hrs total)*  
+  1. Build + start prod server locally (`npm run build && PORT=3003 next start`) — 20 min.  
+  2. Run `npm run perf:baseline` with `BASELINE_DIR=2025-11-20-prod`, verify traces saved — 30 min.  
+  3. Manually run Lighthouse (desktop + mobile) for the three benchmark routes, save JSON/HTML under `docs/partners/perf/baselines/2025-11-20-prod/lighthouse/` — 60 min.  
+  4. Update the baseline README with summary metrics + analyzer links — 30 min.
+- [ ] **≤80 KB parsed goal:** from the latest `.next/analyze/client.json`, list the top 5 `/partners/**` routes over 80 KB parsed. For each, strip optional UI into Suspense + `next/dynamic` hydrators (per cacheComponents best practices) until the parsed payload drops below 80 KB.  
+  *Sub-steps (est. 1.5 hrs to audit + ~2 hrs per route)*  
+  1. Parse `.next/analyze/client.json`, drop results into a spreadsheet/table with parsed KB + culprit chunks — 45 min.  
+  2. For each over-budget route:  
+     - Identify bundles to defer (icons, hero cards, analytics gadgets) — 30 min.  
+     - Implement Suspense + `next/dynamic` hydrators or CSS fallbacks — 60–90 min.  
+     - Re-run `ANALYZE=true npm run build` and confirm the parsed size <80 KB — 30 min.
+- [ ] **Edge cache rules:** add cache-control headers or Vercel middleware that caches `/partners/academy`, `/partners/pipeline-ops`, and `/partners/recruitment` at the edge (`s-maxage` + `stale-while-revalidate`). Document the policy in `partners-portal-perf.md` so every deploy keeps TTFB <100 ms once warm.  
+  *Sub-steps (est. 3 hrs total)*  
+  1. Draft the caching policy (TTL, stale window, conditions) — 30 min.  
+  2. Implement middleware or `headers()` config to set `Cache-Control` + tag invalidation — 90 min.  
+  3. Smoke-test on preview (hit route twice, verify second response has <100 ms TTFB) — 30 min.  
+  4. Document the strategy + invalidation process in `partners-portal-perf.md` — 30 min.
+- [ ] **Critical media trim:** audit hero media on the three benchmark routes; keep only one `fetchpriority="high"` asset per page and lazy-load all secondary imagery/video via aspect-ratio placeholders to keep LCP under 500 ms.  
+  *Sub-steps (est. 2 hrs total)*  
+  1. Inventory hero images/videos per route (size, priority) — 30 min.  
+  2. Update markup: single `fetchpriority="high"` asset, others `loading="lazy"` with CSS placeholders — 60 min.  
+  3. Re-run Lighthouse to confirm LCP <500 ms and update checklist/README — 30 min.
+- [ ] **Adaptive metrics CI:** extend `npm run perf:hydration` / `perf:budgets` (or add a `perf:tti` script) so cached prod traces that exceed 500 ms DCL/load cause CI to fail. This keeps the sub-0.5 s target enforced automatically.  
+  *Sub-steps (est. 2.5 hrs total)*  
+  1. Write a small script that reads the prod trace JSON and asserts DCL/load/LCP <500 ms — 60 min.  
+  2. Add it to the GitHub Actions workflow after `npm run perf:budgets` (skip for PRs if needed) — 30 min.  
+  3. Document remediation steps (where to look when CI fails) in `partners-portal-perf.md` — 30 min.  
+  4. Dry-run CI locally (`CI=1 npm run perf:tti`) and capture screenshots/logs for future reference — 30 min.

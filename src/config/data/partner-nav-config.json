@@ -1,0 +1,764 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-11-15",
+  "description": "SISO Partnership Portal Navigation Configuration - Ready for Implementation",
+  "icons": [
+    {
+      "id": "home",
+      "label": "Partnership Hub",
+      "icon": "LayoutDashboard",
+      "order": 1,
+      "subsections": [
+        {
+          "id": "overview",
+          "label": "Overview",
+          "path": "/partners/dashboard",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Hero stats dashboard with earnings, deals, tier progress",
+          "group": "Pulse"
+        },
+        {
+          "id": "updates",
+          "label": "Updates",
+          "path": "/partners/announcements",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Latest announcements, activity, and wins",
+          "group": "Pulse",
+          "dropdown": {
+            "id": "updates-links",
+            "label": "Updates Links",
+            "items": [
+              {
+                "id": "announcements-link",
+                "label": "Announcements",
+                "path": "/partners/announcements",
+                "description": "Official broadcasts from the SISO team"
+              },
+              {
+                "id": "recent-activity-link",
+                "label": "Recent Activity",
+                "path": "/partners/activity",
+                "description": "Timeline of your partner events"
+              },
+              {
+                "id": "wins-feed-link",
+                "label": "Wins Feed",
+                "path": "/partners/wins-feed",
+                "description": "Latest partner victories for inspiration"
+              }
+            ]
+          }
+        },
+        {
+          "id": "quick-actions",
+          "label": "Quick Actions",
+          "path": "/partners/quick-actions",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Primary CTAs at your fingertips",
+          "group": "Act Now",
+          "dropdown": {
+            "id": "quick-actions-menu",
+            "label": "Quick Actions",
+            "items": [
+              {
+                "id": "submit-client",
+                "label": "Submit Client",
+                "path": "/partners/pipeline-ops/submit-client",
+                "description": "Log a new opportunity fast"
+              },
+              {
+                "id": "view-portfolio",
+                "label": "View Portfolio",
+                "path": "/partners/academy/portfolio",
+                "description": "Grab proof to send prospects"
+              },
+              {
+                "id": "message-siso",
+                "label": "Message SISO",
+                "path": "/partners/support",
+                "description": "Chat with partner success"
+              }
+            ]
+          }
+        },
+        {
+          "id": "todays-work",
+          "label": "Today's Work",
+          "path": "/partners/pipeline-ops/prospects",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Focus view of deals and tasks due now",
+          "group": "Act Now",
+          "dropdown": {
+            "id": "todays-work-links",
+            "label": "Today's Work Links",
+            "items": [
+              {
+                "id": "my-prospects-shortcut",
+                "label": "My Prospects",
+                "path": "/partners/pipeline-ops/prospects",
+                "description": "Board of every client you logged"
+              },
+              {
+                "id": "todays-tasks-shortcut",
+                "label": "Today's Tasks",
+                "path": "/partners/workspace/tasks?filter=today",
+                "description": "Checklist of items due today"
+              }
+            ]
+          }
+        },
+        {
+          "id": "progress-recognition",
+          "label": "Progress & Recognition",
+          "path": "/partners/tier-progress",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Track tier climb and leaderboard rank",
+          "group": "Support & Growth",
+          "dropdown": {
+            "id": "progress-links",
+            "label": "Progress Links",
+            "items": [
+              {
+                "id": "tier-progress-shortcut",
+                "label": "Tier Progress",
+                "path": "/partners/tier-progress",
+                "description": "Deals needed to unlock next perks"
+              },
+              {
+                "id": "leaderboard-shortcut",
+                "label": "Leaderboard",
+                "path": "/partners/earnings/leaderboard",
+                "description": "Where you rank this week"
+              }
+            ]
+          }
+        },
+        {
+          "id": "help-coaching",
+          "label": "Help & Coaching",
+          "path": "/partners/community/help",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Get answers, book sessions, stay sharp",
+          "group": "Support & Growth",
+          "dropdown": {
+            "id": "help-links",
+            "label": "Help Links",
+            "items": [
+              {
+                "id": "office-hours-shortcut",
+                "label": "Office Hours",
+                "path": "/partners/workspace/calendar#office-hours",
+                "description": "Book time with the SISO team"
+              },
+              {
+                "id": "training-spotlight-shortcut",
+                "label": "Training Spotlight",
+                "path": "/partners/training-spotlight",
+                "description": "Recommended enablement bite"
+              },
+              {
+                "id": "help-center-link",
+                "label": "Help Center",
+                "path": "/partners/community/help",
+                "description": "Browse docs and FAQs"
+              },
+              {
+                "id": "contact-support-link",
+                "label": "Contact Support",
+                "path": "/partners/support",
+                "description": "Chat with the SISO team"
+              },
+              {
+                "id": "messages-link",
+                "label": "Messages",
+                "path": "/partners/community/messages",
+                "description": "Open partner inbox"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "academy",
+      "label": "Academy",
+      "icon": "GraduationCap",
+      "order": 2,
+      "subsections": [
+        {
+          "id": "my-progress",
+          "label": "My Progress",
+          "path": "/partners/academy/my-progress",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Onboarding content and SISO process overview",
+          "group": "Learning Flow"
+        },
+        {
+          "id": "courses",
+          "label": "Courses",
+          "path": "/partners/academy/courses",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Video training modules library",
+          "group": "Learning Flow"
+        },
+        {
+          "id": "training-spotlight",
+          "label": "Training Spotlight",
+          "path": "/partners/academy/training-spotlight",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Recommended next course based on progress",
+          "group": "Learning Flow"
+        },
+        {
+          "id": "portfolio",
+          "label": "Portfolio",
+          "path": "/partners/academy/portfolio",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "All SISO builds plus weekly spotlight highlights",
+          "group": "Proof & Assets"
+        },
+        {
+          "id": "pitch-kit",
+          "label": "Pitch Kit",
+          "path": "/partners/academy/pitch-kit",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Templates, brand assets, sales decks",
+          "group": "Proof & Assets"
+        }
+      ],
+      "globalDropdown": {
+        "id": "resources-by-industry",
+        "label": "Resources by Industry",
+        "items": [
+          {
+            "id": "saas",
+            "label": "SaaS",
+            "path": "/partners/academy/industry/saas",
+            "tierRequired": "active",
+            "description": "Pain points, pitch angles, case studies for SaaS"
+          },
+          {
+            "id": "ecommerce",
+            "label": "E-commerce",
+            "path": "/partners/academy/industry/ecommerce",
+            "tierRequired": "active",
+            "description": "E-commerce specific resources and demos"
+          },
+          {
+            "id": "healthcare",
+            "label": "Healthcare",
+            "path": "/partners/academy/industry/healthcare",
+            "tierRequired": "active",
+            "description": "Compliance considerations and use cases"
+          },
+          {
+            "id": "finance",
+            "label": "Finance",
+            "path": "/partners/academy/industry/finance",
+            "tierRequired": "active",
+            "description": "Security focus and regulatory requirements"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pipeline",
+      "label": "Client Pipeline",
+      "icon": "Handshake",
+      "order": 3,
+      "subsections": [
+        {
+          "id": "dashboard",
+          "label": "Dashboard",
+          "path": "/partners/pipeline-ops",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Client Pipeline dashboard with quick insights",
+          "hidden": true,
+          "group": "Manage Pipeline"
+        },
+        {
+          "id": "submit-client",
+          "label": "Submit Client",
+          "path": "/partners/pipeline-ops/submit-client",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Form to log new potential client",
+          "group": "Manage Pipeline"
+        },
+        {
+          "id": "my-prospects",
+          "label": "My Prospects",
+          "path": "/partners/pipeline-ops/prospects",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Airtable-style view of all logged clients",
+          "group": "Manage Pipeline"
+        },
+        {
+          "id": "app-plan-generator",
+          "label": "App Plan Generator",
+          "path": "/partners/tools/app-plan-generator",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Generate custom app plans to pitch to prospects",
+          "group": "Tools"
+        }
+      ]
+    },
+    {
+      "id": "recruitment",
+      "label": "Recruitment",
+      "icon": "UserPlus",
+      "order": 4,
+      "subsections": [
+        {
+          "id": "dashboard",
+          "label": "Dashboard",
+          "path": "/partners/recruitment",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Invite and track sales members you recruit",
+          "group": "Dashboard",
+          "hidden": true
+        },
+        {
+          "id": "prospects",
+          "label": "Prospects",
+          "path": "/partners/recruitment/prospects",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Airtable-style view of recruitment prospects",
+          "group": "Manage Pipeline"
+        },
+        {
+          "id": "team",
+          "label": "Active sales team",
+          "path": "/partners/recruitment/team",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Who\u2019s currently selling and their status",
+          "group": "Grow Team"
+        },
+        {
+          "id": "performance",
+          "label": "Referral performance",
+          "path": "/partners/recruitment/performance",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Referral volume, conversion, and payouts",
+          "group": "Grow Team"
+        }
+      ]
+    },
+    {
+      "id": "growth",
+      "label": "Earnings",
+      "icon": "DollarSign",
+      "order": 5,
+      "subsections": [
+        {
+          "id": "dashboard",
+          "label": "Dashboard",
+          "path": "/partners/earnings",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Earnings dashboard and metrics",
+          "hidden": true,
+          "group": "Money In"
+        },
+        {
+          "id": "earnings",
+          "label": "Overview",
+          "path": "/partners/earnings/overview",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Commission overview and payout tracking",
+          "group": "Money In"
+        },
+        {
+          "id": "wallet",
+          "label": "Wallet & Payouts",
+          "path": "/partners/earnings/wallet",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Payout methods and balance (Stripe Connect)",
+          "group": "Money In"
+        },
+        {
+          "id": "tier-progress",
+          "label": "Tier Progress",
+          "path": "/partners/earnings/tier-progression",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Visual progression tracker and tier benefits",
+          "group": "Tier Progress"
+        },
+        {
+          "id": "achievements",
+          "label": "Achievements",
+          "path": "/partners/earnings/achievements",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Badges earned and collection",
+          "group": "Recognition & Challenges"
+        },
+        {
+          "id": "leaderboard",
+          "label": "Leaderboard",
+          "path": "/partners/earnings/leaderboard",
+          "tierRequired": "active",
+          "hasHashtag": false,
+          "description": "Rankings and top performers",
+          "group": "Recognition & Challenges"
+        },
+        {
+          "id": "challenges",
+          "label": "Challenges",
+          "path": "/partners/earnings/challenges",
+          "tierRequired": "active",
+          "hasHashtag": false,
+          "description": "Weekly/monthly competitions",
+          "group": "Recognition & Challenges"
+        }
+      ]
+    },
+    {
+      "id": "community",
+      "label": "Community",
+      "icon": "Users",
+      "order": 6,
+      "subsections": [
+        {
+          "id": "dashboard",
+          "label": "Dashboard",
+          "path": "/partners/community",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Community dashboard with highlights",
+          "hidden": true
+        },
+        {
+          "id": "messages",
+          "label": "Messages",
+          "path": "/partners/community/messages",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Direct messages and small group chats"
+        },
+        {
+          "id": "general-chat",
+          "label": "General Chat",
+          "path": "/partners/community/channels/general-chat",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Open discussion room for all partners"
+        },
+        {
+          "id": "wins",
+          "label": "Wins",
+          "path": "/partners/community/channels/wins",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Celebrate closed deals",
+          "note": "Read-only for Starter, post at Active+"
+        },
+        {
+          "id": "announcements",
+          "label": "Announcements",
+          "path": "/partners/community/announcements",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Read-only product and program updates"
+        },
+        {
+          "id": "more-channels",
+          "label": "All Channels",
+          "path": "/partners/community/all-channels",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Browse and join regional, industry, and beta channels"
+        },
+        {
+          "id": "all-partners",
+          "label": "All Partners",
+          "path": "/partners/community/all-partners",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Browse all partners and start a DM"
+        },
+        {
+          "id": "help-center",
+          "label": "Help Center",
+          "path": "/partners/community/help",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Searchable knowledge base and contact support"
+        }
+      ]
+    },
+    {
+      "id": "workspace",
+      "label": "Workspace",
+      "icon": "Briefcase",
+      "order": 7,
+      "subsections": [
+        {
+          "id": "calendar",
+          "label": "Calendar & Sessions",
+          "path": "/partners/workspace/calendar",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Unified calendar with office hours, webinars, and deal reminders",
+          "group": "Schedule"
+        },
+        {
+          "id": "tasks",
+          "label": "Tasks",
+          "path": "/partners/workspace/tasks",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "All tasks: onboarding, personal, and assigned",
+          "group": "Productivity"
+        },
+        {
+          "id": "files",
+          "label": "Files",
+          "path": "/partners/workspace/files",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "My, client, and shared documents in one view",
+          "group": "Storage"
+        },
+        {
+          "id": "my-notes",
+          "label": "My Notes",
+          "path": "/partners/workspace/notes/my-notes",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Private personal notes",
+          "group": "Storage"
+        }
+      ]
+    },
+    {
+      "id": "settings",
+      "label": "Settings",
+      "icon": "Settings",
+      "order": 8,
+      "subsections": [
+        {
+          "id": "general",
+          "label": "General",
+          "path": "/partners/settings/general",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Quick controls for theme, notifications, language, and summaries",
+          "dropdown": {
+            "id": "general-expanded",
+            "label": "General Controls",
+            "items": [
+              {
+                "id": "appearance",
+                "label": "Appearance & Accessibility",
+                "path": "/partners/settings/appearance",
+                "description": "Theme, contrast, font size, reduced motion, haptics"
+              },
+              {
+                "id": "language",
+                "label": "Language & Region",
+                "path": "/partners/settings/language",
+                "description": "Language, timezone, number/currency formats"
+              },
+              {
+                "id": "linked-accounts",
+                "label": "App Integrations",
+                "path": "/partners/settings/integrations",
+                "description": "Notion, Google Drive/Docs, Calendar"
+              },
+              {
+                "id": "devices",
+                "label": "Connected Devices",
+                "path": "/partners/settings/devices",
+                "description": "Manage devices and sessions"
+              }
+            ]
+          }
+        },
+        {
+          "id": "profile",
+          "label": "Profile",
+          "path": "/partners/settings/profile",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Name, bio, photo, contact info"
+        },
+        {
+          "id": "notifications",
+          "label": "Notifications",
+          "path": "/partners/settings/notifications",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Preferences for push, email, in-app notifications"
+        },
+        {
+          "id": "security",
+          "label": "Security",
+          "path": "/partners/settings/security",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Password, 2FA, active sessions"
+        },
+        {
+          "id": "privacy",
+          "label": "Privacy",
+          "path": "/partners/settings/privacy",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Data export, delete account, marketing consent"
+        },
+        {
+          "id": "legal",
+          "label": "Legal",
+          "path": "/partners/settings/legal",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Terms, Privacy Policy, Partner Agreement, version info"
+        }
+      ]
+    }
+  ],
+  "notifications": {
+    "location": "header-bell-icon",
+    "tabs": [
+      {
+        "id": "all",
+        "label": "All",
+        "description": "Combined feed of everything"
+      },
+      {
+        "id": "updates",
+        "label": "Updates",
+        "description": "SISO announcements, tier changes, feature unlocks"
+      },
+      {
+        "id": "deals",
+        "label": "Deals",
+        "description": "Client status updates, demo ready, deal closed"
+      },
+      {
+        "id": "chats",
+        "label": "Chats",
+        "description": "Message notifications from Community or DMs"
+      },
+      {
+        "id": "tasks",
+        "label": "Tasks",
+        "description": "Assigned tasks, due date reminders"
+      }
+    ]
+  },
+  "tierSystem": {
+    "tiers": [
+      {
+        "id": "starter",
+        "label": "Starter",
+        "dealsRequired": "0-2",
+        "commissionRate": "20%",
+        "color": "#9CA3AF",
+        "features": [
+          "Basic CRM access",
+          "Getting Started training",
+          "Portfolio access",
+          "Standard support",
+          "Community chat (read-only for wins)",
+          "Personal notes",
+          "Basic office hours"
+        ]
+      },
+      {
+        "id": "active",
+        "label": "Active",
+        "dealsRequired": "3-9",
+        "commissionRate": "22%",
+        "color": "#3B82F6",
+        "features": [
+          "All Starter features",
+          "Leaderboard access",
+          "Industry-specific resources",
+          "Advanced courses",
+          "Post wins to community",
+          "Create shared notes",
+          "Priority office hours",
+          "Full partner directory profiles"
+        ]
+      },
+      {
+        "id": "performer",
+        "label": "Performer",
+        "dealsRequired": "10-24",
+        "commissionRate": "25% + 10% team overrides",
+        "color": "#8B5CF6",
+        "features": [
+          "All Active features",
+          "Team building (10% overrides on recruits)",
+          "White-label materials",
+          "Custom proposal templates",
+          "Enterprise sales training",
+          "Monthly 1:1 coaching",
+          "Moderator privileges in community"
+        ]
+      },
+      {
+        "id": "elite",
+        "label": "Elite",
+        "dealsRequired": "25+",
+        "commissionRate": "30% + 10% overrides + custom deals",
+        "color": "#F59E0B",
+        "features": [
+          "All Performer features",
+          "API access + webhooks",
+          "Elite Council meetings",
+          "Custom deal structures (negotiate with SISO)",
+          "Master trainer certification",
+          "Advisory board participation",
+          "Dedicated account manager"
+        ]
+      }
+    ]
+  },
+  "implementationNotes": {
+    "mobileFirst": true,
+    "iconRailWidth": "64px",
+    "detailPanelWidth": "320px (88% screen width on mobile)",
+    "animationDuration": "300ms",
+    "lockedStateDisplay": {
+      "visual": "Desaturated gray + lock icon",
+      "tooltip": "Unlock at [Tier Name] \u2022 [X deals needed]",
+      "tapBehavior": "Opens modal with tier upgrade benefits"
+    },
+    "hashtagChannels": [
+      "general-chat",
+      "wins",
+      "questions",
+      "feedback"
+    ],
+    "stateManagement": {
+      "activeIcon": "URL state (/partners?nav=academy)",
+      "expandedDropdowns": "Local state",
+      "userTier": "Auth context",
+      "notificationCount": "Real-time WebSocket"
+    }
+  }
+}

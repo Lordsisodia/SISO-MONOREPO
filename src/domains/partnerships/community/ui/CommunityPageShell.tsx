@@ -71,10 +71,10 @@ export function PartnersNavLayer({ children, showFloatingNavButton = true }: { c
 
   return (
     <>
-      <Suspense fallback={<div className="sr-only" aria-hidden="true" />}>
+      <Suspense fallback={<div aria-hidden className="sr-only" />}>
         <CampusDrawerHydrator />
       </Suspense>
-      {showFloatingNavButton ? <FloatingNavButton /> : null}
+      {showFloatingNavButton && !isDrawerOpen ? <FloatingNavButton /> : null}
       {children}
     </>
   );

@@ -19,7 +19,7 @@
    - Store SW source alongside the app (e.g., `apps/partners/public/sw.js`).
 
 2. **Update flow**
-   - Add an update manager (see archive `COMPLETE-IMPLEMENTATION-GUIDE.md`) that listens for `waiting` service worker and prompts users to refresh.
+   - Add an update manager (document it alongside `apps/partners/src/app/providers/RealtimeProvider.tsx`) that listens for a `waiting` service worker and prompts users to refresh.
 
 3. **Realtime + conflict resolution**
    - Extend `RealtimeProvider` to: fetch missed messages after reconnect, manage Supabase connection pooling (monitor `/realtime/v1` connection counts), and expose conflict-resolution helpers to features (`features/leads/model/conflictResolver.ts`, etc.).

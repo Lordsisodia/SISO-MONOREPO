@@ -61,22 +61,12 @@ interface CampusSidebarSurfaceProps {
 
 export function CampusSidebarSurface({ onClose, onNavigate }: CampusSidebarSurfaceProps) {
   return (
-    <div className="flex h-full w-full items-stretch justify-start bg-transparent text-neutral-50">
+    <div className="relative flex h-full w-full items-stretch justify-start bg-transparent text-neutral-50">
       <div className="flex h-full w-[88%] min-w-[320px] items-start justify-start bg-[#050505] px-1 pb-4 pt-4 shadow-[16px_0_48px_rgba(0,0,0,0.6)]">
         <div className="h-full w-full overflow-hidden pr-1">
           <CampusSidebarContent heightClass="h-full" onNavigate={onNavigate} />
         </div>
       </div>
-      {onClose && (
-        <button
-          type="button"
-          onClick={onClose}
-          className="h-full w-[12%] min-w-[40px] cursor-pointer bg-transparent"
-          aria-label="Dismiss campus navigation"
-        >
-          <span className="sr-only">Close</span>
-        </button>
-      )}
     </div>
   );
 }

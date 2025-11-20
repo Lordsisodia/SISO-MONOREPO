@@ -47,4 +47,4 @@ Feature-sliced React + Vite app that already implements the blueprint described 
 
 ## Gaps tracked elsewhere
 
-The service worker, reconnection fallbacks, and mobile-safe components are partially implemented (offline queue and platform detection exist, but the Workbox SW has not been generated yet). Delivery sequencing + open risks now live in `docs/product/partners/delivery-roadmap.md`.
+The service worker, reconnection fallbacks, and mobile-safe components are partially implemented (offline queue and platform detection exist, but the Workbox SW has not been generated yet). Delivery sequencing + open risks now live in `docs/partners/notes/progressive-unlock-plan.md`.
