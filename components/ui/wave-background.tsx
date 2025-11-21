@@ -61,23 +61,34 @@ export function Waves({
 
   useEffect(() => {
     if (!shouldAnimate) return
-    if (!containerRef.current || !svgRef.current) return
+    const containerEl = containerRef.current
+    if (!containerEl || !svgRef.current) return
 
     noiseRef.current = createNoise2D()
     setSize()
     setLines()
 
+    let resizeObserver: ResizeObserver | null = null
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        setSize()
+        setLines()
+      })
+      resizeObserver.observe(containerEl)
+    }
+
     window.addEventListener('resize', onResize)
     window.addEventListener('mousemove', onMouseMove)
-    containerRef.current.addEventListener('touchmove', onTouchMove, { passive: false })
+    containerEl.addEventListener('touchmove', onTouchMove, { passive: false })
 
     rafRef.current = requestAnimationFrame(tick)
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current)
+      resizeObserver?.disconnect()
       window.removeEventListener('resize', onResize)
       window.removeEventListener('mousemove', onMouseMove)
-      containerRef.current?.removeEventListener('touchmove', onTouchMove)
+      containerEl.removeEventListener('touchmove', onTouchMove)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shouldAnimate])

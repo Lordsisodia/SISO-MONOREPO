@@ -14,6 +14,7 @@ import type { ThreadOverview } from "@/domains/partnerships/portal-architecture/
 import { FallingPattern } from "@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern";
 import { FileText, Sparkles, Upload } from "lucide-react";
 import { useHydrateOnView } from "@/domains/shared/hooks/useHydrateOnView";
+import type { SubmitClientPayload, SubmitClientResponse } from "@/domains/partnerships/portal-architecture/pipeline-ops/domain/types";
 import type { DirectoryEntry, FormState, PipelineOpsConfig, WizardPrompt } from "./types";
 
 const LazyComposerBar = lazy(() =>
@@ -89,11 +90,26 @@ const initialFormState: FormState = {
   documents: [],
 };
 
-type SubmitClientExperienceProps = {
-  config: PipelineOpsConfig;
+type SubmitIntakeExperienceOptions = {
+  experienceId?: string;
+  directoryVariant?: "messages" | "client-submissions";
+  threadName?: string;
+  threadAvatarLabel?: string;
+  headerTitle?: string;
+  headerSubtitle?: string;
+  helperText?: string;
+  submitHandler?: (payload: SubmitClientPayload) => Promise<SubmitClientResponse>;
+  successMessage?: (response: SubmitClientResponse) => string;
+  statusIdleLabel?: string;
+  statusSubmittedLabel?: string;
 };
 
-export default function SubmitClientExperience({ config }: SubmitClientExperienceProps) {
+type SubmitClientExperienceProps = {
+  config: PipelineOpsConfig;
+  experience?: SubmitIntakeExperienceOptions;
+};
+
+export default function SubmitClientExperience({ config, experience }: SubmitClientExperienceProps) {
   const {
     wizardPrompts,
     savedDraftThreads = [],
@@ -101,6 +117,20 @@ export default function SubmitClientExperience({ config }: SubmitClientExperienc
     blockedContacts = [],
     initialAssistantMessage,
   } = config;
+  const experienceSettings = {
+    experienceId: "submit-client",
+    directoryVariant: "client-submissions" as const,
+    threadName: "Submit Client",
+    threadAvatarLabel: "SC",
+    headerTitle: "Submit Client Intake",
+    headerSubtitle: "Chat-first submission with Instant review SLA",
+    helperText: "Share whatever you know—company name, WhatsApp, needs, and optional budget. We'll keep score as you go.",
+    submitHandler: submitClient,
+    successMessage: (response: SubmitClientResponse) => `Intake ${response.intakeId} received • Instant review`,
+    statusIdleLabel: "Instant review SLA",
+    statusSubmittedLabel: "Submitted · Instant review",
+    ...(experience ?? {}),
+  } satisfies Required<SubmitIntakeExperienceOptions>;
   const assistantGreeting = initialAssistantMessage ?? DEFAULT_ASSISTANT_MESSAGE;
   const [formState, setFormState] = useState<FormState>(initialFormState);
   const [resultMessage, setResultMessage] = useState<string | null>(null);
@@ -134,7 +164,7 @@ export default function SubmitClientExperience({ config }: SubmitClientExperienc
     setErrorMessage(null);
     startTransition(async () => {
       try {
-        const response = await submitClient({
+        const response = await experienceSettings.submitHandler({
           companyName: formState.companyName,
           contactEmail: formState.contactEmail,
           contactPhone: formState.contactPhone,
@@ -152,7 +182,7 @@ export default function SubmitClientExperience({ config }: SubmitClientExperienc
             .join(" | "),
           vertical: formState.industry || "General",
         });
-        setResultMessage(`Intake ${response.intakeId} received • Instant review`);
+        setResultMessage(experienceSettings.successMessage(response));
       } catch (error) {
         setErrorMessage(error instanceof Error ? error.message : "Something went wrong");
       }
@@ -181,8 +211,9 @@ export default function SubmitClientExperience({ config }: SubmitClientExperienc
           onSubmit={handleSubmit}
           isPending={isPending}
           resultMessage={resultMessage}
-          errorMessage={errorMessage}
-        />
+        errorMessage={errorMessage}
+        experienceSettings={experienceSettings}
+      />
       </div>
     </main>
   );
@@ -202,6 +233,7 @@ type SubmitClientChatProps = {
   isPending: boolean;
   resultMessage: string | null;
   errorMessage: string | null;
+  experienceSettings: Required<SubmitIntakeExperienceOptions>;
 };
 
 function SubmitClientChat({
@@ -218,6 +250,7 @@ function SubmitClientChat({
   isPending,
   resultMessage,
   errorMessage,
+  experienceSettings,
 }: SubmitClientChatProps) {
   const transcriptRef = useRef<HTMLDivElement>(null);
   const { openDrawer } = useMobileNavigation();
@@ -236,7 +269,7 @@ function SubmitClientChat({
   const [inputValue, setInputValue] = useState("");
   const [isDirectoryOpen, setDirectoryOpen] = useState(false);
   const [composerHeight, setComposerHeight] = useState(0);
-  const [activeThreadId, setActiveThreadId] = useState("submit-client");
+  const [activeThreadId, setActiveThreadId] = useState(experienceSettings.experienceId);
   const { ref: composerHydrateRef, hydrated: composerInView } = useHydrateOnView<HTMLDivElement>({ rootMargin: "240px 0px" });
   const [composerRequested, setComposerRequested] = useState(false);
   const shouldRenderComposer = composerInView || composerRequested;
@@ -523,8 +556,8 @@ function SubmitClientChat({
     const currentPreview = resultMessage ? "Submitted • Instant review" : `Draft in progress • ${progressPercent}%`;
     return [
       {
-        id: "submit-client",
-        name: "Submit Client Intake",
+        id: experienceSettings.experienceId,
+        name: experienceSettings.threadName,
         preview: currentPreview,
         unreadCount: 0,
         badge: resultMessage ? "Submitted" : "Active",
@@ -535,7 +568,7 @@ function SubmitClientChat({
     ];
   }, [progressPercent, resultMessage, savedDraftThreads]);
 
-  const threadStatus = resultMessage ? "Submitted · Instant review" : "Instant review SLA";
+  const threadStatus = resultMessage ? experienceSettings.statusSubmittedLabel : experienceSettings.statusIdleLabel;
   const directoryFallback = isDirectoryOpen ? (
     <div className="fixed inset-0 z-[95] flex items-center justify-center bg-black/80 text-sm font-semibold uppercase tracking-[0.3em] text-white/70">
       Loading saved drafts…
@@ -560,7 +593,7 @@ function SubmitClientChat({
     <>
       <Suspense fallback={directoryFallback}>
         <LazyDirectoryOverlay
-          variant="client-submissions"
+          variant={experienceSettings.directoryVariant}
           isOpen={isDirectoryOpen}
           threads={threads}
           activeThreadId={activeThreadId}
@@ -577,24 +610,18 @@ function SubmitClientChat({
         <ChatViewport
           isDirectoryOpen={isDirectoryOpen}
           onOpenDirectory={() => setDirectoryOpen(true)}
-          threadName="Submit Client"
+          threadName={experienceSettings.threadName}
           threadStatus={threadStatus}
-          avatarLabel="SC"
+          avatarLabel={experienceSettings.threadAvatarLabel}
           contentOffset={composerHeight + 32}
           maxWidthClassName="max-w-5xl w-full px-4"
           showAppDrawerButton
+          showHeader={false}
           onOpenAppDrawer={openDrawer}
         >
           <div className="space-y-5">
-            <SettingsGroupCallout
-              icon={<Sparkles className="h-4 w-4 text-siso-orange" />}
-              title="Submit Client Intake"
-              subtitle="Chat-first submission with Instant review SLA"
-              showChevron={false}
-            >
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-3 text-left text-xs text-white/70">
-                Share whatever you know—company name, WhatsApp, needs, and optional budget. We'll keep score as you go.
-              </div>
+            <SettingsGroupCallout icon={<Sparkles className="h-4 w-4 text-siso-orange" />} title={experienceSettings.headerTitle} subtitle={experienceSettings.headerSubtitle} showChevron={false}>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-3 text-left text-xs text-white/70">{experienceSettings.helperText}</div>
             </SettingsGroupCallout>
             <div ref={transcriptRef} className="space-y-3 pb-4">
               {messages.map((message) => (

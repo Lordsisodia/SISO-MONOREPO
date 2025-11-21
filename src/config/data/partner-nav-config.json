@@ -334,6 +334,15 @@
           "hidden": true
         },
         {
+          "id": "submit-partner",
+          "label": "Submit Partner",
+          "path": "/partners/recruitment/submit-partner",
+          "tierRequired": "starter",
+          "hasHashtag": false,
+          "description": "Chat intake to log a new partner recruit",
+          "group": "Grow Team"
+        },
+        {
           "id": "prospects",
           "label": "Prospects",
           "path": "/partners/recruitment/prospects",
@@ -357,7 +366,7 @@
           "path": "/partners/recruitment/performance",
           "tierRequired": "starter",
           "hasHashtag": false,
-          "description": "Referral volume, conversion, and payouts",
+          "description": "Referral volume, revenue, and payout analytics",
           "group": "Grow Team"
         }
       ]

@@ -1,3 +1,5 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { ProspectSummary } from "@/domains/partnerships/portal-architecture/pipeline-ops/domain/types";

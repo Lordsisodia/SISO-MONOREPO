@@ -3,7 +3,7 @@ import { RecruitmentPerformanceContent } from "./PerformanceContent";
 
 export const metadata: Metadata = {
   title: "Referral Performance • SISO Partners",
-  description: "Measure referral volume, conversion health, and override payouts.",
+  description: "Monitor invite conversion, approvals, and revenue across the partner funnel.",
 };
 
 export default function PartnersRecruitmentPerformancePage() {

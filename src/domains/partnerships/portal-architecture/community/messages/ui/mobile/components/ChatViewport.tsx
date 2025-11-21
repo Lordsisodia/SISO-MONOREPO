@@ -16,6 +16,7 @@ type ChatViewportProps = {
   maxWidthClassName?: string;
   showDirectoryToggle?: boolean;
   showAppDrawerButton?: boolean;
+  showHeader?: boolean;
   children: ReactNode;
 };
 
@@ -32,12 +33,17 @@ export function ChatViewport({
   maxWidthClassName = "max-w-md",
   showDirectoryToggle = true,
   showAppDrawerButton = true,
+  showHeader = true,
   children,
 }: ChatViewportProps) {
   const headerRef = useRef<HTMLDivElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
 
   useLayoutEffect(() => {
+    if (!showHeader) {
+      setHeaderHeight(0);
+      return;
+    }
     const node = headerRef.current;
     if (!node) return;
 
@@ -48,7 +54,7 @@ export function ChatViewport({
     observer.observe(node);
 
     return () => observer.disconnect();
-  }, []);
+  }, [showHeader]);
 
   return (
     <div
@@ -58,62 +64,64 @@ export function ChatViewport({
         isDirectoryOpen ? "pointer-events-none opacity-0" : "opacity-100",
       )}
     >
-      <header
-        ref={headerRef}
-        className={cn(
-          "fixed left-1/2 top-0 z-[84] mb-1 flex w-full -translate-x-1/2 items-center gap-3 rounded-b-2xl border border-white/10 bg-siso-bg-tertiary/90 px-3 py-1.5 backdrop-blur transition-opacity",
-          maxWidthClassName,
-          isDirectoryOpen && "pointer-events-none",
-        )}
-        style={{ boxShadow: "0 12px 30px rgba(0,0,0,0.45), inset 0 -1px 0 rgba(255,255,255,0.18)" }}
-      >
-        {showDirectoryToggle ? (
-          <button
-            type="button"
-            onClick={onOpenDirectory}
-            className="inline-flex items-center text-siso-text-primary transition hover:text-siso-orange"
-            aria-label="Open message directory"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-        ) : null}
-        <button
-          type="button"
-          onClick={() => onToggleThreadInfo?.()}
-          aria-expanded={Boolean(onToggleThreadInfo && isThreadInfoOpen)}
+      {showHeader ? (
+        <header
+          ref={headerRef}
           className={cn(
-            "flex flex-1 items-center gap-2 overflow-hidden rounded-full px-2 py-1 text-left transition",
-            onToggleThreadInfo ? "hover:bg-white/5" : "cursor-default",
-            isThreadInfoOpen && "bg-white/5",
+            "fixed left-1/2 top-0 z-[84] mb-1 flex w-full -translate-x-1/2 items-center gap-3 rounded-b-2xl border border-white/10 bg-siso-bg-tertiary/90 px-3 py-1.5 backdrop-blur transition-opacity",
+            maxWidthClassName,
+            isDirectoryOpen && "pointer-events-none",
           )}
-          disabled={!onToggleThreadInfo}
+          style={{ boxShadow: "0 12px 30px rgba(0,0,0,0.45), inset 0 -1px 0 rgba(255,255,255,0.18)" }}
         >
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-siso-orange/20 text-[10px] font-semibold uppercase text-siso-orange">
-            {avatarLabel}
-          </div>
-          <div className="flex min-w-0 flex-col">
-            <span className="truncate text-xs font-semibold uppercase tracking-[0.35em] text-siso-text-primary">
-              {threadName}
-            </span>
-            <span className="text-[9px] font-semibold uppercase tracking-[0.4em] text-siso-text-muted">
-              {threadStatus}
-            </span>
-          </div>
-        </button>
-        {showAppDrawerButton ? (
+          {showDirectoryToggle ? (
+            <button
+              type="button"
+              onClick={onOpenDirectory}
+              className="inline-flex items-center text-siso-text-primary transition hover:text-siso-orange"
+              aria-label="Open message directory"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+          ) : null}
           <button
             type="button"
-            className="ml-auto inline-flex items-center text-siso-text-muted transition hover:text-siso-orange"
-            aria-label="Open campus drawer"
-            onClick={onOpenAppDrawer}
-            disabled={!onOpenAppDrawer}
+            onClick={() => onToggleThreadInfo?.()}
+            aria-expanded={Boolean(onToggleThreadInfo && isThreadInfoOpen)}
+            className={cn(
+              "flex flex-1 items-center gap-2 overflow-hidden rounded-full px-2 py-1 text-left transition",
+              onToggleThreadInfo ? "hover:bg-white/5" : "cursor-default",
+              isThreadInfoOpen && "bg-white/5",
+            )}
+            disabled={!onToggleThreadInfo}
           >
-            <Menu className="h-5 w-5" />
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-siso-orange/20 text-[10px] font-semibold uppercase text-siso-orange">
+              {avatarLabel}
+            </div>
+            <div className="flex min-w-0 flex-col">
+              <span className="truncate text-xs font-semibold uppercase tracking-[0.35em] text-siso-text-primary">
+                {threadName}
+              </span>
+              <span className="text-[9px] font-semibold uppercase tracking-[0.4em] text-siso-text-muted">
+                {threadStatus}
+              </span>
+            </div>
           </button>
-        ) : null}
-      </header>
+          {showAppDrawerButton ? (
+            <button
+              type="button"
+              className="ml-auto inline-flex items-center text-siso-text-muted transition hover:text-siso-orange"
+              aria-label="Open campus drawer"
+              onClick={onOpenAppDrawer}
+              disabled={!onOpenAppDrawer}
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+          ) : null}
+        </header>
+      ) : null}
 
-      <div style={{ height: headerHeight }} aria-hidden />
+      {showHeader ? <div style={{ height: headerHeight }} aria-hidden /> : null}
 
       <article className="flex flex-1 flex-col">
         <div

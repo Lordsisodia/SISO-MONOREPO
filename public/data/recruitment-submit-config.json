@@ -1,0 +1,178 @@
+{
+  "initialAssistantMessage": "Hey—I'm the partner intake assistant. Drop the recruiter’s info and I’ll prep the invite checklist as you go.",
+  "wizardPrompts": [
+    {
+      "id": "companyName",
+      "field": "companyName",
+      "type": "text",
+      "prompt": "What’s the partner’s name or firm?",
+      "helper": "Solo sellers or boutique teams both work.",
+      "required": true,
+      "placeholder": "Avery Rivera"
+    },
+    {
+      "id": "partnershipType",
+      "field": "partnershipType",
+      "type": "chips",
+      "prompt": "What kind of partner are they?",
+      "helper": "Pick anything that fits best.",
+      "options": ["Solo rep", "Boutique agency", "Community", "Content creator", "Other"]
+    },
+    {
+      "id": "companySize",
+      "field": "companySize",
+      "type": "text",
+      "prompt": "How big is their selling team? (optional)",
+      "helper": "Estimate or type NA.",
+      "placeholder": "1-3 reps",
+      "quickReplies": ["Solo", "2-5", "10+", "NA"]
+    },
+    {
+      "id": "contactName",
+      "field": "contactName",
+      "type": "text",
+      "prompt": "Primary contact name",
+      "required": true,
+      "placeholder": "Morgan Field"
+    },
+    {
+      "id": "contactEmail",
+      "field": "contactEmail",
+      "type": "text",
+      "prompt": "Contact email (optional)",
+      "helper": "Helps with compliance packets.",
+      "placeholder": "morgan@revops.io",
+      "quickReplies": ["NA"]
+    },
+    {
+      "id": "contactPhone",
+      "field": "contactPhone",
+      "type": "text",
+      "prompt": "WhatsApp or phone number?",
+      "helper": "We’ll confirm invite via text.",
+      "required": true,
+      "placeholder": "+1 555 123 8888"
+    },
+    {
+      "id": "website",
+      "field": "website",
+      "type": "text",
+      "prompt": "Website or profile link (optional)",
+      "helper": "LinkedIn, Instagram, or site.",
+      "placeholder": "https://linkedin.com/in/...",
+      "quickReplies": ["NA", "Instagram", "LinkedIn"]
+    },
+    {
+      "id": "socialLink",
+      "field": "socialLink",
+      "type": "text",
+      "prompt": "Any other social handle?",
+      "helper": "Drop whichever shows their audience.",
+      "placeholder": "https://instagram.com/...",
+      "quickReplies": ["NA"]
+    },
+    {
+      "id": "clientGoals",
+      "field": "clientGoals",
+      "type": "textarea",
+      "prompt": "Describe their audience + why they want to partner.",
+      "helper": "Short blurb about reach, niche, or product fit.",
+      "required": true,
+      "placeholder": "Runs a LATAM SaaS podcast and wants to resell RevOps tooling."
+    },
+    {
+      "id": "servicesRequested",
+      "field": "servicesRequested",
+      "type": "multi-select",
+      "prompt": "What programs interest them?",
+      "helper": "Tap all that apply.",
+      "required": true,
+      "options": ["Direct referrals", "Channel reseller", "Affiliate", "Community host", "Content partner"]
+    },
+    {
+      "id": "timeline",
+      "field": "timeline",
+      "type": "text",
+      "prompt": "When do they want to start selling? (optional)",
+      "helper": "Month or sprint is fine.",
+      "placeholder": "Ready this month",
+      "quickReplies": ["ASAP", "This quarter", "NA"]
+    },
+    {
+      "id": "expectedValue",
+      "field": "expectedValue",
+      "type": "text",
+      "prompt": "Estimated pipeline they can bring? (optional)",
+      "helper": "USD is fine, rough guess.",
+      "placeholder": "25000",
+      "quickReplies": ["10000", "25000", "50000", "Unknown"]
+    },
+    {
+      "id": "budgetRange",
+      "field": "budgetRange",
+      "type": "chips",
+      "prompt": "Average deal size they usually close?",
+      "helper": "Pick Unknown if not sure.",
+      "options": ["<$5k", "$5k-$10k", "$10k-$25k", "$25k-$50k", "$50k+", "Unknown"]
+    },
+    {
+      "id": "specialRequirements",
+      "field": "specialRequirements",
+      "type": "textarea",
+      "prompt": "Compliance or territory notes?",
+      "helper": "Licensing, regions, or exclusivity requests.",
+      "placeholder": "Only sells in EMEA + healthcare"
+    },
+    {
+      "id": "documents",
+      "field": "documents",
+      "type": "upload",
+      "prompt": "Upload any scorecards or pitch decks (optional)",
+      "helper": "PDF or doc—no IDs please."
+    },
+    {
+      "id": "commercialNotes",
+      "field": "commercialNotes",
+      "type": "textarea",
+      "prompt": "Commission expectations or rev share ideas?",
+      "helper": "Drop numbers or special asks.",
+      "placeholder": "Wants 15% rev share for SaaS leads"
+    },
+    {
+      "id": "contextNotes",
+      "field": "contextNotes",
+      "type": "textarea",
+      "prompt": "Anything else recruitment should know?",
+      "helper": "Decision makers, previous programs, blockers.",
+      "placeholder": "Former HubSpot partner, strong in LATAM"
+    },
+    {
+      "id": "shareWithSiso",
+      "field": "shareWithSiso",
+      "type": "chips",
+      "prompt": "Share notes with Partner Success?",
+      "helper": "Gives pods context before onboarding.",
+      "options": ["Share with SISO", "Keep private"]
+    },
+    {
+      "id": "summary",
+      "type": "summary",
+      "prompt": "All set. Review and hit submit when ready."
+    }
+  ],
+  "savedDraftThreads": [
+    {
+      "id": "revhouse-draft",
+      "name": "RevHouse Network",
+      "preview": "Draft saved • 40% complete",
+      "category": "Saved Drafts",
+      "badge": "Draft",
+      "lastMessageAt": "4:02 PM",
+      "status": "draft"
+    }
+  ],
+  "outgoingRequests": [
+    { "id": "req-onboard", "name": "Onboarding toolkit", "note": "Waiting for signer" }
+  ],
+  "blockedContacts": []
+}

@@ -6,6 +6,8 @@ export type PipelineStage =
   | "won"
   | "lost";
 
+export type ProspectLifecycleStatus = "potential" | "onboarded" | "active" | "complete";
+
 export interface ProspectSummary {
   id: string;
   company: string;
@@ -14,6 +16,7 @@ export interface ProspectSummary {
   nextAction?: string;
   confidence: number; // 0-1
   stage: Extract<PipelineStage, "prospect" | "qualified">;
+  status: ProspectLifecycleStatus;
   owner: string;
   tags: string[];
   updatedAt: string;
