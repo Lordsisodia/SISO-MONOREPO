@@ -335,7 +335,7 @@
         },
         {
           "id": "submit-partner",
-          "label": "Submit Partner",
+          "label": "Submit new partner",
           "path": "/partners/recruitment/submit-partner",
           "tierRequired": "starter",
           "hasHashtag": false,
@@ -344,7 +344,7 @@
         },
         {
           "id": "prospects",
-          "label": "Prospects",
+          "label": "My prospects",
           "path": "/partners/recruitment/prospects",
           "tierRequired": "starter",
           "hasHashtag": false,
@@ -353,7 +353,7 @@
         },
         {
           "id": "team",
-          "label": "Active sales team",
+          "label": "Sales team",
           "path": "/partners/recruitment/team",
           "tierRequired": "starter",
           "hasHashtag": false,
@@ -362,7 +362,7 @@
         },
         {
           "id": "performance",
-          "label": "Referral performance",
+          "label": "Team performance",
           "path": "/partners/recruitment/performance",
           "tierRequired": "starter",
           "hasHashtag": false,
@@ -385,15 +385,6 @@
           "hasHashtag": false,
           "description": "Earnings dashboard and metrics",
           "hidden": true,
-          "group": "Money In"
-        },
-        {
-          "id": "earnings",
-          "label": "Overview",
-          "path": "/partners/earnings/overview",
-          "tierRequired": "starter",
-          "hasHashtag": false,
-          "description": "Commission overview and payout tracking",
           "group": "Money In"
         },
         {

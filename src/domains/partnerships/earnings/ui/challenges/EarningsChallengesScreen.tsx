@@ -8,7 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import Progress from "@/components/ui/progress";
 import { earningsChallenges } from "@/domains/partnerships/earnings/data/earningsChallenges";
 import { cn } from "@/domains/shared/utils/cn";
-import { Trophy, UsersRound, Zap, CheckCircle2 } from "lucide-react";
+import { Trophy, UsersRound, Zap, CheckCircle2, Clock3 } from "lucide-react";
+import Link from "next/link";
+import { EarningsHeroBackLink } from "@/domains/partnerships/earnings/ui/components/EarningsHeroBackLink";
 
 export function EarningsChallengesScreen() {
   const active = earningsChallenges.filter((c) => c.status === "active");
@@ -17,7 +19,13 @@ export function EarningsChallengesScreen() {
 
   const seasonName = "Q4 Momentum Series";
   const seasonDeadline = "Ends Dec 20";
-  const seasonReward = "+12% payout booster";
+  const seasonCountdown = "28 days left";
+
+  const seasonRules = [
+    "Active tier required; squads auto-enrolled when 3+ verified reps",
+    "Boost applies to verified closes between Nov 15–Dec 20",
+    "Stackable with Wallet boosts up to +20% cap",
+  ];
 
   return (
     <section className="relative flex min-h-screen flex-col bg-siso-bg-primary text-siso-text-primary">
@@ -34,22 +42,27 @@ export function EarningsChallengesScreen() {
         </div>
 
         <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+96px)] pt-8">
-          <HighlightCard
-            color="orange"
-            className="w-full pr-16"
-            title="Challenges"
-            description="Weekly and seasonal pushes to boost commissions."
-            hideDivider
-            hideFooter
-            titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
-            descriptionClassName="text-xs"
-            icon={<Trophy className="h-5 w-5" />}
-            metricValue=""
-            metricLabel=""
-            buttonText=""
-            onButtonClick={() => {}}
-            showCornerIcon={false}
-          />
+          <div className="relative min-h-[128px]">
+            <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
+              <EarningsHeroBackLink />
+            </div>
+            <HighlightCard
+              color="orange"
+              className="w-full pr-16 pl-12"
+              title="Challenges"
+              description="Weekly and seasonal pushes to boost commissions."
+              hideDivider
+              hideFooter
+              titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
+              descriptionClassName="text-xs"
+              icon={<Trophy className="h-5 w-5" />}
+              metricValue=""
+              metricLabel=""
+              buttonText=""
+              onButtonClick={() => {}}
+              showCornerIcon={false}
+            />
+          </div>
 
         <SettingsGroupCallout
           icon={<Zap className="h-4 w-4" />}
@@ -57,12 +70,14 @@ export function EarningsChallengesScreen() {
           subtitle="Season status, rewards, and rules at a glance"
           showChevron={false}
         >
-          <div className="grid gap-3 rounded-[22px] border border-white/10 bg-white/5 p-4 sm:grid-cols-2">
-            <ControlStat label="Season" value={seasonName} helper={seasonDeadline} />
-            <ControlStat label="Reward" value={seasonReward} helper="Applies to all verified closes" />
-            <ControlStat label="Active players" value={`${active.length}`} helper="Enrolled this week" />
-            <ControlStat label="Points available" value="1,250" helper="Across all missions" />
-          </div>
+          <SeasonSnapshot
+            seasonName={seasonName}
+            seasonDeadline={seasonDeadline}
+            countdown={seasonCountdown}
+            activePlayers={active.length}
+            totalPoints="1,250"
+            rules={seasonRules}
+          />
         </SettingsGroupCallout>
 
         <SettingsGroupCallout
@@ -113,12 +128,79 @@ export function EarningsChallengesScreen() {
   );
 }
 
-function ControlStat({ label, value, helper }: { label: string; value: string; helper?: string }) {
+type SeasonSnapshotProps = {
+  seasonName: string;
+  seasonDeadline: string;
+  countdown: string;
+  activePlayers: number;
+  totalPoints: string;
+  rules: string[];
+};
+
+function SeasonSnapshot({
+  seasonName,
+  seasonDeadline,
+  countdown,
+  activePlayers,
+  totalPoints,
+  rules,
+}: SeasonSnapshotProps) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/10 px-4 py-3 text-left">
+    <div className="space-y-4 rounded-[26px] border border-white/10 bg-black/20 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+      <div className="flex flex-col gap-3 rounded-[24px] border border-white/10 bg-white/5 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.35em] text-white/60">Season</p>
+          <p className="text-2xl font-semibold text-white">{seasonName}</p>
+          <p className="text-xs text-white/70">{seasonDeadline}</p>
+        </div>
+        <CountdownChip label={countdown} />
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <SnapshotStat label="Active players" value={`${activePlayers}`} helper="Enrolled this week" />
+        <SnapshotStat label="Points pool" value={totalPoints} helper="Across open missions" />
+      </div>
+
+      <div className="space-y-2 rounded-[24px] border border-dashed border-white/20 bg-black/30 p-4">
+        <p className="text-[10px] uppercase tracking-[0.35em] text-white/60">Rules & eligibility</p>
+        <ul className="space-y-1 text-sm text-white/80">
+          {rules.map((rule) => (
+            <li key={rule} className="flex gap-2">
+              <span className="text-siso-orange">•</span>
+              <span>{rule}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function SnapshotStat({
+  label,
+  value,
+  helper,
+  accent,
+}: {
+  label: string;
+  value: string;
+  helper?: string;
+  accent?: string;
+}) {
+  return (
+    <div className="rounded-[22px] border border-white/10 bg-black/30 p-4">
       <p className="text-[10px] uppercase tracking-[0.35em] text-white/60">{label}</p>
-      <p className="text-xl font-semibold text-white">{value}</p>
+      <p className={cn("text-2xl font-semibold text-white", accent)}>{value}</p>
       {helper ? <p className="text-xs text-white/70">{helper}</p> : null}
+    </div>
+  );
+}
+
+function CountdownChip({ label }: { label: string }) {
+  return (
+    <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[10px] uppercase tracking-[0.35em] text-siso-orange">
+      <Clock3 className="h-3.5 w-3.5" />
+      {label}
     </div>
   );
 }
@@ -180,11 +262,11 @@ function ChallengeCard({ challenge, variant }: ChallengeCardProps) {
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-3">
-        {!isCompleted ? (
-          <Button size="sm" className="rounded-2xl">
-            Update progress
-          </Button>
-        ) : null}
+        <Button asChild size="sm" className="rounded-2xl">
+          <Link href={`/partners/earnings/challenges/${challenge.id}`}>
+            View challenge
+          </Link>
+        </Button>
         {challenge.teamName ? (
           <Badge className="bg-white/10 text-white/80">{challenge.teamName}</Badge>
         ) : null}

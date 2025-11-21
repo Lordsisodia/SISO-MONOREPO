@@ -1,63 +1,64 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo } from "react";
+import { Trophy, Sparkles, Award, ScrollText, ListChecks } from "lucide-react";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { Waves } from "@/components/ui/wave-background";
-import { Trophy, Sparkles, UsersRound, Megaphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Progress from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { FloatingNavButton } from "@/domains/partnerships/shared/ui/mobile/FloatingNavButton";
 import {
   badgeTotals,
-  featuredBadges,
-  leaderboardEntries,
-  shoutouts,
-  categorySummaries,
+  badgeCollection,
+  certificateSummary,
+  achievementFeed,
+  nextUnlocks,
 } from "@/domains/partnerships/earnings/data/earningsAchievements";
-import { cn } from "@/domains/shared/utils/cn";
+import { EarningsHeroBackLink } from "@/domains/partnerships/earnings/ui/components/EarningsHeroBackLink";
 
 export function EarningsAchievementsScreen() {
-  const filteredLeaderboard = useMemo(() => leaderboardEntries, []);
+  const earnedBadges = useMemo(
+    () => badgeCollection.filter((badge) => badge.status === "earned").slice(0, 3),
+    [],
+  );
+  const inProgressBadges = useMemo(
+    () => badgeCollection.filter((badge) => badge.status === "in-progress").slice(0, 2),
+    [],
+  );
 
   return (
     <section className="relative flex min-h-screen flex-col bg-siso-bg-primary text-siso-text-primary">
       <FloatingNavButton />
-      <div
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{ filter: "blur(6px)", opacity: 0.9 }}
-      >
-        <Waves
-          className="h-full w-full"
-          strokeColor="#f8a75c"
-          backgroundColor="#0b0b0f"
-          pointerSize={0.35}
-        />
+      <div className="pointer-events-none absolute inset-0 z-0" style={{ filter: "blur(6px)", opacity: 0.9 }}>
+        <Waves className="h-full w-full" strokeColor="#f8a75c" backgroundColor="#0b0b0f" pointerSize={0.35} />
       </div>
 
       <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+96px)] pt-8">
-        <HighlightCard
-          color="orange"
-          className="w-full pr-16"
-          title="Achievements"
-          description="Track badges, multipliers, and recognition across the program."
-          hideDivider
-          hideFooter
-          titleClassName="uppercase tracking-[0.3em] font-semibold text-[24px] leading-[1.1]"
-          descriptionClassName="text-xs"
-          icon={<Trophy className="h-5 w-5" />}
-          metricValue=""
-          metricLabel=""
-          buttonText=""
-          onButtonClick={() => {}}
-          showCornerIcon={false}
-        />
+        <div className="relative min-h-[128px]">
+          <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
+            <EarningsHeroBackLink />
+          </div>
+          <HighlightCard
+            color="orange"
+            className="w-full pr-16 pl-12"
+            title="Achievements"
+            description="Track badges, certificates, and unlocks without leaving earnings."
+            titleClassName="uppercase tracking-[0.3em] font-semibold text-[24px] leading-[1.1]"
+            descriptionClassName="text-xs"
+            icon={<Trophy className="h-5 w-5" />}
+            hideDivider
+            hideFooter
+            showCornerIcon={false}
+          />
+        </div>
 
         <SettingsGroupCallout
           icon={<Sparkles className="h-4 w-4" />}
-          title="Trophy Case"
-          subtitle="Your progress across badges and boosters"
+          title="Trophy case"
+          subtitle="Tap through to manage badges and boosters"
           showChevron={false}
         >
           <div className="grid gap-3 rounded-[22px] border border-white/10 bg-white/5 p-4 sm:grid-cols-2">
@@ -65,85 +66,62 @@ export function EarningsAchievementsScreen() {
               label="Badges earned"
               value={`${badgeTotals.earned}/${badgeTotals.total}`}
               helper={`Next up: ${badgeTotals.nextBadge}`}
+              href="/partners/earnings/badges"
             >
               <Progress value={(badgeTotals.earned / badgeTotals.total) * 100} className="mt-3" />
             </ControlStat>
-            <ControlStat
-              label="Next badge"
-              value={badgeTotals.nextBadge}
-              helper={`${badgeTotals.nextBadgeProgress}% complete`}
-            >
-              <Progress value={badgeTotals.nextBadgeProgress} className="mt-3" />
-            </ControlStat>
+            <CalloutCTA
+              label="Full badge history"
+              description="See earned, in-progress, and locked badges."
+              buttonLabel="View badges"
+              href="/partners/earnings/badges"
+            />
           </div>
         </SettingsGroupCallout>
 
         <SettingsGroupCallout
-          icon={<UsersRound className="h-4 w-4" />}
-          title="Featured badges"
-          subtitle="Rare unlocks and what it takes"
-          showChevron={false}
-        >
-          <div className="grid gap-3 md:grid-cols-3">
-            {featuredBadges.map((badge) => (
-              <BadgeTile key={badge.id} badge={badge} />
-            ))}
-          </div>
-        </SettingsGroupCallout>
-
-        <SettingsGroupCallout
-          icon={<Trophy className="h-4 w-4" />}
-          title="How you stack up"
-          subtitle="Leaderboard refreshed hourly"
+          icon={<Award className="h-4 w-4" />}
+          title="Certificates & credentials"
+          subtitle={`Issued ${certificateSummary.issued} • In progress ${certificateSummary.inProgress}`}
           showChevron={false}
         >
           <div className="space-y-3 rounded-[22px] border border-white/10 bg-white/5 p-4">
             <div className="space-y-2">
-              {filteredLeaderboard.map((entry) => (
-                <LeaderboardRow key={entry.rank} entry={entry} highlight={entry.name.toLowerCase() === "you"} />
+              {certificateSummary.preview.map((certificate) => (
+                <CertificatePreview key={certificate.id} certificate={certificate} />
               ))}
             </div>
+            <CalloutCTA
+              label="Issued & downloads"
+              description="Manage PDFs and shareable credential links."
+              buttonLabel="View certificates"
+              href="/partners/academy/certificates"
+            />
           </div>
         </SettingsGroupCallout>
 
         <SettingsGroupCallout
-          icon={<Megaphone className="h-4 w-4" />}
-          title="Shoutouts"
-          subtitle="Auto-posted into #wins every day"
+          icon={<ScrollText className="h-4 w-4" />}
+          title="Recent achievements"
+          subtitle="Automatic log of your wins"
           showChevron={false}
         >
           <div className="space-y-2 rounded-[22px] border border-white/10 bg-white/5 p-3">
-            {shoutouts.map((item) => (
-              <div key={item.id} className="flex items-center justify-between rounded-2xl bg-black/20 px-3 py-2 text-sm text-white/80">
-                <span>{item.message}</span>
-                <span className="text-[11px] uppercase tracking-[0.3em] text-white/50">{item.timestamp}</span>
-              </div>
+            {achievementFeed.map((item) => (
+              <AchievementFeedRow key={item.id} item={item} />
             ))}
-            <Button variant="secondary" className="mt-2 w-full rounded-2xl" asChild>
-              <a href="/partners/community/channels/wins">Share a win</a>
-            </Button>
           </div>
         </SettingsGroupCallout>
 
         <SettingsGroupCallout
-          icon={<UsersRound className="h-4 w-4" />}
-          title="Categories"
-          subtitle="Track specific badge tracks"
+          icon={<ListChecks className="h-4 w-4" />}
+          title="Next unlocks"
+          subtitle="Stay on pace for the next badge or certificate"
           showChevron={false}
         >
-          <div className="grid gap-3 md:grid-cols-2">
-            {categorySummaries.map((category) => (
-              <div key={category.id} className="rounded-[22px] border border-white/10 bg-white/5 p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-semibold text-white">{category.label}</p>
-                    <p className="text-xs text-siso-text-muted">{category.description}</p>
-                  </div>
-                  <Badge className="bg-white/10 text-white/70">Next: {category.nextBadge}</Badge>
-                </div>
-                <Progress value={category.progress} className="mt-3" />
-                <p className="mt-1 text-[11px] uppercase tracking-[0.3em] text-white/60">{category.progress}% complete</p>
-              </div>
+          <div className="space-y-3 rounded-[22px] border border-white/10 bg-white/5 p-4">
+            {nextUnlocks.map((unlock) => (
+              <NextUnlockRow key={unlock.id} unlock={unlock} />
             ))}
           </div>
         </SettingsGroupCallout>
@@ -152,75 +130,132 @@ export function EarningsAchievementsScreen() {
   );
 }
 
-function ControlStat({ label, value, helper, children }: { label: string; value: string; helper?: string; children?: React.ReactNode }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-black/10 px-4 py-3 text-left">
+function ControlStat({
+  label,
+  value,
+  helper,
+  children,
+  href,
+}: {
+  label: string;
+  value: string;
+  helper?: string;
+  children?: React.ReactNode;
+  href?: string;
+}) {
+  const content = (
+    <div className="rounded-2xl border border-white/10 bg-black/10 px-4 py-3 text-left transition">
       <p className="text-[10px] uppercase tracking-[0.35em] text-white/60">{label}</p>
       <p className="text-xl font-semibold text-white">{value}</p>
       {helper ? <p className="text-xs text-white/70">{helper}</p> : null}
       {children}
     </div>
   );
-}
 
-function BadgeTile({ badge }: { badge: typeof featuredBadges[number] }) {
-  return (
-    <div className="rounded-[20px] border border-white/10 bg-white/5 p-4 shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
-      <div className="flex items-center justify-between">
-        <p className="text-sm font-semibold text-white">{badge.name}</p>
-        <Badge className="bg-white/10 text-white/70">{badge.category}</Badge>
-      </div>
-      <p className="mt-1 text-xs text-siso-text-muted">{badge.description}</p>
-      <div className="mt-3 text-[12px] text-white/80">
-        <p>
-          <span className="text-white/60">Reward: </span>
-          {badge.reward}
-        </p>
-        <p>
-          <span className="text-white/60">Criteria: </span>
-          {badge.criteria}
-        </p>
-        <p className="text-white/60">{badge.rarity}</p>
-      </div>
-    </div>
-  );
-}
-
-function LeaderboardRow({ entry, highlight }: { entry: typeof leaderboardEntries[number]; highlight?: boolean }) {
-  const medal = getMedal(entry.rank);
-  return (
-    <div
-      className={cn(
-        "flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-3 py-2 text-sm",
-        highlight && "border-siso-orange/60 bg-siso-orange/15 text-white",
-      )}
-    >
-      <div className="flex items-center gap-3">
-        <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-white/60">
-          {medal ? <span className={cn("inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold text-black", medal.className)}>{medal.label}</span> : entry.rank}
-        </span>
-        <div>
-          <p className="font-semibold text-white">{entry.name}</p>
-          <p className="text-xs text-white/70">{entry.metricLabel}</p>
-        </div>
-      </div>
-      <div className="text-right text-xs text-white/80">
-        <p className="text-base font-semibold text-white">{entry.metricValue}</p>
-        <p className="text-emerald-300">{entry.trend}</p>
-      </div>
-    </div>
-  );
-}
-
-function getMedal(rank: number): { label: string; className: string } | null {
-  switch (rank) {
-    case 1:
-      return { label: "1", className: "bg-gradient-to-br from-yellow-300 to-amber-400" };
-    case 2:
-      return { label: "2", className: "bg-gradient-to-br from-gray-200 to-gray-400" };
-    case 3:
-      return { label: "3", className: "bg-gradient-to-br from-amber-800 to-orange-600" };
-    default:
-      return null;
+  if (href) {
+    return (
+      <Link href={href} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40">
+        {content}
+      </Link>
+    );
   }
+
+  return content;
+}
+
+function CertificatePreview({
+  certificate,
+}: {
+  certificate: typeof certificateSummary.preview[number];
+}) {
+  return (
+    <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/80">
+      <div>
+        <p className="font-semibold text-white">{certificate.title}</p>
+        <p className="text-xs text-white/60">{certificate.status}</p>
+      </div>
+      <p className="text-[11px] uppercase tracking-[0.3em] text-white/50">{certificate.issued ?? "Pending"}</p>
+    </div>
+  );
+}
+
+function BadgeQuickRow({ badge }: { badge: typeof badgeCollection[number] }) {
+  const statusColor =
+    badge.status === "earned"
+      ? "bg-emerald-400/20 text-emerald-200"
+      : badge.status === "in-progress"
+        ? "bg-amber-400/20 text-amber-200"
+        : "bg-white/10 text-white/60";
+
+  return (
+    <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/15 px-3 py-2 text-sm text-white/80">
+      <div>
+        <p className="font-semibold text-white">{badge.name}</p>
+        <p className="text-xs text-white/60">{badge.category}</p>
+      </div>
+      <div className="text-right text-xs">
+        <Badge className={`${statusColor} border border-white/10 px-2 py-0`}>{badge.status.replace("-", " ")}</Badge>
+        {badge.status === "in-progress" ? (
+          <p className="mt-1 text-[11px] uppercase tracking-[0.3em] text-white/50">{badge.progress ?? 0}%</p>
+        ) : badge.unlockedAt ? (
+          <p className="mt-1 text-[11px] uppercase tracking-[0.3em] text-white/50">{badge.unlockedAt}</p>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function AchievementFeedRow({ item }: { item: typeof achievementFeed[number] }) {
+  return (
+    <div className="flex items-center justify-between rounded-2xl bg-black/20 px-3 py-2 text-sm text-white/80">
+      <div>
+        <p className="font-semibold text-white">{item.title}</p>
+        <p className="text-xs text-white/60">{item.detail}</p>
+      </div>
+      <div className="text-right text-xs text-white/50">
+        <Badge className="bg-white/10 text-white/70">{item.tag}</Badge>
+        <p className="mt-1 text-[11px] uppercase tracking-[0.3em]">{item.timestamp}</p>
+      </div>
+    </div>
+  );
+}
+
+function NextUnlockRow({ unlock }: { unlock: typeof nextUnlocks[number] }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-black/15 p-3">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-semibold text-white">{unlock.label}</p>
+          <p className="text-xs text-white/60">{unlock.requirement}</p>
+        </div>
+        <span className="text-[11px] uppercase tracking-[0.3em] text-white/50">{unlock.reward}</span>
+      </div>
+      <Progress value={unlock.progress} className="mt-3" />
+      <p className="mt-1 text-[11px] uppercase tracking-[0.3em] text-white/60">{unlock.progress}% • {unlock.eta}</p>
+    </div>
+  );
+}
+
+function CalloutCTA({
+  label,
+  description,
+  buttonLabel,
+  href,
+}: {
+  label: string;
+  description: string;
+  buttonLabel: string;
+  href: string;
+}) {
+  return (
+    <div className="rounded-[24px] border border-white/10 bg-white/5 p-3 shadow-[0_20px_50px_rgba(0,0,0,0.35)]">
+      <div className="rounded-[20px] border border-white/10 bg-black/20 p-4 text-white/80">
+        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-white/70">{label}</p>
+        <p className="text-xs text-white/60">{description}</p>
+        <Button asChild className="mt-3 w-full rounded-2xl text-base font-semibold">
+          <Link href={href}>{buttonLabel}</Link>
+        </Button>
+      </div>
+    </div>
+  );
 }

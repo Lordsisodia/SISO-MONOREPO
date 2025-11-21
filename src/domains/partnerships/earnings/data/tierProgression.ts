@@ -1,4 +1,4 @@
-export type TierId = "Starter" | "Active" | "Prime" | "Collective";
+export type TierId = "Trailblazer" | "Builder" | "Vanguard" | "Apex" | "Sovereign";
 
 export type TierMetric = {
   id: string;
@@ -30,54 +30,58 @@ export type TierHistoryEntry = {
 };
 
 export const tierMeta = {
-  currentTier: "Active" as TierId,
-  nextTier: "Prime" as TierId,
+  currentTier: "Builder" as TierId,
+  nextTier: "Vanguard" as TierId,
   pointsToNext: 320,
   estUpgradeDate: "Est. Jan 26",
-  progressPct: 68,
+  progressPct: 86,
 };
 
 export const tierMetrics: TierMetric[] = [
-  { id: "activity", label: "Activity points", value: 680, target: 1000, helper: "Submit 320 more" },
+  { id: "activity", label: "Activity points", value: 680, target: 1_000, helper: "Submit 320 more" },
   { id: "nps", label: "Client NPS", value: 4.7, target: 4.8, helper: "Avg of last 5 surveys" },
-  { id: "revenue", label: "Revenue contribution", value: 88, target: 100, helper: "% of Prime threshold" },
+  { id: "revenue", label: "Revenue contribution", value: 88, target: 100, helper: "% of Vanguard threshold" },
 ];
 
 export const tierBenefits: TierBenefit[] = [
   {
     perk: "Commission rate",
     tiers: {
-      Starter: "12%",
-      Active: "14%",
-      Prime: "16%",
-      Collective: "18%",
+      Trailblazer: "20%",
+      Builder: "23%",
+      Vanguard: "26%",
+      Apex: "28%",
+      Sovereign: "30%",
     },
   },
   {
     perk: "Beta feature access",
     tiers: {
-      Starter: "Launch previews",
-      Active: "+ Ops betas",
-      Prime: "Ops + Growth betas",
-      Collective: "All betas + roadmap vote",
+      Trailblazer: "Launch previews",
+      Builder: "+ Ops betas",
+      Vanguard: "Ops + Growth betas",
+      Apex: "Roadmap vote + launches",
+      Sovereign: "Rev-share pilots + concierge",
     },
   },
   {
     perk: "Support SLA",
     tiers: {
-      Starter: "72h",
-      Active: "48h",
-      Prime: "24h",
-      Collective: "Dedicated captain",
+      Trailblazer: "72h",
+      Builder: "48h",
+      Vanguard: "36h",
+      Apex: "24h",
+      Sovereign: "Dedicated captain",
     },
   },
   {
     perk: "Payout boost",
     tiers: {
-      Starter: "—",
-      Active: "+2%",
-      Prime: "+4%",
-      Collective: "+6%",
+      Trailblazer: "—",
+      Builder: "+2%",
+      Vanguard: "+4%",
+      Apex: "+5%",
+      Sovereign: "+6%",
     },
   },
 ];
@@ -211,6 +215,6 @@ export const unlockMissions: UnlockMission[] = [
 ];
 
 export const tierHistory: TierHistoryEntry[] = [
-  { id: "h1", tier: "Starter", date: "Jan 2024", note: "Joined program" },
-  { id: "h2", tier: "Active", date: "May 2024", note: "Hit activity streak + NPS 4.6" },
+  { id: "h1", tier: "Trailblazer", date: "Jan 2024", note: "Joined program" },
+  { id: "h2", tier: "Builder", date: "May 2024", note: "Hit activity streak + NPS 4.6" },
 ];

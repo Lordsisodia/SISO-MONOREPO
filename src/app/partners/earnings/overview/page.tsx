@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
-import { EarningsOverviewScreen } from "@/domains/partnerships/earnings/ui/overview/EarningsOverviewScreen";
-import { EarningsPageShell } from "@/domains/partnerships/earnings/ui/components/EarningsPageShell";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Earnings Overview",
-  description: "Pulse of payouts, pipeline to cash, and quick actions.",
+  title: "Wallet & Payouts • Earnings",
+  description: "This route now redirects to Wallet & Payouts.",
 };
 
 export default function PartnersEarningsOverviewPage() {
-  return (
-    <EarningsPageShell>
-      <EarningsOverviewScreen />
-    </EarningsPageShell>
-  );
+  redirect("/partners/earnings/wallet");
+  return null;
 }

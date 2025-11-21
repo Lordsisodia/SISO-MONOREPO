@@ -11,6 +11,7 @@ import Progress from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Trophy, Target, History } from "lucide-react";
+import { EarningsHeroBackLink } from "@/domains/partnerships/earnings/ui/components/EarningsHeroBackLink";
 
 export function EarningsTierProgressionBoard() {
   return (
@@ -29,6 +30,7 @@ export function EarningsTierProgressionBoard() {
 
       <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 pb-[calc(env(safe-area-inset-bottom,0px)+96px)] pt-8">
         <TierHero />
+        <TierStatusCard />
 
         <TierBadges />
 
@@ -54,8 +56,20 @@ export function EarningsTierProgressionBoard() {
                   ))}
                 </ul>
                 <div className="mt-3 flex gap-2">
-                  <Button size="sm" className="rounded-2xl">Start mission</Button>
-                  <Button size="sm" variant="outline" className="rounded-2xl border-white/20 text-white/80">
+                  <Button
+                    size="sm"
+                    className="rounded-2xl bg-siso-orange text-black hover:bg-siso-orange/90"
+                    onClick={() => {
+                      // TODO: wire to mission start flow
+                    }}
+                  >
+                    Start mission
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="rounded-2xl border-white/20 bg-white/5 text-white/85 hover:bg-white/10"
+                  >
                     View rules
                   </Button>
                 </div>
@@ -110,42 +124,75 @@ export function EarningsTierProgressionBoard() {
 
 function TierHero() {
   return (
-    <HighlightCard
-      color="orange"
-      className="w-full pr-16"
-      title="Tier progression"
-      description={`Current tier: ${tierMeta.currentTier}`}
-      hideDivider
-      hideFooter
-      titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
-      descriptionClassName="text-xs"
-      icon={<Trophy className="h-5 w-5" />}
-      metricValue=""
-      metricLabel=""
-      buttonText=""
-      onButtonClick={() => {}}
-      showCornerIcon={false}
-    >
-      <div className="mt-4 space-y-2">
-        <Progress value={tierMeta.progressPct} className="h-3" />
-        <p className="text-sm text-white/90">{tierMeta.progressPct}% of the way to {tierMeta.nextTier}</p>
-        <p className="text-xs text-white/70">{tierMeta.pointsToNext} pts to go • {tierMeta.estUpgradeDate}</p>
+    <div className="relative min-h-[128px]">
+      <div className="pointer-events-none absolute inset-y-0 left-3 z-10 flex items-center">
+        <EarningsHeroBackLink />
       </div>
-      <div className="mt-4 flex gap-3">
+      <HighlightCard
+        color="orange"
+        className="w-full pr-16 pl-12"
+        title="Tier progress"
+        description={`Stay on track for ${tierMeta.nextTier} with live mission + earnings signals.`}
+        hideDivider
+        hideFooter
+        titleClassName="uppercase tracking-[0.35em] font-semibold text-[28px] leading-[1.2]"
+        descriptionClassName="text-xs"
+        icon={<Trophy className="h-5 w-5" />}
+        metricValue=""
+        metricLabel=""
+        buttonText=""
+        onButtonClick={() => {}}
+        showCornerIcon={false}
+      />
+    </div>
+  );
+}
+
+function TierStatusCard() {
+  const nextTierCopy = tierMeta.nextTier ? `Next: ${tierMeta.nextTier}` : "Top tier unlocked";
+
+  return (
+    <div className="rounded-[28px] border border-siso-border bg-siso-bg-secondary/90 p-6 text-white shadow-[0_35px_110px_rgba(0,0,0,0.55)] backdrop-blur">
+      <div className="flex flex-col gap-3">
+        <p className="text-xs uppercase tracking-[0.35em] text-siso-text-muted">Current tier</p>
+        <div className="flex flex-wrap items-end gap-3">
+          <p className="text-[30px] font-semibold leading-none">{tierMeta.currentTier}</p>
+          <span className="rounded-full border border-siso-border/60 px-3 py-1 text-[11px] text-siso-text-muted">
+            {nextTierCopy}
+          </span>
+        </div>
+        <p className="text-sm text-siso-text-muted">
+          Missions, revenue and NPS activity fuel your momentum to the next badge.
+        </p>
+      </div>
+
+      <div className="mt-5 rounded-2xl border border-siso-border/50 bg-siso-bg-primary/60 p-4">
+        <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-[0.35em] text-siso-text-muted">
+          <span>Your progress</span>
+          <span className="text-[10px] text-white/70 normal-case tracking-normal">{tierMeta.pointsToNext} pts to go</span>
+        </div>
+        <Progress value={tierMeta.progressPct} className="mt-3 h-2.5" />
+        <p className="mt-2 text-sm text-white/90">
+          {tierMeta.progressPct}% of the way to {tierMeta.nextTier}
+        </p>
+        <p className="text-xs text-siso-text-muted">{tierMeta.estUpgradeDate}</p>
+      </div>
+
+      <div className="mt-5 flex flex-wrap gap-3">
         <Link
           href="/partners/earnings/tiers"
-          className="inline-flex items-center rounded-2xl border border-white/40 bg-white/10 px-4 py-2 text-sm text-white hover:border-white/60"
+          className="inline-flex items-center rounded-2xl border border-siso-border/60 bg-siso-bg-primary/60 px-4 py-2 text-sm text-white hover:border-white/60 hover:text-white"
         >
           View benefits
         </Link>
         <Link
           href="/partners/earnings/review"
-          className="inline-flex items-center rounded-2xl border border-white/30 px-4 py-2 text-sm text-white/80 hover:border-white/60"
+          className="inline-flex items-center rounded-2xl border border-siso-border/40 px-4 py-2 text-sm text-siso-text-muted hover:border-white/50 hover:text-white"
         >
           Ask for review
         </Link>
       </div>
-    </HighlightCard>
+    </div>
   );
 }
 
@@ -198,7 +245,11 @@ function TierBadges() {
     },
   ];
 
-  const [index, setIndex] = useState(0);
+  const initialIndex = Math.max(
+    0,
+    tiers.findIndex((tier) => tier.name === tierMeta.currentTier)
+  );
+  const [index, setIndex] = useState(initialIndex);
   const current = tiers[index];
   // TODO: replace with real user XP once wired to API
   const userXp = 1250;
@@ -263,7 +314,7 @@ function TierBadges() {
           <Button
             variant="outline"
             size="sm"
-            className="rounded-2xl border-white/20 text-white/80"
+            className="rounded-2xl border-white/20 bg-white/10 text-white/90 hover:bg-white/15 disabled:border-white/10 disabled:bg-white/5 disabled:text-white/40"
             disabled={!canPrev}
             onClick={() => setIndex((i) => Math.max(0, i - 1))}
           >

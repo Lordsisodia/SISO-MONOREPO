@@ -4,6 +4,7 @@ import { LazyPartnersPageShell } from "@/domains/partnerships/community/ui/LazyP
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { Waves } from "@/components/ui/wave-background";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
+import { Button } from "@/components/ui/button";
 import { Compass, KanbanSquare, Users2, BarChart3, ArrowRight } from "lucide-react";
 
 const heroCard = {
@@ -132,23 +133,31 @@ export function RecruitmentDashboardContent() {
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-white shadow-[0_12px_28px_rgba(0,0,0,0.28)]">
                   <div className="flex items-center justify-between gap-3">
                     <span className="rounded-full border border-white/15 px-3 py-1 text-[11px] text-white/80">{tile.stat}</span>
-                    <Link
-                      href={tile.href}
-                      className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white transition hover:border-siso-orange"
-                    >
-                      Open <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
                   </div>
-                  <div className="mt-4">
-                    {renderWidget(tile.widget)}
-                  </div>
+                  <div className="mt-4">{renderWidget(tile.widget)}</div>
                 </div>
+                <CalloutButton href={tile.href} label={tile.ctaLabel} />
               </SettingsGroupCallout>
             ))}
           </div>
         </div>
       </section>
     </LazyPartnersPageShell>
+  );
+}
+
+function CalloutButton({ href, label }: { href: string; label: string }) {
+  return (
+    <Button
+      asChild
+      size="sm"
+      className="mt-4 w-full rounded-full bg-white/20 px-4 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-white hover:bg-white/30"
+    >
+      <Link href={href} className="inline-flex items-center justify-center gap-2">
+        {label}
+        <ArrowRight className="h-4 w-4" />
+      </Link>
+    </Button>
   );
 }
 

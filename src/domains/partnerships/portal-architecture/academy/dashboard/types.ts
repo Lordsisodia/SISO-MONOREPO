@@ -29,5 +29,6 @@ export type DashboardCard = {
   href: string;
   icon: ReactNode;
   stat: string;
+  ctaLabel?: string;
   widget?: DashboardWidget;
 };

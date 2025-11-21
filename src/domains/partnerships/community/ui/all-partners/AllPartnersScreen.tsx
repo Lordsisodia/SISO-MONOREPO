@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { AnimatedGlowingSearchBar } from "@/components/ui/animated-glowing-search-bar";
@@ -209,8 +210,8 @@ function PartnerCard({ partner }: { partner: PartnerProfile }) {
         <Button className="rounded-2xl px-6" variant="secondary">
           Message
         </Button>
-        <Button variant="outline" className="rounded-2xl border-white/30 px-6 text-white/80">
-          View Profile
+        <Button variant="outline" className="rounded-2xl border-white/30 px-6 text-white/80" asChild>
+          <Link href={`/partners/community/profile/${partner.id}`}>View profile</Link>
         </Button>
       </div>
     </div>

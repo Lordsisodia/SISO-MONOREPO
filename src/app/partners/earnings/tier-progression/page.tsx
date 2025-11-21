@@ -3,7 +3,7 @@ import { EarningsPageShell } from "@/domains/partnerships/earnings/ui/components
 import { EarningsTierProgressionScreen } from "@/domains/partnerships/earnings/ui/tier-progression/EarningsTierProgressionScreen";
 
 export const metadata: Metadata = {
-  title: "Tier Progression • Earnings",
+  title: "Tier Progress",
   description: "Track partner tier progress and unlock missions.",
 };
 

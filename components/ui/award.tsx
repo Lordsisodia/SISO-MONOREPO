@@ -226,7 +226,7 @@ export function Awards({
       <div
         className={cn(
           "relative z-0",
-          "flex flex-col items-center justify-center rounded-xl border-2 border-dotted p-2",
+          "flex flex-col items-center justify-center rounded-xl border-2 border-dotted border-white/15 bg-black/30 p-2",
           "overflow-hidden",
           className
         )}
@@ -237,36 +237,36 @@ export function Awards({
             <img src={logoSrc} alt="Logo" className="h-full w-full object-contain opacity-90" />
           </div>
         ) : null}
-        <div className="bg-card z-10 rounded-sm border p-6 px-8 text-center">
+        <div className="z-10 w-full max-w-md rounded-xl border border-white/15 bg-white/5 px-8 py-6 text-center text-white">
           <Badge />
           <h1
             className={cn(
-              "mt-4 grid text-3xl leading-7 font-bold tracking-tighter uppercase"
+              "mt-4 grid text-3xl font-bold leading-7 tracking-[0.2em] text-white"
             )}
           >
             Certificate
-            <span className="text-sm font-light tracking-tight">
-              {" "}
-              of {title}
+            <span className="text-sm font-light tracking-[0.2em] text-white/80">
+              {" of "}
+              {title}
             </span>
           </h1>
 
-          <p className="text-muted-foreground mt-4 mb-1 text-xs">
+          <p className="mt-4 mb-1 text-xs text-white/70">
             This is to certify that
           </p>
           <h1
             className={cn(
-              "text-primary mb-2 border-b text-xl font-semibold tracking-tight"
+              "mb-2 border-b border-white/20 text-xl font-semibold uppercase tracking-[0.2em]"
             )}
           >
             {recipient}
           </h1>
 
-          <p className="text-muted-foreground mb-1 text-xs">{subtitle}</p>
+          <p className="mb-1 text-xs text-white/70">{subtitle}</p>
           <div className="mt-6 flex justify-center">
-            <Award strokeWidth={1} className="h-4 w-4" />
+            <Award strokeWidth={1} className="h-4 w-4 text-white/80" />
           </div>
-          <div className={cn("mt-2 text-xs")}>Awarded on: {date}</div>
+          <div className={cn("mt-2 text-xs text-white/60")}>Awarded on: {date}</div>
         </div>
       </div>
     )

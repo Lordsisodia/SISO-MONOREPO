@@ -2,6 +2,7 @@ import { ArrowRight, Briefcase, GraduationCap, LayoutGrid, Presentation, Sparkle
 import Link from "next/link";
 import { HighlightCard } from "@/components/ui/card-5-static";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
+import { Button } from "@/components/ui/button";
 import type { DashboardCard } from "./types";
 
 export const academyDashboardCards: DashboardCard[] = [
@@ -83,19 +84,27 @@ export function AcademyDashboardCard(card: DashboardCard) {
     <SettingsGroupCallout icon={card.icon} title={card.title} subtitle={card.description} showChevron={false}>
       <div className="rounded-2xl border border-white/10 siso-inner-card p-4 shadow-[0_12px_28px_rgba(0,0,0,0.3)] flex flex-col gap-3">
         <div className="flex items-center justify-between gap-3">
-          <span className="rounded-full border border-white/10 px-3 py-1 text-[11px] text-white/80">
-            {card.stat}
-          </span>
-          <Link
-            href={card.href}
-            className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm text-white transition hover:border-siso-orange hover:text-white"
-          >
-            Open <ArrowRight className="ml-2 h-4 w-4" />
-          </Link>
+          <span className="rounded-full border border-white/10 px-3 py-1 text-[11px] text-white/80">{card.stat}</span>
         </div>
         {renderWidget(card)}
       </div>
+      <AcademyCalloutButton href={card.href} label={card.ctaLabel ?? `Open ${card.title.toLowerCase()}` } />
     </SettingsGroupCallout>
+  );
+}
+
+function AcademyCalloutButton({ href, label }: { href: string; label: string }) {
+  return (
+    <Button
+      asChild
+      size="sm"
+      className="mt-2 w-full rounded-full bg-white/20 px-4 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-white hover:bg-white/30"
+    >
+      <Link href={href} className="inline-flex items-center justify-center gap-2">
+        {label}
+        <ArrowRight className="h-4 w-4" />
+      </Link>
+    </Button>
   );
 }
 
