@@ -6,6 +6,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { submitClient } from "@/domains/partnerships/portal-architecture/pipeline-ops/application/pipelineOpsService";
+import { submitPartner } from "@/domains/partnerships/recruitment/application/recruitmentIntakeService";
 import { cn } from "@/lib/utils";
 import { SettingsGroupCallout } from "@/domains/partnerships/portal-architecture/settings/menu/SettingsGroupCallout";
 import { useMobileNavigation } from "@/domains/partnerships/mobile/application/navigation-store";
@@ -14,7 +15,6 @@ import type { ThreadOverview } from "@/domains/partnerships/portal-architecture/
 import { FallingPattern } from "@/domains/partnerships/portal-architecture/shared/forlinkpattern/falling-pattern";
 import { FileText, Sparkles, Upload } from "lucide-react";
 import { useHydrateOnView } from "@/domains/shared/hooks/useHydrateOnView";
-import type { SubmitClientPayload, SubmitClientResponse } from "@/domains/partnerships/portal-architecture/pipeline-ops/domain/types";
 import type { DirectoryEntry, FormState, PipelineOpsConfig, WizardPrompt } from "./types";
 
 const LazyComposerBar = lazy(() =>
@@ -98,10 +98,10 @@ type SubmitIntakeExperienceOptions = {
   headerTitle?: string;
   headerSubtitle?: string;
   helperText?: string;
-  submitHandler?: (payload: SubmitClientPayload) => Promise<SubmitClientResponse>;
-  successMessage?: (response: SubmitClientResponse) => string;
+  submitVariant?: "client" | "partner";
   statusIdleLabel?: string;
   statusSubmittedLabel?: string;
+  hideFloatingNavButton?: boolean;
 };
 
 type SubmitClientExperienceProps = {
@@ -125,12 +125,13 @@ export default function SubmitClientExperience({ config, experience }: SubmitCli
     headerTitle: "Submit Client Intake",
     headerSubtitle: "Chat-first submission with Instant review SLA",
     helperText: "Share whatever you know—company name, WhatsApp, needs, and optional budget. We'll keep score as you go.",
-    submitHandler: submitClient,
-    successMessage: (response: SubmitClientResponse) => `Intake ${response.intakeId} received • Instant review`,
+    submitVariant: "client" as const,
     statusIdleLabel: "Instant review SLA",
     statusSubmittedLabel: "Submitted · Instant review",
+    hideFloatingNavButton: true,
     ...(experience ?? {}),
   } satisfies Required<SubmitIntakeExperienceOptions>;
+  const submitHandler = experienceSettings.submitVariant === "partner" ? submitPartner : submitClient;
   const assistantGreeting = initialAssistantMessage ?? DEFAULT_ASSISTANT_MESSAGE;
   const [formState, setFormState] = useState<FormState>(initialFormState);
   const [resultMessage, setResultMessage] = useState<string | null>(null);
@@ -164,7 +165,7 @@ export default function SubmitClientExperience({ config, experience }: SubmitCli
     setErrorMessage(null);
     startTransition(async () => {
       try {
-        const response = await experienceSettings.submitHandler({
+        const response = await submitHandler({
           companyName: formState.companyName,
           contactEmail: formState.contactEmail,
           contactPhone: formState.contactPhone,
@@ -182,12 +183,30 @@ export default function SubmitClientExperience({ config, experience }: SubmitCli
             .join(" | "),
           vertical: formState.industry || "General",
         });
-        setResultMessage(experienceSettings.successMessage(response));
+        const successCopy =
+          experienceSettings.submitVariant === "partner"
+            ? `Partner intake ${response.intakeId} received • Recruitment review`
+            : `Intake ${response.intakeId} received • Instant review`;
+        setResultMessage(successCopy);
       } catch (error) {
         setErrorMessage(error instanceof Error ? error.message : "Something went wrong");
       }
     });
   };
+
+  useEffect(() => {
+    if (!experienceSettings.hideFloatingNavButton) return undefined;
+    const root = document.documentElement;
+    const previous = root.dataset.hideFloatingNavButton;
+    root.dataset.hideFloatingNavButton = "true";
+    return () => {
+      if (previous) {
+        root.dataset.hideFloatingNavButton = previous;
+      } else {
+        delete root.dataset.hideFloatingNavButton;
+      }
+    };
+  }, [experienceSettings.hideFloatingNavButton]);
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-siso-bg-primary text-siso-text-primary">
@@ -336,10 +355,6 @@ function SubmitClientChat({
       skip: !hasDocs,
       display: hasDocs ? `${formState.documents.length} docs uploaded` : "Skip for now",
     });
-  };
-
-  const handleQuickReply = (reply: string) => {
-    completePrompt(reply, { display: reply });
   };
 
   const isTextPrompt = currentPrompt?.type === "text" || currentPrompt?.type === "textarea";
@@ -566,7 +581,7 @@ function SubmitClientChat({
       },
       ...savedDraftThreads,
     ];
-  }, [progressPercent, resultMessage, savedDraftThreads]);
+  }, [experienceSettings.experienceId, experienceSettings.threadName, progressPercent, resultMessage, savedDraftThreads]);
 
   const threadStatus = resultMessage ? experienceSettings.statusSubmittedLabel : experienceSettings.statusIdleLabel;
   const directoryFallback = isDirectoryOpen ? (
@@ -616,7 +631,6 @@ function SubmitClientChat({
           contentOffset={composerHeight + 32}
           maxWidthClassName="max-w-5xl w-full px-4"
           showAppDrawerButton
-          showHeader={false}
           onOpenAppDrawer={openDrawer}
         >
           <div className="space-y-5">

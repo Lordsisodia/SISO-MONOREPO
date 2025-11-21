@@ -33,7 +33,7 @@ const fetchPipelineOpsConfig = async (baseUrl: string): Promise<PipelineOpsConfi
 };
 
 async function SubmitClientExperienceBoundary() {
-  const baseUrl = getRequestBaseUrl();
+  const baseUrl = await getRequestBaseUrl();
   const config = await fetchPipelineOpsConfig(baseUrl);
   return <SubmitClientExperience config={config} />;
 }

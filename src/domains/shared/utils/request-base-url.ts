@@ -1,10 +1,8 @@
 import { headers } from "next/headers";
 
-type HeadersLike = Awaited<ReturnType<typeof headers>>;
-
-export function getRequestBaseUrl(): string {
+export async function getRequestBaseUrl(): Promise<string> {
   try {
-    const h = headers() as unknown as HeadersLike;
+    const h = await headers();
     const proto = h.get("x-forwarded-proto") ?? "http";
     const host = h.get("x-forwarded-host") ?? h.get("host");
     if (host) {

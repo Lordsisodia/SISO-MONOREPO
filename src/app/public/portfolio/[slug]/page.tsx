@@ -27,7 +27,7 @@ async function PortfolioAssetContent({ params }: { params: Promise<{ slug: strin
   if (!slug) {
     notFound();
   }
-  const baseUrl = getRequestBaseUrl();
+  const baseUrl = await getRequestBaseUrl();
   try {
     const client = await fetchPortfolioClient(baseUrl, slug);
     return <PublicPortfolioAssetView client={client} />;

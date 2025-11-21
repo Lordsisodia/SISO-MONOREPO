@@ -4,8 +4,8 @@ import { PortfolioMobileScreen } from "@/domains/partnerships/portal-architectur
 import { getRequestBaseUrl } from "@/domains/shared/utils/request-base-url";
 import { fetchPortfolioIndex } from "@/domains/partnerships/portfolio/server/data-source";
 
-export default function AcademyPortfolioPage() {
-  const baseUrl = getRequestBaseUrl();
+export default async function AcademyPortfolioPage() {
+  const baseUrl = await getRequestBaseUrl();
   const dataPromise = fetchPortfolioIndex(baseUrl);
 
   return (

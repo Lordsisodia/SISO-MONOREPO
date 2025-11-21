@@ -5,7 +5,6 @@ import SubmitClientExperience from "../../pipeline-ops/submit-client/SubmitClien
 import type { PipelineOpsConfig } from "../../pipeline-ops/submit-client/types";
 import { LazyPartnersPageShell } from "@/domains/partnerships/community/ui/LazyPartnersPageShell";
 import { getRequestBaseUrl } from "@/domains/shared/utils/request-base-url";
-import { submitPartner } from "@/domains/partnerships/recruitment/application/recruitmentIntakeService";
 
 const configFilePath = path.join(process.cwd(), "public/data/recruitment-submit-config.json");
 
@@ -34,7 +33,7 @@ const fetchRecruitmentConfig = async (baseUrl: string): Promise<PipelineOpsConfi
 };
 
 async function SubmitPartnerExperienceBoundary() {
-  const baseUrl = getRequestBaseUrl();
+  const baseUrl = await getRequestBaseUrl();
   const config = await fetchRecruitmentConfig(baseUrl);
   return (
     <SubmitClientExperience
@@ -47,8 +46,7 @@ async function SubmitPartnerExperienceBoundary() {
         headerTitle: "Submit Partner Intake",
         headerSubtitle: "Chat-first submission to fast-track recruitment reviews",
         helperText: "Share the recruit's name, channel, and reach. We'll prep invites while you answer prompts.",
-        submitHandler: submitPartner,
-        successMessage: (response) => `Partner intake ${response.intakeId} received • Recruitment review`,
+        submitVariant: "partner",
         statusIdleLabel: "Recruitment review SLA",
         statusSubmittedLabel: "Submitted · Recruitment review",
       }}

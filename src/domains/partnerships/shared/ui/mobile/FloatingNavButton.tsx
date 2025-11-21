@@ -6,6 +6,9 @@ import { cn } from "@/domains/shared/utils/cn";
 
 export function FloatingNavButton({ className }: { className?: string }) {
   const { openDrawer } = useMobileNavigation();
+  if (typeof document !== "undefined" && document.documentElement.dataset.hideFloatingNavButton === "true") {
+    return null;
+  }
   return (
     <button
       type="button"
